@@ -10,6 +10,17 @@
 function xero_admin_settings() {
   $form = array();
 
+  // @todo Turn into MENU_LOCAL_ACTION in Drupal 7
+  $items = array(
+    l(t('Add Xero Application on Xero.com'), 'https://api.xero.com/Applicaiton/Add'),
+    l(t('Verify Xero Installation'), 'admin/reports/status'),
+  );
+
+  $form['help'] = array(
+    '#type' => 'markup',
+    '#value' => '<p>'. theme('item_list', $items) .'</p>'
+  );
+
   $form['xero_consumer_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Xero Consumer Key'),
