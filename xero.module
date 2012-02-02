@@ -135,6 +135,27 @@ function xero_xero_make_info() {
     'lineitem' => array(
       'file path' => $path,
     ),
+    'employee' => array(
+      'file path' => $path,
+    ),
+    'expenseclaim' => array(
+      'file path' => $path,
+    ),
+    'receipt' => array(
+      'file path' => $path,
+    ),
+    'item' => array(
+      'file path' => $path,
+    ),
+    'manualjournal' => array(
+      'file path' => $path,
+    ),
+    'journalline' => array(
+      'file path' => $path,
+    ),
+    'transaction' => array(
+      'file path' => $path,
+    ),
   );
 }
 
@@ -168,7 +189,7 @@ function xero_php_load() {
  *         or returns NULL if there was an error before querying.
  *
  * Example:
- * 
+ *
  *   //Return all contacts for your xero account.
  *   $result = xero_query('get', 'Contacts');
  *
@@ -229,7 +250,7 @@ function xero_error($code = 0, $type = '', $message) {
 /**
  * Form element helper for actions using the Xero Module API.
  * @param $action the action to be taken (Contacts, Invoices)
- * @return $element a Drupal form element. 
+ * @return $element a Drupal form element.
  *
  * Example:
  *   $form['blah'] = xero_form_helper('Contacts', $form['blah']['#default_value']);
