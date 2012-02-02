@@ -2,7 +2,7 @@
 
 /**
  * @file
- * 
+ *
  */
 
 
@@ -39,7 +39,7 @@ function xero_make_contact($size = 'minimal', $address = 0, $phone = 0) {
     $address--;
   }
 
-  while ($phone > 0) { 
+  while ($phone > 0) {
     if (!isset($contact['Contact']['Phones'])) {
       $contact['Contact']['Phones'] = array();
     }
@@ -97,7 +97,7 @@ function xero_make_phone($size = 'minimal') {
   }
 
   $keys = array('PhoneNumber', 'PhoneAreaCode', 'PhoneCountryCode');
- 
+
   foreach ($keys as $key) {
     $phone['Phone'][$key] = '';
   }
@@ -166,7 +166,7 @@ function xero_make_invoice($size = 'minimal', $contact_type = 'id', $items = 1) 
   }
 
   $keys = array('Date', 'DueDate', 'LineAmountTypes', 'LineItems');
-  
+
   if ($size == 'all') {
     $keys = array_merge($keys, array('InvoiceNumber', 'Reference', 'CurrencyCode', 'Status', 'SubTotal', 'TotalTax', 'Total'));
   }
@@ -213,7 +213,7 @@ function xero_make_creditnote($size = 'minimal', $contact_type = 'id', $items = 
   }
 
   $keys = array('Date', 'DueDate', 'LineAmountTypes', 'LineItems');
-  
+
   if ($size == 'all') {
     $keys = array_merge($keys, array('CreditNoteNumber', 'Reference', 'CurrencyCode', 'Status', 'SubTotal', 'TotalTax', 'Total'));
   }
@@ -265,4 +265,113 @@ function xero_make_lineitem($size = 'minimal') {
   }
 
   return $lineitem;
+}
+
+/**
+ * Xero Make Employee
+ */
+function xero_make_employee($size = 'minimal') {
+
+  $employee = array(
+    'Employee' => array(
+      'FirstName' => '',
+      'LastName' => '',
+    ),
+  );
+
+  if ($size == 'all') {
+    $employee['Employee']['ExternalLink'] = array(
+      'URL' => '',
+    );
+  }
+
+  return $employee;
+}
+
+/**
+ * Xero Make Expense Claim.
+ */
+function xero_make_exenseclaim($size = 'minimal', $contact_type = 'id', $items = 1, $receipts = 1) {
+  $claim = array(
+    'User' => array(
+      'UserID' => '',
+    ),
+    'Receipts' => array(),
+  );
+
+  for ($n = 0; $n < $items; $n++) {
+    $claim['Receipts'][] = xero_make_receipt($size, $contact_type, $receipts);
+  }
+
+  return $claim;
+}
+
+/**
+ * Xero Make Receipt.
+ */
+function xero_make_receipt($size = 'minimal', $contact_type = 'id', $items = 1) {
+  $receipt = array(
+    'Receipt' => array(
+      'Date' => '',
+      'Contact' => array(),
+      'User' => array(
+        'UserID' => ''
+      ),
+    ),
+  );
+
+  if ($contact_type == 'id') {
+    $receipt['Receipt']['Contact']['ContactID'] = '';
+  }
+  else {
+    $receipt['Receipt']['Contact']['Name'] = '';
+  }
+
+  $keys = array('LineItems');
+
+  if ($size == 'all') {
+    $keys = array_merge($keys, array('LineAmountTypes', 'SubTotal', 'TotalTax', 'Total'));
+  }
+
+  foreach ($keys as $key) {
+    if ($key == 'LineItems') {
+      $receipt['Receipt']['LineItems'] = array();
+      for ($n = 0; $n < $items; $n++) {
+        $receipt['Receipt']['LineItems'][] = xero_make_lineitem($size);
+      }
+    }
+    else {
+      $receipt['Receipt'][$key] = '';
+    }
+  }
+
+  return $receipt;
+}
+
+/**
+ * Xero Make Item
+ */
+function xero_make_item($size = 'minimal') {
+  $item = array(
+    'Code' => array(),
+  );
+
+  if ($size <> 'minimal') {
+    $item['Description'] = '';
+    $item['PurchaseDetails'] = array(
+      'UnitPrice' => '',
+      'AccountCode' => '',
+    );
+    $item['SalesDetails'] = array(
+      'UnitPrice' => '',
+      'AccountCode' => '',
+    );
+  }
+
+  if ($size == 'all') {
+    $item['SalesDetails']['TaxType'] = '';
+    $item['PurchaseDetails']['TaxType'] = '';
+  }
+ 
+  return $item;
 }
