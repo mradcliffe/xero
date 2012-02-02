@@ -269,6 +269,8 @@ function xero_make_lineitem($size = 'minimal') {
 
 /**
  * Xero Make Employee
+ * @param $size minimal or all.
+ * @return array a valid employee array.
  */
 function xero_make_employee($size = 'minimal') {
 
@@ -290,6 +292,12 @@ function xero_make_employee($size = 'minimal') {
 
 /**
  * Xero Make Expense Claim.
+ * @param $size minimal, recommended, or all. This will be passed through to the
+ * receipts make.
+ * @param $contact_type passed through to the receipts make.
+ * @param $items the number of receipts to make.
+ * @param $receipts the number of line items on the receipt. May not be useful.
+ * @return array a valid ExpenseClaim structure.
  */
 function xero_make_exenseclaim($size = 'minimal', $contact_type = 'id', $items = 1, $receipts = 1) {
   $claim = array(
@@ -308,6 +316,10 @@ function xero_make_exenseclaim($size = 'minimal', $contact_type = 'id', $items =
 
 /**
  * Xero Make Receipt.
+ * @param $size minimal, recommended, or all.
+ * @param $contact_type whether to use the Contact Name or ID.
+ * @param $items the number of line items to build.
+ * @return array a valid Receipt structure.
  */
 function xero_make_receipt($size = 'minimal', $contact_type = 'id', $items = 1) {
   $receipt = array(
@@ -350,6 +362,8 @@ function xero_make_receipt($size = 'minimal', $contact_type = 'id', $items = 1) 
 
 /**
  * Xero Make Item
+ * @param $size minimal, recommended, or all.
+ * @return array a valid Item structure.
  */
 function xero_make_item($size = 'minimal') {
   $item = array(
@@ -372,6 +386,53 @@ function xero_make_item($size = 'minimal') {
     $item['SalesDetails']['TaxType'] = '';
     $item['PurchaseDetails']['TaxType'] = '';
   }
- 
+
   return $item;
+}
+
+/**
+ * Xero Make Manual Journal
+ * @param $size minimal, recommended, or all.
+ * @param $items the number of JournalLine structures to make.
+ * @return array a valid ManualJournal structure.
+ */
+function xero_make_manualjournal($size = 'minimal', $items = 1) {
+  $journal = array(
+    'ManualJournal' => array(
+      'Narration' => '',
+      'JournalLines' => array(),
+    ),
+  );
+
+  for ($i = 0; $i < $items; $i++) {
+    $journal['JournalLines'][] = xero_make_journalline($size);
+  }
+
+  if ($size <> 'minimal') {
+    $journal['Date'] = '';
+  }
+  return $journal;
+}
+
+/**
+ * Xero Make Journal Line
+ * @param $size minimal, recommended, or all.
+ * @return array a valid JournalLine structure.
+ */
+function xero_make_journalline($size = 'minimal') {
+  $line = array(
+    'JournalLine' => array(
+      'LineAmount' => '',
+      'AccountCode' => '',
+    ),
+  );
+
+  if ($size <> 'minimal') {
+    $line['JournalLine']['Description'] = '';
+    $line['JournalLine']['TaxType'] = '';
+    // @todo on tracking categories.
+    // $line['JournalLine']['Tracking'] = array();
+  }
+
+  return $line;
 }

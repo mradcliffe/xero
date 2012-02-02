@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file 
+ * @file
  *   Xero Validation Test Framework
  *
  * The following tests have been created:
@@ -22,7 +22,7 @@
  *  - assertValidLineItem
  * - assertValidCreditNote
  *  - assertValidLineItem
- *  
+ *
  */
 
 
@@ -35,7 +35,7 @@ class XeroValidateTest extends DrupalUnitTestCase {
 
   /**
    * Implementation of getInfo() method
-   * @return array 
+   * @return array
    */
   function getInfo() {
     return array(
@@ -51,7 +51,7 @@ class XeroValidateTest extends DrupalUnitTestCase {
   /**
    * Test a contact data structure.
    */
-  function testContact() {    
+  function testContact() {
     //Test a minimal contact
     $minimal = xero_make('contact', 'minimal');
 
@@ -64,7 +64,7 @@ class XeroValidateTest extends DrupalUnitTestCase {
 
     $this->assert($this->assertValidContact($all), t('xero_make_contact created a valid contact structure containing <em>all</em> elements.'));
   }
-  
+
   /**
    * Test making a payment.
    */
@@ -516,5 +516,30 @@ class XeroValidateTest extends DrupalUnitTestCase {
 
      return $this->assert(TRUE, t('Found a valid Credit Note data set.'));
    }
-}
 
+   /**
+    * Assert valid employee.
+    * @param $employee the employee structure to test.
+    * @return value from assert().
+    */
+   public function assertValidEmployee($employee = array()) {
+     if (empty($employee['Employee'])) {
+       return $this->assert(FALSE, t('Found a valid Employee data set.'));      
+     }
+
+     if (empty($employee['Employee']['FirstName'])) {
+       return $this->assert(FALSE, t('Found a valid Employee First Name element.'));
+     }
+
+     if (empty($employee['Employee']['LastName'])) {
+       return $this->assert(FALSE, t('Found a valid Employee Last Name element.'));
+     }
+
+     if (isset($employee['Employee']['ExternalLink'])) {
+       if (!isset($employee['Employee']['ExternalLink']['URL'])) {
+         return $this->assert(FALSE, t('Found a valid URL element underneath ExternalLink element.'));
+       }
+     }
+
+   }
+}
