@@ -436,3 +436,42 @@ function xero_make_journalline($size = 'minimal') {
 
   return $line;
 }
+
+/**
+ * Xero Make Transaction
+ * @param $size minimal, recommended, or all.
+ * @param $contact_type whether to user Name or ID.
+ * @param $items the number of line items on the transaction.
+ * @return array a valid BankTransaction data set.
+ */
+function xero_make_transaction($size = 'minimal', $contact_type = 'id', $items = 1) {
+
+  $t = array(
+    'BankTransaction' => array(
+      'Type' => '',
+      'Contact' => array(),
+      'LineItems' => array(),
+      'BankAccount' => '',
+    ),
+  );
+
+  if ($contact_type == 'id') {
+    $t['BankTransaction']['Contact']['ContactID'] = '';
+  }
+  else {
+    $t['BankTransaction']['Contact']['Name'] = '';
+  }
+
+  for ($i = 0; $i < $items; $i++) {
+    $t['BankTransaction']['LineItems'][] = xero_make_lineitem($size);
+  }
+
+  if ($size <> 'minimal') {
+    $keys = array('Date', 'Reference', 'Status', 'CurrencyRate', 'Url', 'Subtotal', 'Tax', 'Total');
+    foreach ($keys as $key) {
+      $t['BankTransaction'][$key] = '';
+    }
+  }
+
+  return $t;
+}
