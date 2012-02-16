@@ -467,7 +467,7 @@ function xero_make_transaction($size = 'minimal', $contact_type = 'id', $items =
   }
 
   if ($size <> 'minimal') {
-    $keys = array('Date', 'Reference', 'Status', 'CurrencyRate', 'Url', 'Subtotal', 'Tax', 'Total');
+    $keys = array('Date', 'Reference', 'Status', 'CurrencyRate', 'Url', 'SubTotal', 'Tax', 'Total');
     foreach ($keys as $key) {
       $t['BankTransaction'][$key] = '';
     }
