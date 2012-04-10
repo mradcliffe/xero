@@ -39,6 +39,13 @@ function xero_requirements($phase) {
     if (!drupal_verify_install_file($certpath, FILE_EXIST, 'file') || !drupal_verify_install_file($keypath, FILE_EXIST, 'file')) {
       $requirements['xero_cert']['value'] = $t('You must !configure the Xero module with the location of your Xero certificate!', array('!configure' => l($t('configure'), 'admin/settings/xero')));
       $requirements['xero_cert']['severity'] = REQUIREMENT_ERROR;
+    } 
+    else if (function_exists('openssl_x509_parse')) {
+      $certinfo = openssl_x509_parse(file_get_contents($certpath));
+      if ($certinfo['validFrom_time_t'] > time() || $certinfo['validTo_time_t'] < time()) {
+        $requirements['xero_cert']['value'] .= '<p>' . $t('The certificate is expired (valid from %from to %to).', array('%from' => format_date($certinfo['validFrom_time_t']), '%to' => format_date($certinfo['validTo_time_t']))) . '</p>';
+        $requirements['xero_cert']['severity'] = REQUIREMENT_ERROR;
+      }
     }
   }
 
