@@ -206,7 +206,7 @@ function xero_php_load() {
 function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items = array()) {
   $xero = xero_php_load();
 
-  if (!is_object($xero)) {
+  if (!$xero->verify()) {
     xero_error(0, '', 'Error trying to make a xero connection object.');
     return NULL;
   }

@@ -51,13 +51,17 @@ class XeroConnectionTest extends DrupalUnitTestCase {
    $this->assertNotEqual($secret, '', t('Xero Consumer Secret is not empty.'));
   }
 
+  // @note this test functions only with PHP-Xero from https://github.com/mradcliffe/PHP-Xero
   public function testXeroConnection() {
     $xero = xero_php_load();
 
-    $this->assertNotNull($xero, t('Sucessfully initialized the PHP-Xero library.'));
+    $this->assertNotNull($xero->verify(), t('Successfully initialized the PHP-Xero library.'));
 
-    $result = $xero->Accounts;
+    // I don't usually do it this way.
+    if ($xero->verify()) {
+      $result = $xero->Accounts;
 
-    $this->assertNotNull($result['Accounts']['Account'][0]['Name'], t('Successfully queried xero for accounts. Found an account named @name', array('@name' => $result['Accounts']['Account'][0]['Name'])));
+      $this->assertNotNull($result['Accounts']['Account'][0]['Name'], t('Successfully queried xero for accounts. Found an account named @name.', array('@name' => json_encode($result['Accounts']['Account'][0]['Name']))));
+    }
   }
 }

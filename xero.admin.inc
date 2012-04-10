@@ -26,6 +26,7 @@ function xero_admin_settings() {
     '#title' => t('Xero Consumer Key'),
     '#description' => t('Provide the consumer key for your private application on xero.'),
     '#default_value' => variable_get('xero_consumer_key', ''),
+    '#required' => TRUE,
   );
 
   $form['xero_consumer_secret'] = array(
@@ -33,6 +34,7 @@ function xero_admin_settings() {
     '#title' => t('Xero Consumer Secret'),
     '#description' => t('Provide the consumer secret for your private application on xero.'),
     '#default_value' => variable_get('xero_consumer_secret', ''),
+    '#required' => TRUE,
   );
 
   $form['xero_cert_path'] = array(
@@ -40,6 +42,8 @@ function xero_admin_settings() {
     '#title' => t('Xero Certificate Path'),
     '#description' => t('Provide the full path and file name to your Xero certificate.'),
     '#default_value' => variable_get('xero_cert_path', ''),
+    '#element_validate' => array('xero_admin_settings_validate_exists'),
+    '#required' => TRUE,
   );
 
   $form['xero_key_path'] = array(
@@ -47,9 +51,20 @@ function xero_admin_settings() {
     '#title' => t('Xero Key Path'),
     '#description' => t('Provide the full path and file name to your Xero certificate private key.'),
     '#default_value' => variable_get('xero_key_path', ''),
+    '#element_validate' => array('xero_admin_settings_validate_exists'),
+    '#required' => TRUE,
   );
 
   return system_settings_form($form);
+}
+
+/**
+ * Validation callback for xero_admin_settings().  Verifies that the field's file exists and is readable.
+ */
+function xero_admin_settings_validate_exists($element, &$form_state) {
+  if (!@file_exists($element['#value'])) {
+    form_error($element, t('The specified file either does not exist, or is not accessible to the web server.'));
+  }
 }
 
 /**
