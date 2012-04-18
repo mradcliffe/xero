@@ -48,11 +48,28 @@ function xero_requirements($phase) {
       }
     }
   }
-  
-  $xero = xero_php_load();
-  if (!method_exists($xero, 'verify')) {
-    $requirements['xero_lib']['value'] = $t('For stability purposes, you should use a fork of PHP-Xero that has the verify() method such as !link', array('!link' => l($t("mradcliffe/PHP-Xero", 'http://github.com/mradcliffe/PHP-Xero'))));
-    $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
+
+  if ($requirements['xero_lib']['severity'] == REQUIREMENT_OK) {
+    // Load up Xero library directly only if it exists.
+    require_once $incpath . '/xero.php';
+    $key = variable_get('xero_consumer_key', '');
+    $secret = variable_get('xero_consumer_secret', '');
+    $cert = variable_get('xero_cert_path', '');
+    $cert_key = variable_get('xero_key_path', '');
+
+    if (!class_exists('Xero')) {
+      // We shouldn't be having this issue, but just in case...
+      $requirements['xero_lib']['value'] = $t('You must install the <a href="http://github.com/mradcliffe/PHP-Xero" target="new">PHP-Xero library</a> in the xero module include/ directory before proceeding.');
+      $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
+    }
+    else {
+      $xero = new Xero($key, $secret, $cert, $cert_key, 'json');
+
+      if (!method_exists($xero, 'verify')) {
+        $requirements['xero_lib']['value'] = $t('For stability purposes, you should use a fork of PHP-Xero that has the verify() method such as !link', array('!link' => l($t("mradcliffe/PHP-Xero", 'http://github.com/mradcliffe/PHP-Xero'))));
+        $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
+      }
+    }
   }
 
   if (module_exists('oauth_common')) {
