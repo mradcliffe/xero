@@ -21,8 +21,7 @@ function xero_requirements($phase) {
   $incpath = drupal_get_path('module', 'xero') . '/include/';
 
   if (!drupal_verify_install_file($incpath . 'xero.php', FILE_EXIST, 'file')) {
-    //Note: I don't think I can use l() or theme() here
-    $requirements['xero_lib']['value'] = $t('You must install the <a href="http://github.com/mradcliffe/PHP-Xero" target="new">PHP-Xero library</a> in the xero module include/ directory before proceeding.');
+    $requirements['xero_lib']['value'] = $t('You must install the !link in the xero module include/ directory before proceeding.', array('!link' => l($t('PHP-Xero Library'), 'http://github.com/mradcliffe/PHP-Xero')));
     $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
   }
 
@@ -59,7 +58,7 @@ function xero_requirements($phase) {
 
     if (!class_exists('Xero')) {
       // We shouldn't be having this issue, but just in case...
-      $requirements['xero_lib']['value'] = $t('You must install the <a href="http://github.com/mradcliffe/PHP-Xero" target="new">PHP-Xero library</a> in the xero module include/ directory before proceeding.');
+      $requirements['xero_lib']['value'] = $t('You must install the !link in the xero module include/ directory before proceeding.', array('!link' => l($t('PHP-Xero Library'), 'http://github.com/mradcliffe/PHP-Xero')));
       $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
     }
     else {
