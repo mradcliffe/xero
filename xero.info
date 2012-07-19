@@ -1,5 +1,8 @@
 name = Xero
 description = Provides third-party integration with xero.com accounting services.
 package = Xero
-core = 6.x
-php = 5.x
+core = 7.x
+
+files[] = tests/xero.test
+files[] = tests/xero-connection.test
+files[] = xero.make.inc

@@ -36,7 +36,7 @@ function xero_requirements($phase) {
     $keypath = variable_get('xero_key_path', '');
 
     if (!drupal_verify_install_file($certpath, FILE_EXIST, 'file') || !drupal_verify_install_file($keypath, FILE_EXIST, 'file')) {
-      $requirements['xero_cert']['value'] = $t('You must !configure the Xero module with the location of your Xero certificate!', array('!configure' => l($t('configure'), 'admin/settings/xero')));
+      $requirements['xero_cert']['value'] = $t('You must !configure the Xero module with the location of your Xero certificate!', array('!configure' => l($t('configure'), 'admin/config/services/xero')));
       $requirements['xero_cert']['severity'] = REQUIREMENT_ERROR;
     } 
     else if (function_exists('openssl_x509_parse')) {

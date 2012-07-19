@@ -17,14 +17,23 @@
 
 
 /**
- * Implementation of hook_perm().
+ * Implementation of hook_permission().
  *
  * These are basic permissions. It is up to individual module developers
  * to add more complex permissions in their modules. This may change in
  * the future.
  */
-function xero_perm() {
-  return array('access xero', 'post to xero');
+function xero_permission() {
+  return array(
+    'access xero' => array(
+      'title' => t('Access Xero'),
+      'description' => t('Grants access of basic information related to Xero.'),
+    ),
+    'post to xero' => array(
+      'title' => t('Post to Xero'),
+      'description' => t('Grants access to make post requests to Xero.'),
+    ),
+  );
 }
 
 /**
@@ -38,30 +47,30 @@ function xero_perm() {
 function xero_theme($existing, $type, $theme, $path) {
   return array(
     'xero_contact' => array(
-      'arguments' => array($contact = NULL),
+      'variables' => array($contact = NULL),
       'template' => 'xero-contact',
       'file' => 'xero.theme.inc',
       'path' => drupal_get_path('module', 'xero') . '/theme',
     ),
     'xero_invoice' => array(
-      'arguments' => array($invoice = NULL),
+      'variables' => array($invoice = NULL),
       'template' => 'xero-invoice',
       'file' => 'xero.theme.inc',
       'path' => drupal_get_path('module', 'xero') . '/theme',
     ),
     'xero_creditnote' => array(
-      'arguments' => array($creditnote = NULL),
+      'variables' => array($creditnote = NULL),
       'template' => 'xero-creditnote',
       'file' => 'xero.theme.inc',
       'path' => drupal_get_path('module', 'xero') . '/theme',
     ),
     'xero_addresses' => array(
-      'arguments' => array($addresses = NULL),
+      'variables' => array($addresses = NULL),
       'file' => 'xero.theme.inc',
       'path' => drupal_get_path('module', 'xero') . '/theme',
     ),
     'xero_lineitems' => array(
-      'arguments' => array($items = NULL, $subtotal = NULL, $tax = NULL, $total = NULL),
+      'variables' => array($items = NULL, $subtotal = NULL, $tax = NULL, $total = NULL),
       'file' => 'xero.theme.inc',
       'path' => drupal_get_path('module', 'xero') . '/theme',
     ),
@@ -242,7 +251,7 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
  */
 function xero_error($code = 0, $type = '', $message) {
   $error_code = (!empty($type)) ? $code . ' ' . $type : $code;
-  $formatted = t('<b>Error</b>: %code: %message', array('%code' => $error_code, '%message' => $message ));
+  $formatted = t('<strong>Error</strong>: %code: %message', array('%code' => $error_code, '%message' => $message ));
   drupal_set_message($formatted, 'error');
   watchdog('xero', $formatted, NULL, WATCHDOG_CRITICAL, NULL);
 }
@@ -401,7 +410,7 @@ function xero_get_cache($type = 'Contacts') {
 
   $cached = $result[$type];
 
-  cache_set('xero_' . strtolower($type), $cached, 'cache', CACHE_TEMPORARY, NULL);
+  cache_set('xero_' . strtolower($type), $cached, 'cache', CACHE_TEMPORARY);
 
   return $cached;
 }
@@ -434,6 +443,7 @@ function xero_make($type = 'contact', $size = 'minimal', $args = array()) {
   }
 
   if (isset($info[$type]) && file_exists($info[$type]['file path'])) {
+    // @todo use module_load_include() instead?
     include_once($info[$type]['file path']);
     $func = 'xero_make_' . $type;
 

@@ -6,19 +6,26 @@
 
 /**
  * Administrative settings form callback
+ * @param $form the form array
+ * @param &$form_state the form state array
+ * @return array the form array.
  */
-function xero_admin_settings() {
-  $form = array();
-
+function xero_admin_settings($form, &$form_state) {
   // @todo Turn into MENU_LOCAL_ACTION in Drupal 7
   $items = array(
-    l(t('Add Xero Application on Xero.com'), 'https://api.xero.com/Applicaiton/Add'),
-    l(t('Verify Xero Installation'), 'admin/reports/status'),
+    array(
+      'text' => t('Add Xero Application on Xero.com'), 
+      'path' => 'https://api.xero.com/Applicaiton/Add',
+    ),
+    array(
+      'text' => t('Verify Xero Installation'),
+      'path' => 'admin/reports/status',
+    ),
   );
 
   $form['help'] = array(
-    '#type' => 'markup',
-    '#value' => '<p>'. theme('item_list', $items) .'</p>'
+    '#theme' => 'links',
+    '#links' => $items,
   );
 
   $form['xero_consumer_key'] = array(
@@ -82,7 +89,7 @@ function xero_autocomplete_contacts($string = '') {
     }
   }
 
-  drupal_json($matches);
+  drupal_json_output($matches);
 }
 
 /**
@@ -100,5 +107,5 @@ function xero_autocomplete_invoices($string = '') {
     }
   }
 
-  drupal_json($matches);
+  drupal_json_output($matches);
 }
