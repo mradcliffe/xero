@@ -18,9 +18,7 @@
 class XeroThemeTestCase extends DrupalUnitTestCase {
 
   function setUp() {
-    parent::setUp();
-
-    module_load_include('inc', 'xero', 'tests/xero.theme');
+    module_load_include('inc', 'xero', 'theme/xero.theme');
   }
 }
 

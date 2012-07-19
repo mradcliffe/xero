@@ -5,4 +5,5 @@ core = 7.x
 
 files[] = tests/xero.test
 files[] = tests/xero-connection.test
+files[] = tests/xero-theme.test
 files[] = xero.make.inc
