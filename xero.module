@@ -101,8 +101,8 @@ function xero_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/settings/xero'] = array(
-    'title' => 'Xero Configuration',
+  $items['admin/config/services/xero'] = array(
+    'title' => 'Xero configuration',
     'description' => 'Configure the xero module for your organization.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('xero_admin_settings'),
