@@ -45,9 +45,6 @@ class XeroValidateTest extends DrupalUnitTestCase {
     );
   }
 
-  function setUp() {
-  }
-
   /**
    * Test a contact data structure.
    */
