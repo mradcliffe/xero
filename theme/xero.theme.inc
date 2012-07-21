@@ -8,12 +8,12 @@
 
 /**
  * Theme Addresses properly
- * @param addresses an array of addresses
+ * @param $variables associative array of variables passed into the theme function.
  * @return HTML formatted string
  */
-function theme_xero_addresses($addresses) {
+function theme_xero_addresses($variables) {
   $o = '';
-  foreach ($addresses as $address) {
+  foreach ($variables['addresses'] as $address) {
     $o .= '<div class="xero-address">';
     for ($i = 1; $i < 5; $i++) {
       if (isset($address['AddressLine'.$i]) && !empty($address['AddressLine'.$i])) {
@@ -29,17 +29,18 @@ function theme_xero_addresses($addresses) {
 
 /**
  * Theme Xero Line Items properly.
- * @param $items an array of line items
- * @param $subtotal the subtotal of the invoice
- * @param $tax the total tax of the invoice
- * @param $total the grand total of the invoice
+ * @param $variables an associative array of variables passed into theme function:
+ *   'items' an array of line items. Each item is an associative array.
+ *   'subtotal' the subtotal of the invoice
+ *   'tax' the total tax of the invoice
+ *   'total' the grand total of the invoice
  * @return HTML formatted string
  */
-function theme_xero_lineitems($items, $subtotal, $tax, $total) {
+function theme_xero_lineitems($varibales) {
   $header = array(t('Description'), t('Quantity'), t('Unit Price'), t('Tax'), t('Amount'), t('Account'), t('Category'));
   $rows = array();
 
-  foreach ($items as $item) {
+  foreach ($variables['items'] as $item) {
     $row = array();
     $categories = '';
 
@@ -60,8 +61,8 @@ function theme_xero_lineitems($items, $subtotal, $tax, $total) {
     $rows[] = $row;
   }
 
-  $rows[] = array('', '', '', $tax, $subtotal);
-  $rows[] = array('', '', '', '', '<b>' . $total . '</b>');
+  $rows[] = array('', '', '', $variables['tax'], $variables['subtotal']);
+  $rows[] = array('', '', '', '', '<b>' . $variables['total'] . '</b>');
 
   return theme('table', $header, $rows, array('class' => 'xero-lineitems'), t('Line Items'));
 }
