@@ -12,7 +12,7 @@
 /**
  * Implementation of hook_order().
  */
-function uc_xero_example_order($op, &$order, $status) {
+function uc_xero_example_order($op, $order, $status) {
   if ($op == 'update') {
     if ($status == 'pending') {
 
@@ -33,7 +33,7 @@ function uc_xero_example_order($op, &$order, $status) {
       $subtotal = 0;
       foreach ($order->products as $key => $item) {
         $node = node_load($item->nid);
-        $invoice['Invoice']['LineItems'][$i]['LineItem']['Description'] = check_plain($node->title);
+        $invoice['Invoice']['LineItems'][$i]['LineItem']['Description'] = $node->title;
         $invoice['Invoice']['LineItems'][$i]['LineItem']['Quantity'] = $item->qty;
         $invoice['Invoice']['LineItems'][$i]['LineItem']['UnitAmount'] = $item->price;
         $invoice['Invoice']['LineItems'][$i]['LineItem']['AccountCode'] = 200;
