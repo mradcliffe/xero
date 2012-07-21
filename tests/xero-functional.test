@@ -1,0 +1,86 @@
+<?php
+/**
+ * @file
+ *   Xero Functional Test Cases
+ */
+
+
+/**
+ * @class
+ *   XeroWebTestCase
+ */
+class XeroWebTestCase extends DrupalWebTestCase {
+
+  function setUp($modules = array()) {
+    // Retrieve variables from the live database.
+    $key = variable_get('xero_consumer_key', '');
+    $secret = variable_get('xero_consumer_secret', '');
+    $cert_path = variable_get('xero_cert_path', '');
+    $key_path = variable_get('xero_key_path', '');
+
+    $modules = array_merge(array('xero'), $modules);
+    parent::setUp($modules);
+
+    // Set the variables after setup when using the test database.
+    $this->web_admin = $this->drupalCreateUser(array('administer site configuration'));
+    $this->drupalLogin($this->web_admin);
+
+    $edit = array(
+      'xero_consumer_key' => $key,
+      'xero_consumer_secret' => $secret,
+      'xero_cert_path' => $cert_path,
+      'xero_key_path' => $key_path,
+    );
+    $this->drupalPost('admin/config/services/xero', $edit, t('Save configuration'));
+
+    $this->drupalLogout();
+  }
+
+}
+
+/**
+ * @class
+ *   Xero Autocomplete Test Case
+ */
+class XeroAutocompleteTestCase extends XeroWebTestCase {
+
+  static public function getInfo() {
+    return array(
+      'name' => t('Xero Autocomplete Paths Tests'),
+      'description' => t('Test the autocomplete paths.'),
+      'group' => t('Xero'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp();
+
+  }
+
+  /**
+   * Assert that user has access to autocomplete contacts.
+   */
+  function testAutocompleteContacts() {
+    $this->drupalGet('xero/autocomplete/Contacts');
+    $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Contacts')));
+
+    $this->web_user = $this->drupalCreateUser(array('access content', 'access xero'));
+    $this->drupalLogin($this->web_user);
+    $this->drupalGet('xero/autocomplete/Contacts');
+    $this->assertResponse(200, t('User was able to access %path', array('%path' =>  'xero/autocomplete/Contacts')));
+  }
+
+  /**
+   * Assert that user has access to autocomplete invoices.
+   */
+  function testAutocompleteInvoices() {
+    $this->drupalGet('xero/autocomplete/Invoices');
+    $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Invoices')));
+
+    $this->web_user = $this->drupalCreateUser(array('access content', 'access xero'));
+    $this->drupalLogin($this->web_user);
+    $this->drupalGet('xero/autocomplete/Invoices');
+    $this->assertResponse(200, t('User was able to access %path', array('%path' =>  'xero/autocomplete/Invoices')));
+  }
+
+}
