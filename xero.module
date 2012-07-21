@@ -394,12 +394,10 @@ function xero_form_helper($type = 'Contacts', $default = '') {
  * $type, but lower case.
  *
  * @param $type the type of cache to get. Defaults to Contacts
- * @return $cached array of cached data
+ * @return array cached data.
  */
 function xero_get_cache($type = 'Contacts') {
-  $cached = cache_get('xero_' . strtolower($type), 'cache');
-
-  if (!is_numeric($cached)) {
+  if ($cached = cache_get('xero_' . strtolower($type), 'cache')) {
     return $cached->data;
   }
 
@@ -408,11 +406,11 @@ function xero_get_cache($type = 'Contacts') {
     return NULL;
   }
 
-  $cached = $result[$type];
+  $to_cache = $result[$type];
 
-  cache_set('xero_' . strtolower($type), $cached, 'cache', CACHE_TEMPORARY);
+  cache_set('xero_' . strtolower($type), $to_cache, 'cache', CACHE_TEMPORARY);
 
-  return $cached;
+  return $to_cache;
 }
 
 /**

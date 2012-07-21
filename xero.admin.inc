@@ -83,7 +83,7 @@ function xero_autocomplete_contacts($string = '') {
   $matches = array();
 
   foreach ($contacts['Contact'] as $item) {
-    if (is_string(stristr($item['Name'], $string))) {
+    if (!empty($string) && is_string(stristr($item['Name'], $string))) {
       $id = $item['ContactID'];
       $matches[$id] = check_plain($item['Name']);
     }
@@ -101,7 +101,7 @@ function xero_autocomplete_invoices($string = '') {
   $matches = array();
 
   foreach ($invoices['Invoice'] as $item) {
-    if (is_string(stristr($item['InvoiceNumber'], $string))) {
+    if (!empty($string) && is_string(stristr($item['InvoiceNumber'], $string))) {
       $id = $item['InvoiceNumber'];
       $matches[$id] = check_plain($item['InvoiceNumber']);
     }
