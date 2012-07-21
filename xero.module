@@ -422,11 +422,13 @@ function xero_get_cache($type = 'Contacts') {
  * xero_make().
  * @param $type the data type to use such as 'contact'.
  * @param $size the size of the data set to return. this can be anything that
- * a xero_make_FUNCTION defines for itself. @see xero_make_invoice().
+ * a xero_make_FUNCTION defines for itself.
  * @param $args any additional arguments to pass into the make function as an
  * indexed array.
  * @return a valid xero data structure or FALSE if we couldn't do it for some
  * reason.
+ * 
+ * @see xero_make_invoice().
  */
 function xero_make($type = 'contact', $size = 'minimal', $args = array()) {
   if ($cached = cache_get('xero_make_registry', 'cache')) {
