@@ -15,7 +15,7 @@ function xero_admin_settings($form, &$form_state) {
   $items = array(
     array(
       'title' => t('Add Xero Application on Xero.com'), 
-      'href' => 'https://api.xero.com/Applicaiton/Add',
+      'href' => 'https://api.xero.com/Application/Add',
     ),
     array(
       'title' => t('Verify Xero Installation'),
