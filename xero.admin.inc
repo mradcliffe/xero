@@ -75,10 +75,12 @@ function xero_autocomplete_contacts($string = '') {
   $contacts = xero_get_cache('Contacts');
   $matches = array();
 
-  foreach ($contacts['Contact'] as $item) {
-    if (!empty($string) && is_string(stristr($item['Name'], $string))) {
-      $id = $item['ContactID'];
-      $matches[$id] = check_plain($item['Name']);
+  if (!empty($contacts['Contact'])) {
+    foreach ($contacts['Contact'] as $item) {
+      if (!empty($string) && is_string(stristr($item['Name'], $string))) {
+        $id = $item['ContactID'];
+        $matches[$id] = check_plain($item['Name']);
+      }
     }
   }
 
@@ -93,10 +95,12 @@ function xero_autocomplete_invoices($string = '') {
   $invoices = xero_get_cache('Invoices');
   $matches = array();
 
-  foreach ($invoices['Invoice'] as $item) {
-    if (!empty($string) && is_string(stristr($item['InvoiceNumber'], $string))) {
-      $id = $item['InvoiceNumber'];
-      $matches[$id] = check_plain($item['InvoiceNumber']);
+  if (!empty($invoices['Invoice'])) {
+    foreach ($invoices['Invoice'] as $item) {
+      if (!empty($string) && is_string(stristr($item['InvoiceNumber'], $string))) {
+        $id = $item['InvoiceNumber'];
+        $matches[$id] = check_plain($item['InvoiceNumber']);
+      }
     }
   }
 
