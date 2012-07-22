@@ -10,9 +10,8 @@
 function xero_admin_settings() {
   $form = array();
 
-  // @todo Turn into MENU_LOCAL_ACTION in Drupal 7
   $items = array(
-    l(t('Add Xero Application on Xero.com'), 'https://api.xero.com/Applicaiton/Add'),
+    l(t('Add Xero Application on Xero.com'), 'https://api.xero.com/Application/Add'),
     l(t('Verify Xero Installation'), 'admin/reports/status'),
   );
 
