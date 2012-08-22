@@ -64,4 +64,22 @@ class XeroConnectionTest extends DrupalUnitTestCase {
       $this->assertNotNull($result['Accounts']['Account'][0]['Name'], t('Successfully queried xero for accounts. Found an account named @name.', array('@name' => json_encode($result['Accounts']['Account'][0]['Name']))));
     }
   }
+
+  /**
+   * This only works if you have an invoice.
+   */
+  public function testXeroPDF() {
+    $filename = $this->originalFileDirectory . '/simpletest/verbose/' . $this->randomName(5) . '.pdf';
+
+    $xero = xero_php_load();
+
+    $invoices = $xero->Invoices;
+    $invoice_num = $invoices['Invoices']['Invoice'][0]['InvoiceNumber'];
+
+    $result = $xero->Invoices($invoice_num, '', '', '', 'pdf');
+
+    $bytes = file_put_contents($filename, $result, FILE_APPEND);
+    $url = '<a href="' . file_create_url($filename) . '" target="_blank">' . t('PDF successfully saved.') . '</a>';
+    $this->assertNotEqual($bytes, 0, t('!link', array('!link' => $url)));
+  }
 }

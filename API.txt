@@ -15,7 +15,7 @@ I Queries
     Retrieve all contacts in your organization:
 
     <?php
-      $result = xero_query('get', 'Contacts', FALSE, FALSE, array());
+      $result = xero_query('get', 'Contacts', FALSE, FALSE, array(), 'json');
     ?>
 
     The first argument is straightforward.
@@ -26,6 +26,9 @@ I Queries
     The fourth argument is an optional UTC timestamp: YYYY-MM-DDT00:00:00
     The fifth argument is an optional array of key=value filters corresponding
     to elements in object we're querying.
+    The sixth argument is an optional string detailing what the response format
+    should be such as json, xml, or pdf. You should only need this if you want
+    a PDF from an invoice.
 
     The return value has three possible scenarios:
       1. NULL - Unable to even query xero.
@@ -36,7 +39,7 @@ I Queries
     who have been modified after Midnight September 5th, 2010.
 
     <?php
-      $result = xero_query('get', 'Contacts', FALSE, '2010-09-05T00:00:00', array('IsSupplier' => 'TRUE'));
+      $result = xero_query('get', 'Contacts', FALSE, '2010-09-05T00:00:00', array('IsSupplier' => 'TRUE'), 'json');
     ?>
 
     You could loop through the results with:

@@ -175,7 +175,7 @@ function xero_xero_make_info() {
  *
  * @return object A PHP-Xero object or NULL.
  */
-function xero_php_load() {
+function xero_php_load($method = 'json') {
   module_load_include('php', 'xero', 'include/xero');
 
   $key = variable_get('xero_consumer_key', '');
@@ -183,7 +183,7 @@ function xero_php_load() {
   $cert = variable_get('xero_cert_path', '');
   $cert_key = variable_get('xero_key_path', '');
 
-  return new Xero($key, $secret, $cert, $cert_key, 'json');
+  return new Xero($key, $secret, $cert, $cert_key, $method);
 }
 
 /**
@@ -194,6 +194,7 @@ function xero_php_load() {
  * @param $id an optional id of the xero object such as contactid, invoiceid, etc...
  * @param $after an optional ModifiedAfter parameter for a get query.
  * @param $items an optional array of items to post such as contacts, invoices, etc...
+ * @param $method an optional string for response format: xml, json, or pdf.
  * @return returns a result array from the PHP-Xero containing status & the data posted
  *         or returns NULL if there was an error before querying.
  *
@@ -212,8 +213,8 @@ function xero_php_load() {
  *   See PHP-Xero and developer.xero.com for more information.
  *
  */
-function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items = array()) {
-  $xero = xero_php_load();
+function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items = array(), $method = 'json') {
+  $xero = xero_php_load($method);
 
   if (!$xero->verify()) {
     xero_error(0, '', 'Error trying to make a xero connection object.');
