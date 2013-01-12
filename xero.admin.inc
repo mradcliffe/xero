@@ -12,6 +12,8 @@
  */
 function xero_admin_settings($form, &$form_state) {
 
+  $xero = xero_php_load();
+
   $items = array(
     array(
       'title' => t('Add Xero Application on Xero.com'), 
@@ -28,7 +30,14 @@ function xero_admin_settings($form, &$form_state) {
     '#links' => $items,
   );
 
-  $form['xero_consumer_key'] = array(
+  $form['xero'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Xero Configuration'),
+    '#collapsible' => TRUE,
+    '#collapsed' => $xero->verify(),
+  );
+
+  $form['xero']['xero_consumer_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Xero Consumer Key'),
     '#description' => t('Provide the consumer key for your private application on xero.'),
@@ -36,7 +45,7 @@ function xero_admin_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['xero_consumer_secret'] = array(
+  $form['xero']['xero_consumer_secret'] = array(
     '#type' => 'textfield',
     '#title' => t('Xero Consumer Secret'),
     '#description' => t('Provide the consumer secret for your private application on xero.'),
@@ -44,7 +53,7 @@ function xero_admin_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['xero_cert_path'] = array(
+  $form['xero']['xero_cert_path'] = array(
     '#type' => 'textfield',
     '#title' => t('Xero Certificate Path'),
     '#description' => t('Provide the full path and file name to your Xero certificate.'),
@@ -53,7 +62,7 @@ function xero_admin_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['xero_key_path'] = array(
+  $form['xero']['xero_key_path'] = array(
     '#type' => 'textfield',
     '#title' => t('Xero Key Path'),
     '#description' => t('Provide the full path and file name to your Xero certificate private key.'),
@@ -61,6 +70,28 @@ function xero_admin_settings($form, &$form_state) {
     '#element_validate' => array('xero_admin_settings_validate_exists'),
     '#required' => TRUE,
   );
+
+  if ($xero->verify()) {
+    // Only display defaults if configured correctly.
+
+    $form['defaults'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Xero API Defaults'),
+      '#collapsible' => TRUE,
+    );
+
+    $accounts = xero_get_cache('Accounts');
+    foreach ($accounts['Account'] as $account) {
+      $account_options[$account['Code']] = check_plain($account['Name']);
+    }
+    $form['defaults']['xero_default_account'] = array(
+      '#type' => 'select',
+      '#title' => t('Default Account'),
+      '#description' => t('Choose a default account.'),
+      '#options' => $account_options,
+      '#default_value' => variable_get('xero_default_account', ''),
+    );
+  }
 
   return system_settings_form($form);
 }
