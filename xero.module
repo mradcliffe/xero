@@ -326,6 +326,7 @@ function xero_form_helper($type = 'Contacts', $default = '') {
     case 'Accounts':
       $accounts = xero_get_cache('Accounts');
       $element[$key]['#description'] = t('Select an Account from a list of valid Xero accounts.');
+      $element[$key]['#default_value'] = variable_get('xero_default_account', '');
       $element[$key]['#type'] = 'select';
       $element[$key]['#options'] = array();
 
