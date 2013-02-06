@@ -81,3 +81,18 @@ function xero_requirements($phase) {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_field_schema().
+ */
+function xero_field_schema($field) {
+  if ($field['type'] == 'xero_reference') {
+    return array(
+      'columns' => array(
+        'guid' => array('type' => 'varchar', 'length' => 36, 'not null' => TRUE),
+        'label' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      ),
+    );
+  }
+}
+

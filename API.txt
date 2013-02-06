@@ -110,6 +110,9 @@ II Form Helper
     $form['ContactID'] = xero_form_helper('Contacts', $default_value);
   ?>
 
+  The autocomplete matches have changed and the xero data type's label
+  will be returned as part of the value of the field!
+
   Note that at this time it is not possible to pass in filters for
   xero_form_helper as it uses xero_get_cache.
 

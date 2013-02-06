@@ -16,6 +16,8 @@
  */
 
 
+module_load_include('inc', 'xero', 'xero.field');
+
 /**
  * Implementation of hook_permission().
  *
@@ -510,6 +512,20 @@ function xero_get_data_types($name = '') {
       'guid' => 'InvoiceID',
       'label' => 'InvoiceNumber',
       'plural' => 'Invoices',
+    ),
+    'Account' => array(
+      'name' => 'Account',
+      'title' => 'Account',
+      'guid' => 'AccountID',
+      'label' => 'AccountCode',
+      'plural' => 'Accounts',
+    ),
+    'Payment' => array(
+      'name' => 'Payment',
+      'title' => 'Payment',
+      'guid' => 'PaymentID',
+      'label' => '',
+      'plural' => 'Payments',
     ),
   );
 

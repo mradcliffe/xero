@@ -122,7 +122,7 @@ function xero_autocomplete($type, $string = '') {
   foreach ($items[$type['name']] as $item) {
     if (!empty($string) && is_string(stristr($item[$label_key], $string))) {
       $id = $item[$guid_key];
-      $matches[$id] = check_plain($item[$label_key]);
+      $matches[$id . ' (' . $item[$label_key] . ')'] = check_plain($item[$label_key]);
     }
   }
 
