@@ -106,7 +106,7 @@ II Form Helper
   above.
 
   <?php
-    //An autocomplete textfield for contacts.
+    // An autocomplete textfield for contacts.
     $form['ContactID'] = xero_form_helper('Contacts', $default_value);
   ?>
 

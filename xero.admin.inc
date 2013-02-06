@@ -106,37 +106,26 @@ function xero_admin_settings_validate_exists($element, &$form_state) {
 }
 
 /**
- * Xero Autocomplete Contacts page callback
- * @param $string the string to search
+ * Xero Autocomplete page callback.
+ *
+ * @param $type
+ *   The xero data type array.
+ * @param $string
+ *   The string to search for.
  */
-function xero_autocomplete_contacts($string = '') {
-  $contacts = xero_get_cache('Contacts');
+function xero_autocomplete($type, $string = '') {
   $matches = array();
+  $items = xero_get_cache($type['plural']);
+  $guid_key = $type['guid'];
+  $label_key = !empty($type['label']) ? $type['label'] : $type['guid'];
 
-  foreach ($contacts['Contact'] as $item) {
-    if (!empty($string) && is_string(stristr($item['Name'], $string))) {
-      $id = $item['ContactID'];
-      $matches[$id] = check_plain($item['Name']);
+  foreach ($items[$type['name']] as $item) {
+    if (!empty($string) && is_string(stristr($item[$label_key], $string))) {
+      $id = $item[$guid_key];
+      $matches[$id] = check_plain($item[$label_key]);
     }
   }
 
   drupal_json_output($matches);
 }
 
-/**
- * Xero Autocomplete Invoices page callback
- * @param $string the string to search
- */
-function xero_autocomplete_invoices($string = '') {
-  $invoices = xero_get_cache('Invoices');
-  $matches = array();
-
-  foreach ($invoices['Invoice'] as $item) {
-    if (!empty($string) && is_string(stristr($item['InvoiceNumber'], $string))) {
-      $id = $item['InvoiceNumber'];
-      $matches[$id] = check_plain($item['InvoiceNumber']);
-    }
-  }
-
-  drupal_json_output($matches);
-}

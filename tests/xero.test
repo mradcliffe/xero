@@ -37,7 +37,7 @@ class XeroValidateTest extends DrupalUnitTestCase {
    * Implementation of getInfo() method
    * @return array
    */
-  function getInfo() {
+  static public function getInfo() {
     return array(
       'name' => t('Xero Validation Tests'),
       'description' => t('Validate data structures returned by xero_make functions.'),

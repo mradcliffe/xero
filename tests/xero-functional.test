@@ -63,11 +63,11 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
    */
 
   function testAutocompleteContacts() {
-    $this->drupalGet('xero/autocomplete/Contacts');
+    $this->drupalGet('xero/autocomplete/Contact');
     $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Contacts')));
 
     $this->drupalLogin($this->web_user);
-    $this->drupalGet('xero/autocomplete/Contacts');
+    $this->drupalGet('xero/autocomplete/Contact');
     $content = $this->drupalGetContent();
     $this->assertEqual(array(), json_decode($content), t('An empty json object was returned.'));
     $this->verbose($content);
@@ -77,11 +77,11 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
    * Assert that user has access to autocomplete invoices.
    */
   function testAutocompleteInvoices() {
-    $this->drupalGet('xero/autocomplete/Invoices');
+    $this->drupalGet('xero/autocomplete/Invoice');
     $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Invoices')));
 
     $this->drupalLogin($this->web_user);
-    $this->drupalGet('xero/autocomplete/Invoices');
+    $this->drupalGet('xero/autocomplete/Invoice');
     $content = $this->drupalGetContent();
     $this->assertEqual(array(), json_decode($content), t('An empty json object was returned.'));
     $this->verbose($content);
