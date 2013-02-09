@@ -91,6 +91,10 @@ function xero_field_schema($field) {
       'columns' => array(
         'guid' => array('type' => 'varchar', 'length' => 36, 'not null' => TRUE),
         'label' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+        'type' => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE),
+      ),
+      'indexes' => array(
+        'type' => array('type'),
       ),
     );
   }
