@@ -15,6 +15,8 @@ function xero_field_info() {
       'description' => t('A reference to a Xero data type such as a Contact, Account, BankTransaction, etc... stored as a globally-unique identifier.'),
       'default_widget' => 'xero_textfield',
       'default_formatter' => 'xero_reference',
+      'property_type' => 'struct',
+      'property_callbacks' => array('xero_entity_metadata_property_info_alter'),
     ),
   );
 }
@@ -32,16 +34,20 @@ function xero_field_widget_info() {
         'xero_type' => '',
       ),
       'behaviors' => array(
-        'multiple_values' => FIELD_BEHAVIOR_CUSTOM,
+        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+        'default value' => FIELD_BEHAVIOR_NONE,
       ),
     ),
     'xero_textfield' => array(
       'label' => t('Xero textfield'),
       'description' => t('Use a plain text field to enter reference to globally-unique identifier and labels.'),
       'field types' => array('xero_reference'),
-      'settings' => array(),
+      'settings' => array(
+        'xero_type' => array(),
+      ),
       'behaviors' => array(
-        'multiple_values' => FIELD_BEHAVIOR_DEFAULT,
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_NONE,
       ),
     ),
   );
@@ -57,9 +63,7 @@ function xero_field_formatter_info() {
       'description' => t('Display as a link to xero.com'),
       'field types' => array('xero_reference'),
       'settings' => array(
-        'guid' => 1,
-        'label' => 1,
-        'type' => 1,
+        'display' => array('guid' => 'guid', 'label' => 'label', 'type' => 'type'),
       ),
     ),
   );
@@ -111,6 +115,13 @@ function xero_field_validate($entity_type, $entity, $field, $instance, $langcode
         'message' => t('%name: must have a valid Xero type.', array('%name' => $instance['label'])),
       );
     }
+    elseif ($instance['widget']['type'] == 'xero_textfield' && !in_array($item['type'], $instance['widget']['settings']['xero_type'])) {
+      // Xero type must be configured.
+      $errors[$field_name][$langcode][$delta][] = array(
+        'error' => 'xero_type',
+        'message' => t('%name: invalid Xero type for this field.', array('%name' => $instance['label'])),
+      );
+    }
   }
 }
 
@@ -136,27 +147,30 @@ function xero_field_presave($entity_type, $entity, $field, $instance, $langcode,
  */
 function xero_field_widget_settings_form($field, $instance) {
 
-  if ($instance['widget']['type'] == 'xero_autocomplete') {
-    // Xero autocomplete requires a single data type.
-
-    $xero_types = array();
-    $types = xero_get_data_types();
-    foreach ($types as $name => $type) {
-      $xero_types[$name] = $type['title'];
-    }
-
-    $form['xero_type'] = array(
-      '#type' => 'select',
-      '#title' => t('Xero data type'),
-      '#description' => t('Select the Xero data type to use for this field. Example: Contact, Account, etc...'),
-      '#options' => $xero_types,
-      '#required' => TRUE,
-      '#default_value' => isset($instance['widget']['settings']['xero_type']) ? $instance['widget']['settings']['xero_type'] : '',
-      '#weight' => -10,
-    );
-
-    return $form;
+  $xero_types = array();
+  $types = xero_get_data_types();
+  foreach ($types as $name => $type) {
+    $xero_types[$name] = $type['title'];
   }
+
+  $form['xero_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Xero data type'),
+    '#description' => t('Select the Xero data type to use for this field. Example: Contact, Account, etc...'),
+    '#options' => $xero_types,
+    '#required' => TRUE,
+    '#default_value' => isset($instance['widget']['settings']['xero_type']) ? $instance['widget']['settings']['xero_type'] : '',
+    '#weight' => -10,
+  );
+
+  if ($instance['widget']['type'] == 'xero_textfield') {
+    // Alter form settings to provide multiple values.
+    $form['xero_type']['#multiple'] = TRUE;
+    $form['xero_type']['#required'] = FALSE;
+    $form['xero_type']['#description'] = t('Select the Xero data types to use for this field. If none are selected, then all data types will be available.');
+  }
+
+  return $form;
 }
 
 /**
@@ -187,13 +201,8 @@ function xero_field_widget_form(&$form, $form_state, $field, $instance, $langcod
     );
   }
   else {
-    
-    // Array map data types into select options.
-    $types = xero_get_data_types();
-    $options = array();
-    foreach ($types as $name => $type) {
-      $options[$name] = $type['title'];
-    }
+    // Assemble elements. 
+    $options = xero_field_get_type_options($instance['widget']['settings']['xero_type'], null, null);
 
     $element += array(
       '#type' => 'container',
@@ -203,13 +212,13 @@ function xero_field_widget_form(&$form, $form_state, $field, $instance, $langcod
         '#title' => t('Xero type'),
         '#description' => t('Select the Xero data type to associate.'),
         '#options' => $options,
-        '#default_value' => !empty($items) ? $items[$delta]['type'] : '',
+        '#default_value' => (!empty($items) && !empty($items[$delta])) ? $items[$delta]['type'] : '',
       ),
       'guid' => array(
         '#type' => 'textfield',
         '#title' => t('GUID'),
         '#description' => t('Provide the globally-unique identifier for the Xero item.'),
-        '#default_value' => !empty($items) ? $items[$delta]['guid'] : '',
+        '#default_value' => (!empty($items) && !empty($items[$delta])) ? $items[$delta]['guid'] : '',
         '#maxlength' => 38,
         '#size' => 60,
       ),
@@ -217,7 +226,7 @@ function xero_field_widget_form(&$form, $form_state, $field, $instance, $langcod
         '#type' => 'textfield',
         '#title' => t('Description'),
         '#description' => t('Describe the reference to the Xero item'),
-        '#default_value' => !empty($items) ? $items[$delta]['label'] : '',
+        '#default_value' => (!empty($items) && !empty($items[$delta])) ? $items[$delta]['label'] : '',
         '#maxlength' => 255,
         '#size' => 60,
       ),
@@ -252,25 +261,17 @@ function xero_field_formatter_settings_form($field, $instance, $view_mode, $form
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
-  $form['guid'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display GUID'),
-    '#default_value' => $settings['guid'],
+  $element = array();
+
+  $element['display'] = array(
+    '#type' => 'select',
+    '#title' => t('Display fields'),
+    '#options' => array('guid' => t('GUID'), 'label' => t('Label'), 'type' => t('Xero type')),
+    '#multiple' => TRUE,
+    '#default_value' => $settings['display'],
   );
 
-  $form['label'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display Label'),
-    '#default_value' => $settings['label'],
-  );
-
-  $form['type'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display Xero Type'),
-    '#default_value' => $settings['type'],
-  );
-
-  return $form;
+  return $element;
 }
 
 /**
@@ -280,9 +281,9 @@ function xero_field_formatter_settings_summary($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
-  $guid = $settings['guid'] ? 'Visible' : 'Hidden';
-  $label = $settings['label'] ? 'Visible' : 'Hidden';
-  $type = $settings['type'] ? 'Visible' : 'Hidden';
+  $guid = in_array('guid', $settings['display']) ? 'Visible' : 'Hidden';
+  $label = in_array('label', $settings['display']) ? 'Visible' : 'Hidden';
+  $type = in_array('type', $settings['display']) ? 'Visible' : 'Hidden';
 
   return t('GUID @guid, Label @label, Xero type @type', array('@guid' => $guid, '@label' => $label, '@type' => $type));
 }
@@ -314,10 +315,10 @@ function xero_field_formatter_view($entity_type, $entity, $field, $instance, $la
           ),
         );
 
-        if ($display['settings']['type']) {
+        if (in_array('type', $display['settings']['display'])) {
           $element[$delta]['type'] = array(
             '#theme' => 'html_tag',
-            '#tag' => 'h3',
+            '#tag' => 'span',
             '#value' => $type['title'],
             '#attributes' => array(
               'class' => array('xero-type-label'),
@@ -325,7 +326,7 @@ function xero_field_formatter_view($entity_type, $entity, $field, $instance, $la
           );
         }
 
-        if ($display['settings']['label'] && $type['label']) {
+        if (in_array('label', $display['settings']['display']) && $type['label']) {
           // Only add label if the data type has a label.
           $element[$delta]['label'] = array(
             '#theme' => 'html_tag',
@@ -337,7 +338,7 @@ function xero_field_formatter_view($entity_type, $entity, $field, $instance, $la
           );
         }
         
-        if ($display['settings']['guid']) {
+        if (in_array('guid', $display['settings']['display'])) {
           $element[$delta]['label']['#value'] .= ': ';
           $element[$delta]['guid'] = array(
             '#theme' => 'html_tag',
@@ -355,3 +356,64 @@ function xero_field_formatter_view($entity_type, $entity, $field, $instance, $la
  
   return $element;
 }
+
+/**
+ * Implements hook_entity_metadata_property_info_alter().
+ *
+ * It is currently not possible to accurately get a token from Entity API tokens
+ * for multi-value fields.
+ *
+ * @param &$info
+ * @param $entity_type
+ * @param $field
+ * @param $instance
+ * @param $field_type 
+ */
+function xero_entity_metadata_property_info_alter(&$info, $entity_type, $field, $instance, $field_type) {
+  $name = $field['field_name'];
+  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$name];
+
+  $property['type'] = $field['cardinality'] == 1 ? 'struct' : 'list<struct>';
+  $property['getter callback'] = 'entity_metadata_field_property_get';
+  $property['setter callback'] = 'entity_metadata_field_property_set';
+  $property['cardinality'] = $field['cardinality'];
+  $property['property info'] = array(
+    'guid' => array(
+      'type' => 'text',
+      'label' => t('GUID'),
+      'getter callback' => 'entity_metadata_property_get',
+      'raw getter callback' => 'entity_metadata_property_get',
+    ),
+    'label' => array(
+      'type' => 'text',
+      'label' => t('Label'),
+      'getter callback' => 'entity_metadata_property_get',
+      'raw getter callback' => 'entity_metadata_property_get',
+    ),
+    'type' => array(
+      'type' => 'text',
+      'label' => t('Xero type'),
+      'getter callback' => 'entity_metadata_property_get',
+      'options list' => 'xero_field_get_type_options',
+      'raw getter callback' => 'entity_metadata_property_get',
+    ),
+  );
+
+}
+
+/**
+ * Get xero data types as an option list.
+ */
+function xero_field_get_type_options($name, $info, $display) {
+  $available = is_array($name) ? $name : array();
+  $options = array();
+  $types = xero_get_data_types();
+  foreach ($types as $type_name => $type) {
+    if (empty($available) || (!empty($available) && in_array($type_name, $available))) {
+      // Add data type to options list.
+      $options[$type_name] = $type['title'];
+    }
+  }
+  return $options;
+}
+
