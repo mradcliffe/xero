@@ -331,7 +331,10 @@ function xero_field_formatter_view($entity_type, $entity, $field, $instance, $la
         }
         
         if (in_array('guid', $display['settings']['display'])) {
-          $element[$delta]['label']['#value'] .= ': ';
+          if (isset($element[$delta]['label'])) {
+            $element[$delta]['label']['#value'] .= ': ';
+          }
+
           $element[$delta]['guid'] = array(
             '#theme' => 'html_tag',
             '#tag' => 'span',
