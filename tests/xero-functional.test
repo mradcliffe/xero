@@ -11,7 +11,7 @@
  */
 class XeroWebTestCase extends DrupalWebTestCase {
 
-  function setUp($modules = array()) {
+  protected function setUp($modules = array()) {
     // Retrieve variables from the live database.
     $key = variable_get('xero_consumer_key', '');
     $secret = variable_get('xero_consumer_secret', '');
@@ -22,7 +22,7 @@ class XeroWebTestCase extends DrupalWebTestCase {
     parent::setUp($modules);
 
     // Set the variables after setup when using the test database.
-    $this->web_admin = $this->drupalCreateUser(array('administer site configuration'));
+    $this->web_admin = $this->drupalCreateUser(array('administer site configuration', 'bypass node access', 'administer content types', 'access content'));
     $this->drupalLogin($this->web_admin);
 
     $edit = array(
@@ -52,7 +52,7 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
     );
   }
 
-  function setUp() {
+  protected function setUp() {
     parent::setUp();
 
     $this->web_user = $this->drupalCreateUser(array('access xero'));
@@ -62,7 +62,7 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
    * Assert that user has access to autocomplete contacts.
    */
 
-  function testAutocompleteContacts() {
+  public function testAutocompleteContacts() {
     $this->drupalGet('xero/autocomplete/Contact');
     $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Contacts')));
 
@@ -76,7 +76,7 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
   /**
    * Assert that user has access to autocomplete invoices.
    */
-  function testAutocompleteInvoices() {
+  public function testAutocompleteInvoices() {
     $this->drupalGet('xero/autocomplete/Invoice');
     $this->assertResponse(403, t('Access denied for anonymous user at %path', array('%path' => 'xero/autocomplete/Invoices')));
 

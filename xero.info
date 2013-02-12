@@ -7,4 +7,5 @@ configure = admin/config/services/xero
 files[] = tests/xero.test
 files[] = tests/xero-connection.test
 files[] = tests/xero-functional.test
+files[] = tests/xero-field.test
 files[] = xero.make.inc
