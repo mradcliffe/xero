@@ -99,14 +99,6 @@ function xero_field_validate($entity_type, $entity, $field, $instance, $langcode
           'message' => t('%name: %value is not a globally-unique identifier.', array('%name' => $instance['label'], '%value' => $item['guid'])),
         );
       }
-
-      if (strlen($item['label']) > 255) {
-        // Label is too long.
-        $errors[$field_name][$langcode][$delta][] = array(
-          'error' => 'label_length_error',
-          'message' => t('%name: must be 255 characters or less.', array('%name' => $isntance['label'])),
-        ); 
-      }
     }
     elseif ($instance['widget']['type'] == 'xero_textfield' && empty($item['type'])) {
       // Xero type must be set for manual/variable type entry.
