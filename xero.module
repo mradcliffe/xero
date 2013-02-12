@@ -217,7 +217,7 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
   $xero = xero_php_load($method);
 
   if (!$xero->verify()) {
-    xero_error(0, '', 'Error trying to make a xero connection object.');
+    xero_error(0, '', 'Error trying to make a xero connection object.', $items);
     return NULL;
   }
 
@@ -233,12 +233,12 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
     $result = $xero->$action($items);
   }
   else {
-    xero_error(0, '', t('%type is not a valid type of get or post.', array('%type' => $type)));
+    xero_error(0, '', t('%type is not a valid type of get or post.', array('%type' => $type)), $items);
     return NULL;
   }
 
   if (isset($result['ErrorNumber'])) {
-    xero_error($result['ErrorNumber'], $result['Type'], $result['Message']);
+    xero_error($result['ErrorNumber'], $result['Type'], $result['Message'], $items, $result);
   }
 
   return $result;
@@ -249,12 +249,17 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
  * @param $code Optional Xero error code.
  * @param $type Optional Xero error type.
  * @param $message Xero error message.
+ * @param $items The items that were posted.
+ * @param $result The entire result array.
  */
-function xero_error($code = 0, $type = '', $message) {
+function xero_error($code = 0, $type = '', $message, $items = 'N/A', $result = 'N/A') {
   $error_code = (!empty($type)) ? $code . ' ' . $type : $code;
-  $formatted = t('<strong>Error</strong>: %code: %message', array('%code' => $error_code, '%message' => $message ));
-  drupal_set_message($formatted, 'error');
-  watchdog('xero', $formatted, NULL, WATCHDOG_CRITICAL, NULL);
+  $format_options = array('@code' => $error_code, '@message' => $message);
+  drupal_set_message(t('Error @code: @message', $format_options), 'error');
+
+  $format_options['!items'] = '<div><h3>Items</h3><pre>' . print_r($items, TRUE) . '</pre></div>';
+  $format_options['!result'] = '<div><h3>Result</h3><pre>' . print_r($result, TRUE) . '</pre></div>';
+  watchdog('xero', 'Error @code: @message !items !result', NULL, WATCHDOG_CRITICAL, NULL);
 }
 
 /**
