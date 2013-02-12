@@ -203,3 +203,34 @@ V PHP-Xero Library
 
     $result = $xero->Contacts($new);
   ?>
+
+VI Xero Types
+
+  A xero type is a data type as defined by the Xero Developer API. Xero API now
+  supports xero types in the following manner:
+
+  %xero_type menu wildcard will load an associative array of information about
+  a given type. Please consult xero_get_data_types() for more information as
+  this does not contain all data types.
+
+  The autocomplete path has been reduced to one path using the above wildcard
+  argument. The autocomplete key is the Xero data type name and not the plural
+  key. See below.
+
+  Type information refers to either the key returned by Xero's Restful API, or
+  the Drupal Xero API title/key for Form API.
+  
+    - name: The key to use for Form API.
+    - title: The title to use for Form API.
+    - guid: The GUID key for a Xero type.
+    - label: The human-readable key for a Xero type. If empty, guid will be used.
+    - plural: The plural key for a Xero type.
+
+    Example (Contacts):
+
+      'name' => 'Contact',
+      'title' => 'Contact',
+      'guid' => 'ContactID',
+      'label' => 'Name',
+      'plural' => 'Contacts',
+
