@@ -228,7 +228,7 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
   }
 
   if (isset($result['ErrorNumber'])) {
-    xero_error($result['ErrorNumber'], $result['Type'], $result['Message']);
+    xero_error($result['ErrorNumber'], $result['Type'], $result['Message'], $items, $result);
   }
 
   return $result;
@@ -239,12 +239,17 @@ function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items 
  * @param $code Optional Xero error code.
  * @param $type Optional Xero error type.
  * @param $message Xero error message.
+ * @param $items The items that were posted.
+ * @param $result The entire result array.
  */
-function xero_error($code = 0, $type = '', $message) {
+function xero_error($code = 0, $type = '', $message, $items = 'N/A', $result = 'N/A') {
   $error_code = (!empty($type)) ? $code . ' ' . $type : $code;
-  $formatted = t('<b>Error</b>: %code: %message', array('%code' => $error_code, '%message' => $message ));
-  drupal_set_message($formatted, 'error');
-  watchdog('xero', $formatted, NULL, WATCHDOG_CRITICAL, NULL);
+  $format_options = array('@code' => $error_code, '@message' => $message);
+  drupal_set_message(t('Error @code: @message', $format_options), 'error');
+
+  $format_options['!items'] = '<div><h3>Items</h3><pre>' . print_r($items, TRUE) . '</pre></div>';
+  $format_options['!result'] = '<div><h3>Result</h3><pre>' . print_r($result, TRUE) . '</pre></div>';
+  watchdog('xero', 'Error @code: @message !items !result', NULL, WATCHDOG_CRITICAL, NULL);
 }
 
 /**
