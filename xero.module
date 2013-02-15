@@ -252,7 +252,7 @@ function xero_error($code = 0, $type = '', $message, $items = 'N/A', $result = '
 
   $format_options['!items'] = '<div><h3>Items</h3><pre>' . print_r($items, TRUE) . '</pre></div>';
   $format_options['!result'] = '<div><h3>Result</h3><pre>' . print_r($result, TRUE) . '</pre></div>';
-  watchdog('xero', 'Error @code: @message !items !result', NULL, WATCHDOG_CRITICAL, NULL);
+  watchdog('xero', 'Error @code: @message !items !result', $format_options, WATCHDOG_CRITICAL, NULL);
 }
 
 /**
