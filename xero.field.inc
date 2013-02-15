@@ -15,7 +15,7 @@ function xero_field_info() {
       'description' => t('A reference to a Xero data type such as a Contact, Account, BankTransaction, etc... stored as a globally-unique identifier.'),
       'default_widget' => 'xero_textfield',
       'default_formatter' => 'xero_reference',
-      'property_type' => 'struct',
+      'property_type' => 'xero_reference',
       'property_callbacks' => array('xero_entity_metadata_property_info_alter'),
     ),
   );
@@ -368,29 +368,33 @@ function xero_entity_metadata_property_info_alter(&$info, $entity_type, $field, 
   $name = $field['field_name'];
   $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$name];
 
-  $property['type'] = $field['cardinality'] == 1 ? 'struct' : 'list<struct>';
-  $property['getter callback'] = 'entity_metadata_field_property_get';
-  $property['setter callback'] = 'entity_metadata_field_property_set';
-  $property['cardinality'] = $field['cardinality'];
+  // $property['type'] = $field['cardinality'] == 1 ? 'struct' : 'list<struct>';
+  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
+  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
+  unset($property['query callback']);
+  // $property['cardinality'] = $field['cardinality'];
   $property['property info'] = array(
     'guid' => array(
       'type' => 'text',
       'label' => t('GUID'),
-      'getter callback' => 'entity_metadata_property_get',
-      'raw getter callback' => 'entity_metadata_property_get',
+      'getter callback' => 'entity_property_verbatim_get',
+      'setter callback' => 'entity_property_verbatim_set',
+      'raw getter callback' => 'entity_property_verbatim_get',
     ),
     'label' => array(
       'type' => 'text',
       'label' => t('Label'),
-      'getter callback' => 'entity_metadata_property_get',
-      'raw getter callback' => 'entity_metadata_property_get',
+      'getter callback' => 'entity_property_verbatim_get',
+      'setter callback' => 'entity_property_verbatim_set',
+      'raw getter callback' => 'entity_property_verbatim_get',
     ),
     'type' => array(
       'type' => 'text',
       'label' => t('Xero type'),
-      'getter callback' => 'entity_metadata_property_get',
+      'getter callback' => 'entity_property_verbatim_get',
       'options list' => 'xero_field_get_type_options',
-      'raw getter callback' => 'entity_metadata_property_get',
+      'setter callback' => 'entity_property_verbatim_set',
+      'raw getter callback' => 'entity_property_verbatim_get',
     ),
   );
 
