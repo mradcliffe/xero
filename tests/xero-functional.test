@@ -11,7 +11,7 @@
  */
 class XeroWebTestCase extends DrupalWebTestCase {
 
-  protected function setUp($modules = array()) {
+  public function setUp($modules = array()) {
     // Retrieve variables from the live database.
     $key = variable_get('xero_consumer_key', '');
     $secret = variable_get('xero_consumer_secret', '');
