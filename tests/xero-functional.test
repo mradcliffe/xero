@@ -52,7 +52,7 @@ class XeroAutocompleteTestCase extends XeroWebTestCase {
     );
   }
 
-  protected function setUp() {
+  public function setUp() {
     parent::setUp();
 
     $this->web_user = $this->drupalCreateUser(array('access xero'));
