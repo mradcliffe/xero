@@ -184,9 +184,8 @@ function xero_field_widget_form(&$form, $form_state, $field, $instance, $langcod
     $element += array(
       '#type' => 'textfield',
       '#description' => t('Type a Xero %type %field to search for an available record.', array('%type' => $type['name'], '%field' => $label)),
-      '#autocomplete_path' => 'xero/autocomplete/' . $instance['settings']['xero_type'],
+      '#autocomplete_path' => 'xero/autocomplete/' . $instance['widget']['settings']['xero_type'],
       '#element_validate' => array('xero_field_autocomplete_validate'),
-      '#field_parents' => array('guid'),
       '#default_value' => !empty($guids) ? implode(', ', $guids) : '',
       '#maxlength' => 1024,
       '#size' => 60,
@@ -237,10 +236,12 @@ function xero_field_widget_form(&$form, $form_state, $field, $instance, $langcod
 function xero_field_autocomplete_validate($element, &$form_state) {
   if (!empty($element['#value']) && !is_array($element['#value'])) {
     // Autocomplete field widget must be expanded into an array.
-    preg_match('/(\S+) \((\S+)\)/', $element['#value'], $matches);
+    preg_match('/(\S+) \((.+)\)/', $element['#value'], $matches);
     $item = array(
-      'guid' => $matches[1],
-      'label' => $matches[2],
+      array(
+        'guid' => $matches[1],
+        'label' => $matches[2],
+      ),
     );
     form_set_value($element, $item, $form_state);
   }

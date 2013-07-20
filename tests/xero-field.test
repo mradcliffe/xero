@@ -10,25 +10,15 @@
  */
 class XeroFieldTestCase extends XeroWebTestCase {
   
-  static public function getInfo() {
-    return array(
-      'name' => 'Xero Field Tests',
-      'description' => 'Assert create, read, and update for Xero reference field type.',
-      'group' => 'Xero',
-    ); 
-  }
-
   public function setUp() {
     parent::setUp();
 
-    $this->nodeType = $this->drupalCreateContentType();
     $this->node = $this->drupalCreateNode(array('type' => 'page'));
 
     // Login as admin. and test field UI create field instance.
     $this->drupalLogin($this->web_admin);
     $this->field_name = $this->createXeroField($this->randomName(10));
   }
-
 
   /**
    * Create Xero reference field.
@@ -82,8 +72,22 @@ class XeroFieldTestCase extends XeroWebTestCase {
       'type' => $type,
     );
   }
+}
 
-  public function testBasic() {
+/**
+ * Xero field CRUD
+ */
+class XeroFieldCRUDTestCase extends XeroFieldTestCase {
+
+  static public function getInfo() {
+    return array(
+      'name' => 'Xero Field CRUD',
+      'description' => 'Assert create, read, and update for Xero reference field type.',
+      'group' => 'Xero',
+    ); 
+  }
+
+  public function testCRUD() {
     // Create node and save values.
     $values = $this->createFieldValue();
     $field_name = $this->field_name;
@@ -113,8 +117,63 @@ class XeroFieldTestCase extends XeroWebTestCase {
     $this->assertText('is not a globally-unique identifier.');
     $this->assertText('cannot be longer than 255 characters');
   }
+}
 
-  function testDisplays() {
+/**
+ * Test autocomplete widget.
+ */
+class XeroFieldAutocompleteTestCase extends XeroFieldTestCase {
+
+  static public function getInfo() {
+    return array(
+      'name' => 'Xero Field Autocomplete',
+      'description' => 'Assert autocomplete values are transformed correctly.',
+      'group' => 'Xero',
+    ); 
+  }
+
+  public function setUp() {
+    parent::setUp();
+
+    // Change to autocomplete widget.
+    $edit = array(
+      'widget_type' => 'xero_autocomplete',
+    );
+    $this->drupalPost('admin/structure/types/manage/page/fields/' . $this->field_name . '/widget-type', $edit, t('Continue'));
+    $this->assertRaw('Xero autocomplete');
+
+    $edit = array(
+      'instance[widget][settings][xero_type]' => 'Contact',
+    );
+    $this->drupalPost('admin/structure/types/manage/page/fields/' . $this->field_name, $edit, t('Save settings'));
+  }
+
+  public function testAutocompleteWidget() {
+    // Create node and save values.
+    $values = $this->createFieldValue();
+    $edit = array(
+      $this->field_name . '[und]' => $values['guid'] . ' (ContactID)',
+    );
+    $this->drupalPost('node/' . $this->node->nid . '/edit', $edit, t('Save'));
+    $this->assertRaw($values['guid'], t('Found saved GUID: %guid', array('%guid' => $values['guid'])));
+    $this->assertRaw($values['type'], t('Found saved xero type: %type', array('%type' => $values['type'])));
+  }
+}
+
+/**
+ * Test Xero field display.
+ */
+class XeroFieldDisplayTestCase extends XeroFieldTestCase {
+
+  static public function getInfo() {
+    return array(
+      'name' => 'Xero Field Display',
+      'description' => 'Assert field display',
+      'group' => 'Xero',
+    );
+  }
+
+  public function testDisplays() {
 
     // Disable all but type
     $update = array(
