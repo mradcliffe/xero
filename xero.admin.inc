@@ -11,8 +11,15 @@
  * @return array the form array.
  */
 function xero_admin_settings($form, &$form_state) {
+  $xero_loaded = FALSE;
 
-  $xero = xero_php_load();
+  try {
+    $xero = xero_php_load();
+    $xero_loaded = TRUE;
+  } catch (XeroException $e) {
+    $xero_loaded = FALSE;
+    drupal_set_message(t('Error: @message', array('@message' => $e->getMessage())), 'error');
+  }
 
   $items = array(
     array(
@@ -30,11 +37,12 @@ function xero_admin_settings($form, &$form_state) {
     '#links' => $items,
   );
 
+  // Open the fieldset if there was a problem loading the library.
   $form['xero'] = array(
     '#type' => 'fieldset',
     '#title' => t('Xero Configuration'),
     '#collapsible' => TRUE,
-    '#collapsed' => $xero->verify(),
+    '#collapsed' => (empty($xero_loaded)) ? FALSE : $xero->verify(),
   );
 
   $form['xero']['xero_consumer_key'] = array(
@@ -71,7 +79,7 @@ function xero_admin_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  if ($xero->verify()) {
+  if (!empty($xero_loaded) && $xero->verify()) {
     // Only display defaults if configured correctly.
 
     $form['defaults'] = array(
