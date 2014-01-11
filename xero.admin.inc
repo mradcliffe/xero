@@ -14,9 +14,11 @@ function xero_admin_settings() {
   try {
     $xero = xero_php_load();
     $xero_loaded = TRUE;
-  } catch (XeroException $e) {
+  }
+  catch (XeroException $e) {
     $xero_loaded = FALSE;
     drupal_set_message(t('Error: @message', array('@message' => $e->getMessage())), 'error');
+    watchdog_exception('xero', $e, 'Xero certificate is missing.');
   }
 
   $items = array(

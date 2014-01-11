@@ -64,7 +64,8 @@ function xero_requirements($phase) {
     else {
       try {
         $xero = new Xero($key, $secret, $cert, $cert_key, 'json');
-      } catch (XeroException $e) {
+      } 
+      catch (XeroException $e) {
         $requirements['xero_lib']['value'] = $t('PHP-Xero error: @error', array('@error' => $e->getMessage()));
         $requirements['xero_lib']['severity'] = REQUIREMENT_ERROR;
         return $requirements;
