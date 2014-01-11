@@ -84,7 +84,10 @@ function xero_admin_settings() {
 
     $accounts = xero_get_cache('Accounts');
     foreach ($accounts['Account'] as $account) {
-      $account_options[$account['Code']] = check_plain($account['Name']);
+      // Bank accounts do not have a code, exclude them.
+      if (!empty($account['Code'])) {
+        $account_options[$account['Code']] = check_plain($account['Name']);
+      }
     }
     $form['defaults']['xero_default_account'] = array(
       '#type' => 'select',
