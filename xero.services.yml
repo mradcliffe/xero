@@ -1,0 +1,10 @@
+services:
+  xero.client.factory:
+    class: Drupal\xero\XeroClientFactory
+  xero.client:
+    class: BlackOptic\Bundle\XeroBundle\XeroClient
+    factory_method: get
+    factory_service: xero.client.factory
+    arguments:
+      - '@config.factory'
+      - '@logger.factory'

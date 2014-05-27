@@ -1,0 +1,38 @@
+<?php
+/**
+ * @file
+ * Provides \Drupal\xero\TypedData\Definition\EmployeeDefinition.
+ */
+
+namespace Drupal\xero\TypedData\Definition;
+
+use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\TypedData\ComplexDataDefinitionBase;
+
+/**
+ * Xero Employee data definition
+ */
+class EmployeeDefinition extends ComplexDataDefinitionBase {
+  /**
+   * {@inheritdoc}
+   */
+  public function getPropertyDefinitions() {
+    if (!isset($this->propertyDefinitions)) {
+      $info = &$this->propertyDefinitions;
+
+      // UUID is read only.
+      $info['EmployeeID'] = DataDefinition::create('uuid')->setLabel('Employee Id')->setReadOnly();
+
+      // Writeable properties.
+      $info['FirstName'] = DataDefinition::create('string')->setLabel('First name');
+      $info['LastName'] = DataDefinition::create('string')->setLabel('Last name');
+
+      // Optional
+      $info['ExternalLink'] = LinkDefinition::create('xero_link')->setLabel('External link');
+
+      // Read-only.
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly();
+    }
+    return $this->propertyDefinitions;
+  }
+}
