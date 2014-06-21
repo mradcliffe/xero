@@ -1,5 +1,7 @@
-xero_consumer_key: ''
-xero_consumer_secret: ''
-xero_cert_path: ''
-xero_key_path: ''
-xero_default_account: ''
+oauth:
+  consumer_key: ''
+  consumer_secret: ''
+  cert_path: ''
+  key_path: ''
+defaults:
+  account: ''

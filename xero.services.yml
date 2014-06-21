@@ -8,3 +8,8 @@ services:
     arguments:
       - '@config.factory'
       - '@logger.factory'
+  xero.normalizer:
+    class: Drupal\xero\Normalizer\XeroNormalizer
+    arguments: ['@typed_data_manager']
+    tags:
+      - { name: normalizer }

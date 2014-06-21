@@ -1,5 +1,10 @@
 {
-  "require": {
-    "blackoptic/xerobundle": "*",
-  }
+    "name": "drupal/xero",
+    "type": "drupal-module",
+    "descirption": "Xero module provides integration with the Xero API and Drupal.",
+    "homepage": "http://drupal.org/project/xero",
+    "license": "GPL-2.0",
+    "require": {
+        "blackoptic/xerobundle": "dev-master"
+    }
 }

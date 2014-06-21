@@ -1,8 +1,10 @@
 name: Xero
 description: Provides third-party integration with xero.com acounting software as a service.
+type: module
 package: Xero
 core: 8.x
-configure: admin/config/services/xero
+configure: 'xero.configure'
 dependencies:
   - symfony_dependency
   - guzzle_dependency
+  - serialization

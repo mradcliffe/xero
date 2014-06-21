@@ -1,8 +1,8 @@
 xero.configure:
   path: '/admin/config/services/xero'
   defaults:
+    _form: '\Drupal\xero\Form\SettingsForm'
     _title: 'Xero Configuration'
-    _form: '\Drupal\xero\Form\XeroConfigurationForm'
   requirements:
     _permission: 'administer site configuration'
 #xero.autocomplete:
