@@ -1,25 +1,29 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\Account.
+ * Provides \Drupal\xero\Plugin\DataType\Account.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
+
+use Drupal\Core\TypedData\Annotation\DataType;
+use Drupal\Core\TypedData\Annotation\Translation;
 
 /**
  * Xero Account type.
  *
  * @DataType(
- *   "id" => "xero_account",
- *   "label" => @Translation("Xero Account"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\AccountDefinition"
+ *   id = "xero_account",
+ *   label = @Translation("Xero Account"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\AccountDefinition"
  * )
  */
 class Account extends XeroTypeBase {
 
-  static protected $guid_name = 'AccountID';
-  static protected $plural_name = 'Accounts';
-  static protected $label = 'AccountCode';
+  static public $guid_name = 'AccountID';
+  static public $xero_name = 'Account';
+  static public $plural_name = 'Accounts';
+  static public $label = 'AccountCode';
 
   /**
    * {@inheritdoc}

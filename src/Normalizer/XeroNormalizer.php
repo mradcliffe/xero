@@ -7,7 +7,7 @@
 namespace Drupal\xero\Normalizer;
 
 use Drupal\serialization\Normalizer\ComplexDataNormalizer;
-use Drupal\Core\TypedData\TypeDataManager;
+use Drupal\Core\TypedData\TypedDataManager;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -27,17 +27,19 @@ class XeroNormalizer extends ComplexDataNormalizer implements DenormalizerInterf
    * {@inheritdoc}
    */
   public function denormalize($data, $class, $format = NULL, array $context = array()) {
-    var_dump($context);
-    var_dump($class);
-    var_dump($data);
-    exit;
+    // The context array requires the Xero data type to be known. If not, then
+    // cannot do anything. This is consistent with Entity normalization.
+    if (!isset($context['plugin_id']) || empty($context['plugin_id'])) {
+      throw new UnexpectedValueException('Plugin id parameter must be included in context.');
+    }
 
-    // Get the Data Definition for the DataType in $class.
-
-    // Get the plural name for the Datatype in $class.
+    $name = $class::$xero_name;
     $plural_name = $class::$plural_name;
 
-    // go through $data->{$plural_name} and do TypedDataManager::create().
+    $list_definition = $this->typedDataManager->createListDataDefinition($context['plugin_id']);
+    $items = $this->typedDataManager->create($list_definition, $data[$plural_name][$name]);
+
+    return $items;
   }
 
 }

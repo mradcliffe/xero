@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\XeroTypeBase.
+ * Provides \Drupal\xero\Plugin\DataType\XeroTypeBase.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 use Drupal\Core\TypedData\Plugin\DataType\Map;
 use Drupal\xero\TypedData\XeroTypeInterface;
@@ -15,9 +15,10 @@ use Drupal\xero\TypedData\XeroTypeInterface;
  */
 abstract class XeroTypeBase extends Map implements XeroTypeInterface {
 
-  static protected $guid_name;
-  static protected $plural_name;
-  static protected $label;
+  static public $guid_name;
+  static public $xero_name;
+  static public $plural_name;
+  static public $label;
 
   /**
    * {@inheritdoc}

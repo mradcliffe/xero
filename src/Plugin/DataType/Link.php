@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\Link.
+ * Provides \Drupal\xero\Plugin\DataType\Link.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 use Drupal\Core\TypedData\Plugin\DataType\Map;
 
@@ -12,9 +12,9 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * Xero link
  *
  * @DataType(
- *   "id" => "xero_link",
- *   "label" => @Translation("Xero Link"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\LinkDefinition"
+ *   id = "xero_link",
+ *   label = @Translation("Xero Link"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\LinkDefinition"
  * )
  */
 class Link extends Map {

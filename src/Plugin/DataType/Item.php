@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ * Provides \Drupal\xero\Plugin\DataType\Item.
+ */
+
+namespace Drupal\xero\Plugin\DataType;
+
+/**
+ * Xero Item type.
+ *
+ * @DataType(
+ *   id = "xero_item",
+ *   label = @Translation("Xero Item"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ItemDefinition"
+ * )
+ */
+class Item extends XeroTypeBase {
+
+  static public $guid_name = 'ItemID';
+  static public $xero_name = 'Item';
+  static public $plural_name = 'Items';
+  static public $label = 'Code';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getPropertyDefinitions() {
+    return $this->definition->getPropertyDefinitions();
+  }
+
+}

@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\Address.
+ * Provides \Drupal\xero\Plugin\DataType\Address.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 use Drupal\Core\TypedData\Plugin\DataType\Map;
 
@@ -12,9 +12,9 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * Xero address type
  *
  * @DataType(
- *   "id" => "xero_address",
- *   "label" => @Translation("Xero Address"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\AddressDefinition"
+ *   id = "xero_address",
+ *   label = @Translation("Xero Address"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\AddressDefinition"
  * )
  */
 class Address extends Map {

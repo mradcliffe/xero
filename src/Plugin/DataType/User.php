@@ -1,27 +1,28 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\User.
+ * Provides \Drupal\xero\Plugin\DataType\User.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 /**
  * Xero User type.
  *
  * @DataType(
- *   "id" => "xero_user",
- *   "label" => @Translation("Xero User"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\UserDefinition"
+ *   id = "xero_user",
+ *   label = @Translation("Xero User"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\UserDefinition"
  * )
  *
  * @todo user roles?
  */
 class User extends XeroTypeBase {
 
-  static protected $guid_name = 'UserID';
-  static protected $plural_name = 'Users';
-  static protected $label = 'EmailAddress';
+  static public $guid_name = 'UserID';
+  static public $xero_name = 'User';
+  static public $plural_name = 'Users';
+  static public $label = 'EmailAddress';
 
   /**
    * {@inheritdoc}

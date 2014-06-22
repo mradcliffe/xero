@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\Phone.
+ * Provides \Drupal\xero\Plugin\DataType\Phone.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 use Drupal\Core\TypedData\Plugin\DataType\Map;
 
@@ -12,9 +12,9 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * Xero phone type
  *
  * @DataType(
- *   "id" => "xero_phone",
- *   "label" => @Translation("Xero Phone"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\PhoneDefinition"
+ *   id = "xero_phone",
+ *   label = @Translation("Xero Phone"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\PhoneDefinition"
  * )
  */
 class Phone extends Map {

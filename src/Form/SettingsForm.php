@@ -115,18 +115,23 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       try {
         $request = $this->client->get('Accounts');
         $response = $request->send();
-        // @todo support List of accounts... how? Documentation is terrible. DrupalWTF.
-        $accounts = $this->serializer->deserialize($response->getBody(TRUE), 'Drupal\xero\TypedData\Plugin\DataType\Account', 'xml');
+        $context = array('plugin_id' => 'xero_account');
+        $accounts = $this->serializer->deserialize($response->getBody(TRUE), 'Drupal\xero\Plugin\DataType\Account', 'xml', $context);
+
 
         foreach ($accounts as $account) {
           // Bank accounts do not have a code, exclude them.
-          if ($account->get('Code')) {
-            $account_options[$account->get('Code')] = check_plain($account->get('Name'));
+          if ($account->get('Code')->getValue()) {
+            $account_options[$account->get('Code')->getValue()] = check_plain($account->get('Name')->getValue());
           }
         }
       }
       catch (RequestException $e) {
         $this->logger->error('%message: %response', array('%message' => $e->getMessage(), '%response' => $e->getResponse()->getBody(TRUE)));
+        return parent::buildForm($form, $form_state);
+      }
+      catch (\Exception $e) {
+        $this->logger->error('%message', array('%message' => $e->getMessage()));
         return parent::buildForm($form, $form_state);
       }
 
@@ -135,7 +140,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
         '#title' => t('Default Account'),
         '#description' => t('Choose a default account.'),
         '#options' => $account_options,
-        '#default_value' => $this->config->get('defaults.account'),
+        '#default_value' => $config->get('defaults.account'),
       );
     }
 
@@ -155,8 +160,6 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * {@inheritdoc}
    */
    public function submitForm(array &$form, array &$form_state) {
-     parent::submitForm($form, $form_state);
-
      // Set configuration.
      $config = self::config('xero.settings');
      $config

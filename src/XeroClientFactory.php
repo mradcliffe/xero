@@ -22,11 +22,11 @@ class XeroClientFactory {
     $config = $config_factory->get('xero.settings');
     $xero_config = array(
       'base_url' => 'https://api.xero.com/api.xro/2.0',
-      'token' => $config->get('xero_consumer_key', ''),
-      'token_secret' => $config->get('xero_consumer_secret', ''),
-      'consumer_key' => $config->get('xero_consumer_key', ''),
-      'consumer_secret' => $config->get('xero_consumer_secret', ''),
-      'private_key' => $config->get('xero_key_path', '')
+      'token' => $config->get('oauth.consumer_key'),
+      'token_secret' => $config->get('oauth.consumer_secret'),
+      'consumer_key' => $config->get('oauth.consumer_key'),
+      'consumer_secret' => $config->get('oauth.consumer_secret'),
+      'private_key' => $config->get('oauth.key_path')
     );
 
     try {

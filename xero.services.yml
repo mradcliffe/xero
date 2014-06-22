@@ -5,9 +5,7 @@ services:
     class: BlackOptic\Bundle\XeroBundle\XeroClient
     factory_method: get
     factory_service: xero.client.factory
-    arguments:
-      - '@config.factory'
-      - '@logger.factory'
+    arguments: ['@config.factory', '@logger.factory']
   xero.normalizer:
     class: Drupal\xero\Normalizer\XeroNormalizer
     arguments: ['@typed_data_manager']

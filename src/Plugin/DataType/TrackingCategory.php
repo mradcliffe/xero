@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\TrackingCategory.
+ * Provides \Drupal\xero\Plugin\DataType\TrackingCategory.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 use Drupal\Core\TypedData\Plugin\DataType\Map;
 
@@ -12,9 +12,9 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * Xero line item type
  *
  * @DataType(
- *   "id" => "xero_tracking",
- *   "label" => @Translation("Xero Tracking Category"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\TrackingCategoryDefinition"
+ *   id = "xero_tracking",
+ *   label = @Translation("Xero Tracking Category"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\TrackingCategoryDefinition"
  * )
  */
 class TrackingCategory extends Map {

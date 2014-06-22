@@ -1,25 +1,26 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\TypedData\Plugin\DataType\Contact.
+ * Provides \Drupal\xero\Plugin\DataType\Contact.
  */
 
-namespace Drupal\xero\TypedData\Plugin\DataType;
+namespace Drupal\xero\Plugin\DataType;
 
 /**
  * Xero Contact type.
  *
  * @DataType(
- *   "id" => "xero_contact",
- *   "label" => @Translation("Xero Contact"),
- *   "definition_class" => "\Drupal\xero\TypedData\Definition\ContactDefinition"
+ *   id = "xero_contact",
+ *   label = @Translation("Xero Contact"),
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ContactDefinition"
  * )
  */
 class Contact extends XeroTypeBase {
 
-  static protected $guid_name = 'ContactID';
-  static protected $plural_name = 'Contacts';
-  static protected $label = 'Name';
+  static public $guid_name = 'ContactID';
+  static public $xero_name = 'Contact';
+  static public $plural_name = 'Contacts';
+  static public $label = 'Name';
 
   /**
    * {@inheritdoc}
