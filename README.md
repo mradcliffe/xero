@@ -1,3 +1,54 @@
+# Xero Module
+
+This module provides classes to help interface with the Xero Account SaaS product. You will need to be familiar with the [Xero API](http://developer.xero.com).
+
+The module provides a factory class which instantiates XeroClient, an extension of Guzzle Client. This allows you to make requests to the Xero API via Guzzle. As well, all of Xero types are mapped out as a TypedData replacing the old `xero_make` system, and the raw JSON or XML can be fed into Serializer to normalize and denormalize data.
+
+## XeroBundle
+
+Xero module now requires [BlackOptic\XeroBundle](https://github.com/james75/XeroBundle) instead of PHP-Xero, and this can either be included by hacking Drupal core composer.json -OR- by installing [Composer Manager](http://drupal.org/project/composer_manager) patched with [#2276423: Composer Manager work flow breaks when a module defines a service from a dependency](https://www.drupal.org/node/2276423).
+
+## Using XeroClient to fetch into TypedData manually
+
+It is advised to use dependency injection to retrieve the `xero.client` and `serializer` services. This example assumes that this is stored in an object variable called `client` and serializer is `serializer`.
+
+```php
+  try {
+    // Do Guzzle things.
+    $options = array('query' => array('where' => 'Contact.FirstName = John'));
+    $request = $this->client->get('Contacts', array(), $options);
+    $response = $request->send();
+
+    // Do Serializer things. The context array must have a key plugin_id with
+    // the plugin id of the data type because Drupal.
+    $context = array('plugin_id' => 'xero_contact');
+    $contacts = $this->serializer->deserialize($response->getBody(TRUE), 'Drupal\xero\Plugin\DataType\Contact', 'xml', $context);
+
+    // Contacts is a list item and can be iterated through like an entity or
+    // other typed data.
+    foreach ($contacts as $contact) {
+      $mail = $contact->get('Email')->getValue();
+    }
+  }
+  catch (RequestException $e) {
+    // Do Logger things.
+  }
+```
+
+## Using TypedData to post to Xero
+
+```php
+  $typedDataManager = \Drupal::typedDataManager();
+
+  // Xero likes lists, so it's a good idea to create a the list item for an
+  // equivalent xero data type using typed data manager.
+  $definition = $typedDataManager->createListDataDefinition('xero_invoice');
+  $invoices = $typedDataManager->create($definition, 'xero_invoice');
+
+  foreach ($invoices as $invoice) {
+    $invoice->setValue('ACCREC');
+  }
+```
 
 Xero API Examples
 
@@ -50,7 +101,7 @@ I Queries
       }
     ?>
 
-  2 Caching Data 
+  2 Caching Data
 
     The Xero API for Drupal will keep a cache of objects if you use
     the xero_get_cache method. This is a simple way of grabbing all
@@ -80,7 +131,7 @@ I Queries
     post new objects for an action on the xero.com developer site.
 
     You may also modify an existing item by passing the appropriate
-    identifier as part of the array structure. You do not need to 
+    identifier as part of the array structure. You do not need to
     specify every element as elements not specified will remain the
     same.
 
@@ -138,7 +189,7 @@ III Xero Make
   ?>
 
   In this example the arguments array contains two arguments, which
-  correspond to the arguments of xero_make_invoice. The return value 
+  correspond to the arguments of xero_make_invoice. The return value
   will look like this. Note that 'recommended' is also passed into
   xero_make_lineitem, which is called directly from xero_make_invoice.
 
@@ -182,7 +233,7 @@ IV Theming Data
 
   <?php
     $output = theme('xero_contact', $contact);
-  ?> 
+  ?>
 
 V PHP-Xero Library
 
@@ -219,7 +270,7 @@ VI Xero Types
 
   Type information refers to either the key returned by Xero's Restful API, or
   the Drupal Xero API title/key for Form API.
-  
+
     - name: The key to use for Form API.
     - title: The title to use for Form API.
     - guid: The GUID key for a Xero type.
