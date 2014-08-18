@@ -9,6 +9,7 @@ namespace Drupal\xero\Form;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Serializer;
 use BlackOptic\Bundle\XeroBundle\XeroClient;
@@ -53,7 +54,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
 
     // Get the configuration from ConfigFormBase::config().
     $config = self::config('xero.settings');
@@ -150,27 +151,28 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
   /**
    * Validate that certificate or key file exist.
    */
-  public function validateFileExists($element, &$form_state) {
+  public function validateFileExists($element, FormStateInterface $form_state) {
     if (!file_exists($element['#value'])) {
-      \Drupal::formBuilder()->setError($element, $form_state, t('The specified file either does not exist, or is not accessible to the web server.'));
+      $form_state->setError($element, t('The specified file either does not exist, or is not accessible to the web server.'));
     }
   }
 
   /**
    * {@inheritdoc}
    */
-   public function submitForm(array &$form, array &$form_state) {
+   public function submitForm(array &$form, FormStateInterface $form_state) {
      // Set configuration.
      $config = self::config('xero.settings');
+     $form_state_values = $form_state->getValues();
      $config
-       ->set('oauth.consumer_key', $form_state['values']['oauth']['consumer_key'])
-       ->set('oauth.consumer_secret', $form_state['values']['oauth']['consumer_secret'])
-       ->set('oauth.cert_path', $form_state['values']['oauth']['cert_path'])
-       ->set('oauth.key_path', $form_state['values']['oauth']['key_path']);
+       ->set('oauth.consumer_key', $form_state_values['oauth']['consumer_key'])
+       ->set('oauth.consumer_secret', $form_state_values['oauth']['consumer_secret'])
+       ->set('oauth.cert_path', $form_state_values['oauth']['cert_path'])
+       ->set('oauth.key_path', $form_state_values['oauth']['key_path']);
 
      // Check for default account and save setting, if available.
-     if (isset($form_state['values']['defaults'])) {
-       $config->set('defaults.account', $form_state['values']['defaults']['account']);
+     if (isset($form_state_values['defaults'])) {
+       $config->set('defaults.account', $form_state_values['defaults']['account']);
      }
 
      $config->save();
