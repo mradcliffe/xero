@@ -123,7 +123,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
         foreach ($accounts as $account) {
           // Bank accounts do not have a code, exclude them.
           if ($account->get('Code')->getValue()) {
-            $account_options[$account->get('Code')->getValue()] = check_plain($account->get('Name')->getValue());
+            $account_options[$account->get('Code')->getValue()] = $account->get('Name')->getValue();
           }
         }
       }
