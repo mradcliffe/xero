@@ -6,5 +6,4 @@ core: 8.x
 configure: 'xero.configure'
 dependencies:
   - symfony_dependency
-  - guzzle_dependency
   - serialization
