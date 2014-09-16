@@ -8,6 +8,7 @@ namespace Drupal\xero;
 
 use Symfony\Component\Serializer\Serializer;
 use BlackOptic\Bundle\XeroBundle\XeroClient;
+use \Drupal\xero\TypedData\XeroTypeInterface;
 use Drupal\Core\TypedData\TypedDataManager;
 use Drupal\Component\Uuid;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -60,6 +61,11 @@ class XeroQuery /*implements XeroQueryInterface */ {
    * The xero data type type definition.
    */
   protected $type_definition;
+
+  /**
+   * The xero data object.
+   */
+  protected $data;
 
   /**
    * Construct a Xero Query object.
@@ -174,6 +180,35 @@ class XeroQuery /*implements XeroQueryInterface */ {
     $this->addHeader('If-Modified-Since', $timestamp);
 
     return $this;
+  }
+
+  /**
+   * Set the data object to send in the request.
+   *
+   * @param XeroTypeInterface
+   *   The xero data object.
+   * @return this
+   *   The query object for chaining.
+   */
+  public function setData(XeroTypeInterface $data) {
+    if (isset($this->type) && $this->type <> $data->getPluginId()) {
+      throw new \InvalidArgumentException('The xero data type set for this query does not match the data.');
+    }
+    elseif (!isset($this->type)) {
+      $this->type = $data->getPluginId();
+    }
+
+    $this->data = $data;
+  }
+
+  /**
+   * Get the type data definition property.
+   *
+   * @return DataDefinitionInterface
+   *   The data definition class or NULL if not set.
+   */
+  public function getDefinition() {
+    return $this->type_definition;
   }
 
   /**
@@ -324,6 +359,10 @@ class XeroQuery /*implements XeroQueryInterface */ {
       }
     }
 
+    if ($this->method == 'get' && $this->data !== NULL) {
+      throw new \InvalidArgumentException('Invalid use of data object for fetching data.');
+    }
+
     if ($this->format == 'pdf' && !in_array($this->type, array('xero_invoice', 'xero_credit_note'))) {
       throw new \InvalidArgumentException('PDF format may only be used for invoices or credit notes.');
     }
@@ -348,11 +387,15 @@ class XeroQuery /*implements XeroQueryInterface */ {
       // @todo Change to put for requests without id.
 
       $data_class = $this->type_definition->getClass();
-
       $endpoint = $data_class::$plural_name;
+      $context = array('plugin_id' => $this->type);
+
+      if ($this->data !== NULL) {
+        $this->options['body'] = $this->serializer->serialize($this->data, $this->format, $context);
+      }
+
       $request = $this->client->{$this->method}($endpoint, $this->options);
       $response = $request->send();
-      $context = array('plugin_id' => $this->type);
       $data = $this->serializer->deserialize($response->getBody(TRUE), $this->type_definition->getClass(), $this->format, $context);
 
       return $data;

@@ -37,23 +37,6 @@ function xero_permission() {
 }
 
 /**
- * Implementation of hook_theme().
- */
-function xero_theme($existing, $type, $theme, $path) {
-  return array(
-    'xero_reference' => array(
-      'variables' => array(
-        'item' => NULL,
-        'delta' => NULL,
-        'definition' => NULL,
-        'settings' => NULL,
-        'attributes' => NULL,
-      ),
-    ),
-  );
-}
-
-/**
  * Load Xero Guzzle client.
  *
  * @return \BlackOptic\XeroBundle\XeroClient
@@ -64,61 +47,66 @@ function xero_load() {
 }
 
 /**
- * Get or post an object type to xero.
+ * Get or post an object type to xero. Using the {xero.query} service is highly
+ * recommended instead.
  *
- * @param $type two possible values: get or post. put is not supported.
- * @param $action the type of action we're doing: Invoices, Contacts, etc...
- * @param $id an optional id of the xero object such as contactid, invoiceid, etc...
- * @param $after an optional ModifiedAfter parameter for a get query.
- * @param $items an optional array of items to post such as contacts, invoices, etc...
- * @param $method an optional string for response format: xml, json, or pdf.
- * @return returns a result array from the PHP-Xero containing status & the data posted
- *         or returns NULL if there was an error before querying.
+ * @deprecated
+ *
+ * @param $method
+ *   The HTTP method to use: get or post.
+ * @param $plugin_id
+ *   The Xero data type plugin_id.
+ * @param $id
+ *   (Optional) The Xero GUID to use for get or pst.
+ * @param $after
+ *   (Optional) ModifiedAfter parameter for a get query.
+ * @param $items
+ *   (Optional) An array of items to post such as contacts, invoices, etc...
+ * @param $method
+ *   (Optional) The content-type to use for the response: xml, json, or pdf.
+ * @return \Drupal\xero\TypedData\XeroTypeInterface
+ *   Return TypedData from the response or FALSE.
  *
  * Example:
  *
- *   //Return all contacts for your xero account.
- *   $result = xero_query('get', 'Contacts');
+ *   // Return all contacts for your xero account.
+ *   $result = xero_query('get', 'xero_contact');
  *
- *   //Post a new contact.
+ *   // Post a new contact.
  *   $contacts = array('Contact' => array('Name' => 'New Contact'));
- *   $result = xero_query('post', 'Contacts', FALSE, FALSE, $contacts);
+ *   $result = xero_query('post', 'xero_contact', FALSE, FALSE, $contacts);
  *
- *   //Query a new contact by it's Name element, not the ContactID.
- *   $result = xero_query('get', 'Contacts', FALSE, FALSE, array('Name' => 'New Contact'));
+ *   The following usage from Drupal 7 is NOT allowed any more:
+ *   // Query a new contact by it's Name element, not the ContactID.
+ *   $result = xero_query('get', 'xero_contact', FALSE, FALSE, array('Name' => 'New Contact'));
  *
  *   See PHP-Xero and developer.xero.com for more information.
- *
  */
-function xero_query($type = 'get', $action, $id = FALSE, $after = FALSE, $items = array(), $method = 'json') {
-  $xero = xero_load($method);
+function xero_query($method = 'get', $plugin_id, $id = FALSE, $after = FALSE, $items = array(), $format = 'xml') {
 
-  if (!$xero->verify()) {
-    xero_error(0, '', 'Error trying to make a xero connection object.', $items);
-    return NULL;
-  }
+  $xero = \Drupal::service('xero.query');
 
-  if ($type == 'get') {
-    if (!$id && !$after && empty($items)) {
-      $result = $xero->$action;
-    }
-    else {
-      $result = $xero->$action($id, $after, $items);
-    }
-  }
-  elseif ($type == 'post') {
-    $result = $xero->$action($items);
-  }
-  else {
-    xero_error(0, '', t('%type is not a valid type of get or post.', array('%type' => $type)), $items);
-    return NULL;
+  $xero
+    ->setMethod($method)
+    ->setFormat($format)
+    ->setType($plugin_id);
+
+  if ($id) {
+    $xero->setId($id);
   }
 
-  if (isset($result['ErrorNumber'])) {
-    xero_error($result['ErrorNumber'], $result['Type'], $result['Message'], $items, $result);
+  if ($after) {
+    $xero->setModifiedAfter($after);
   }
 
-  return $result;
+  if ($items) {
+    $list_definition = $xero->typed_data->createListDataDefinition($plugin_id);
+    $data = $xero->typed_data->create($xero->getDefinition(), $items, NULL, $list_definition);
+
+    $xero->setData($data);
+  }
+
+  return $xero->execute();
 }
 
 /**
