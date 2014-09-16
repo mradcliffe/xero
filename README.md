@@ -8,6 +8,23 @@ The module provides a factory class which instantiates XeroClient, an extension 
 
 Xero module now requires [BlackOptic\XeroBundle](https://github.com/james75/XeroBundle) instead of PHP-Xero, and this can either be included by hacking Drupal core composer.json -OR- by installing [Composer Manager](http://drupal.org/project/composer_manager) patched with [#2276423: Composer Manager work flow breaks when a module defines a service from a dependency](https://www.drupal.org/node/2276423).
 
+## Using XeroQuery to fetch into TypedData
+
+The `xero.query` service is a HTTP query builder built for Xero that is similar to the Database API.
+
+```php
+  $query = \Drupal::get('xero.query');
+
+  $contacts = $query
+    ->setType('xero_contact')
+    ->addCondition('Contact.FirstName', 'John')
+    ->execute();
+
+  foreach ($contacts as $contact) {
+    $mail = $contact->get('Email')->getValue();
+  }
+```
+
 ## Using XeroClient to fetch into TypedData manually
 
 It is advised to use dependency injection to retrieve the `xero.client` and `serializer` services. This example assumes that this is stored in an object variable called `client` and serializer is `serializer`.

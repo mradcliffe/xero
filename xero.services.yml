@@ -11,3 +11,6 @@ services:
     arguments: ['@typed_data_manager']
     tags:
       - { name: normalizer }
+  xero.query:
+     class: Drupal\xero\XeroQuery
+     arguments: ['@xero.client', '@serializer', '@typed_data_manager', '@logger.factory']

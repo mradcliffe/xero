@@ -5,9 +5,9 @@ xero.configure:
     _title: 'Xero Configuration'
   requirements:
     _permission: 'administer site configuration'
-#xero.autocomplete:
+# xero.autocomplete:
 #  path: '/xero/autocomplete/{type}'
 #  defaults:
-#    _controller: XeroAutoCompleteController
+#    _controller: '\Drupal\xero\Controller\XeroAutocompleteController::autocomplete'
 #  requirements:
 #    _permission: 'access xero'
