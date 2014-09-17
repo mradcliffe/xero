@@ -36,6 +36,11 @@ class XeroNormalizer extends ComplexDataNormalizer implements DenormalizerInterf
     $name = $class::$xero_name;
     $plural_name = $class::$plural_name;
 
+    // Wrap the data an array if there is a singular object returned.
+    if (count(array_filter(array_keys($data[$plural_name][$name]), 'is_string'))) {
+      $data[$plural_name][$name] = array($data[$plural_name][$name]);
+    }
+
     $list_definition = $this->typedDataManager->createListDataDefinition($context['plugin_id']);
     $items = $this->typedDataManager->create($list_definition, $data[$plural_name][$name]);
 

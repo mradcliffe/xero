@@ -25,7 +25,7 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
  */
 class XeroQuery /*implements XeroQueryInterface */ {
 
-  static protected $operators = array('==', '!=', 'StartsWith', 'EndsWith', 'Contains', 'guid');
+  static protected $operators = array('==', '!=', 'StartsWith', 'EndsWith', 'Contains', 'Guid');
 
   /**
    * The options to pass into guzzle.
@@ -394,7 +394,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
         $this->options['body'] = $this->serializer->serialize($this->data, $this->format, $context);
       }
 
-      $request = $this->client->{$this->method}($endpoint, $this->options);
+      $request = $this->client->{$this->method}($endpoint, $this->options['headers']);
+
+      // Add query parameters via getQuery() instead :-(
+      if (!empty($this->options['query'])) {
+        $q = $request->getQuery();
+        foreach ($this->options['query'] as $key => $value) {
+          $q->set($key, $value);
+        }
+      }
+
       $response = $request->send();
       $data = $this->serializer->deserialize($response->getBody(TRUE), $data_class, $this->format, $context);
 
