@@ -23,17 +23,17 @@ class JournalLineDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All journal items are read-only.
-      $info['JournalLineID'] = DataDefinition::create('uuid')->setLabel('Journal Line ID')->setReadOnly();
-      $info['AccountID'] = DataDefinition::create('uuid')->setLabel('Account ID')->setReadOnly();
-      $info['AccountCode'] = DataDefinition::create('string')->setLabel('Account code')->setReadOnly();
-      $info['AccountType'] = DataDefinition::create('string')->setLabel('Account type')->setReadOnly();
-      $info['AccountName'] = DataDefinition::create('string')->setLabel('Account name')->setReadOnly();
-      $info['NetAmount'] = DataDefinition::create('float')->setLabel('Net')->setReadOnly();
-      $info['GrossAmount'] = DataDefinition::create('float')->setLabel('Gross')->setReadOnly();
-      $info['TaxAmount'] = DataDefinition::create('float')->setLabel('Tax')->setReadOnly();
-      $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->setReadOnly();
-      $info['TaxName'] = DataDefinition::create('string')->setLabel('Tax name')->setReadOnly();
-      $info['TrackingCategories'] = ListDataDefinition::create('xero_tracking')->setLabel('Tracking Categories')->setReadOnly();
+      $info['JournalLineID'] = DataDefinition::create('uuid')->setLabel('Journal Line ID')->setReadOnly(TRUE);
+      $info['AccountID'] = DataDefinition::create('uuid')->setLabel('Account ID')->setReadOnly(TRUE);
+      $info['AccountCode'] = DataDefinition::create('string')->setLabel('Account code')->setReadOnly(TRUE);
+      $info['AccountType'] = DataDefinition::create('string')->setLabel('Account type')->setReadOnly(TRUE);
+      $info['AccountName'] = DataDefinition::create('string')->setLabel('Account name')->setReadOnly(TRUE);
+      $info['NetAmount'] = DataDefinition::create('float')->setLabel('Net')->setReadOnly(TRUE);
+      $info['GrossAmount'] = DataDefinition::create('float')->setLabel('Gross')->setReadOnly(TRUE);
+      $info['TaxAmount'] = DataDefinition::create('float')->setLabel('Tax')->setReadOnly(TRUE);
+      $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->setReadOnly(TRUE);
+      $info['TaxName'] = DataDefinition::create('string')->setLabel('Tax name')->setReadOnly(TRUE);
+      $info['TrackingCategories'] = ListDataDefinition::create('xero_tracking')->setLabel('Tracking Categories')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

@@ -21,7 +21,7 @@ class EmployeeDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['EmployeeID'] = DataDefinition::create('uuid')->setLabel('Employee Id')->setReadOnly();
+      $info['EmployeeID'] = DataDefinition::create('uuid')->setLabel('Employee Id')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['FirstName'] = DataDefinition::create('string')->setLabel('First name');
@@ -31,7 +31,7 @@ class EmployeeDefinition extends ComplexDataDefinitionBase {
       $info['ExternalLink'] = LinkDefinition::create('xero_link')->setLabel('External link');
 
       // Read-only.
-      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly();
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

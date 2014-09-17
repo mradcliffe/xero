@@ -26,7 +26,7 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DELETED', 'AUTHORISED'));
 
       // UUID is read only.
-      $info['BankTransactionID'] = DataDefinition::create('uuid')->setLabel('Bank Transaction ID')->setReadOnly();
+      $info['BankTransactionID'] = DataDefinition::create('uuid')->setLabel('Bank Transaction ID')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
@@ -49,7 +49,7 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');
 
       // Read-only
-      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly();
+      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

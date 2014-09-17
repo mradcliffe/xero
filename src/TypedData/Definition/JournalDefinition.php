@@ -22,12 +22,12 @@ class JournalDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All properties are read-only.
-      $info['JournalID'] = DataDefinition::create('uuid')->setLabel('Journal ID')->setReadOnly();
-      $info['JournalDate'] = DataDefinition::create('string')->setLabel('Date')->setReadOnly();
-      $info['JournalNumber'] = DataDefiniton::create('string')->setLabel('Journal #')->setReadOnly();
-      $info['CreatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Created Date')->setReadOnly();
-      $info['Reference'] = DataDefinition::create('string')->setLabel('Reference')->setReadOnly();
-      $info['JournalLines'] = ListDataDefinition::create('xero_journal_line')->setLabel('Journal Lines')->setReadOnly();
+      $info['JournalID'] = DataDefinition::create('uuid')->setLabel('Journal ID')->setReadOnly(TRUE);
+      $info['JournalDate'] = DataDefinition::create('string')->setLabel('Date')->setReadOnly(TRUE);
+      $info['JournalNumber'] = DataDefiniton::create('string')->setLabel('Journal #')->setReadOnly(TRUE);
+      $info['CreatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Created Date')->setReadOnly(TRUE);
+      $info['Reference'] = DataDefinition::create('string')->setLabel('Reference')->setReadOnly(TRUE);
+      $info['JournalLines'] = ListDataDefinition::create('xero_journal_line')->setLabel('Journal Lines')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

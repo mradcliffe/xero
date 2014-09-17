@@ -24,7 +24,7 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
       $line_type_options = array('choices' => array('Exclusive', 'Inclusive', 'NoTax'));
 
       // UUID is read only.
-      $info['ReceiptID'] = DataDefinition::create('uuid')->setLabel('Receipt ID')->setReadOnly();
+      $info['ReceiptID'] = DataDefinition::create('uuid')->setLabel('Receipt ID')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date')->setRequired();
@@ -40,11 +40,11 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');
 
       // Read-only
-      $info['ReceiptNumber'] = DataDefinition::create('string')->setLabel('Receipt #')->setReadOnly();
-      $info['Url'] = DataDefinition::create('url')->setLabel('URL')->setReadOnly();
-      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly();
-      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly();
-      $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly();
+      $info['ReceiptNumber'] = DataDefinition::create('string')->setLabel('Receipt #')->setReadOnly(TRUE);
+      $info['Url'] = DataDefinition::create('url')->setLabel('URL')->setReadOnly(TRUE);
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE);
+      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
+      $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

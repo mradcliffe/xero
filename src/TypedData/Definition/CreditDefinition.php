@@ -19,7 +19,7 @@ class CreditDefinition extends ComplexDataDefinitionBase {
    *
    * @todo Allocations
    * @todo confirm read-only fields as API documentation is incomplete
-   * 
+   *
    * http://developer.xero.com/documentation/api/credit-notes/
    */
   public function getPropertyDefinitions() {
@@ -31,7 +31,7 @@ class CreditDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DRAFT', 'SUBMITTED', 'DELETED', 'AUTHORISED', 'PAID', 'INVOICED'));
 
       // UUID is read only.
-      $info['CreditNoteID'] = DataDefinition::create('uuid')->setLabel('Credit Note ID')->setReadOnly();
+      $info['CreditNoteID'] = DataDefinition::create('uuid')->setLabel('Credit Note ID')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
@@ -54,8 +54,8 @@ class CreditDefinition extends ComplexDataDefinitionBase {
       $info['SentToContact'] = DataDefinition::create('boolean')->setLabel('Sent to Contact?');
 
       // Read-only
-      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly();
-      $info['FullyPaidOnDate'] = DataDefinition::create('datetime_iso8601')->setlabel('Fully Paid On Date')->setReadOnly();
+      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
+      $info['FullyPaidOnDate'] = DataDefinition::create('datetime_iso8601')->setlabel('Fully Paid On Date')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

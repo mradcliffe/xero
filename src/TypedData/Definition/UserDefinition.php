@@ -21,13 +21,13 @@ class UserDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All properties are read-only.
-      $info['UserID'] = DataDefinition::create('uuid')->setLabel('User Id')->setReadOnly();
-      $info['EmailAddress'] = DataDefinition::create('email')->setLabel('E-mail address')->setReadOnly();
-      $info['FirstName'] = DataDefinition::create('string')->setLabel('First Name')->setReadOnly();
-      $info['LastName'] = DataDefinition::create('string')->setLabel('Last Name')->setReadOnly();
-      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly();
-      $info['IsSubscriber'] = DataDefinition::create('boolean')->setLabel('Subscriber?')->setReadOnly();
-      $info['OrganisationRole'] = DataDefinition::create('string')->setLabel('Organisation Role')->setReadOnly();
+      $info['UserID'] = DataDefinition::create('uuid')->setLabel('User Id')->setReadOnly(TRUE);
+      $info['EmailAddress'] = DataDefinition::create('email')->setLabel('E-mail address')->setReadOnly(TRUE);
+      $info['FirstName'] = DataDefinition::create('string')->setLabel('First Name')->setReadOnly(TRUE);
+      $info['LastName'] = DataDefinition::create('string')->setLabel('Last Name')->setReadOnly(TRUE);
+      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
+      $info['IsSubscriber'] = DataDefinition::create('boolean')->setLabel('Subscriber?')->setReadOnly(TRUE);
+      $info['OrganisationRole'] = DataDefinition::create('string')->setLabel('Organisation Role')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

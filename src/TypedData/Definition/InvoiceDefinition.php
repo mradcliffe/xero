@@ -28,7 +28,7 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DRAFT', 'SUBMITTED', 'DELETED', 'AUTHORISED', 'PAID', 'INVOICED'));
 
       // UUID is read only.
-      $info['InvoiceID'] = DataDefinition::create('uuid')->setLabel('Invoice ID')->setReadOnly();
+      $info['InvoiceID'] = DataDefinition::create('uuid')->setLabel('Invoice ID')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
@@ -56,12 +56,12 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');
 
       // Read-only
-      $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly();
-      $info['Payments'] = ListDataDefinition::create('xero_payment')->setLabel('Payments')->setReadOnly();
-      $info['AmountDue'] = DataDefinition::create('float')->setLabel('Amount Due')->setReadOnly();
-      $info['AmountPaid'] = DataDefinition::create('float')->setLabel('Amount Paid')->setReadOnly();
-      $info['AmountCredited'] = DataDefinition::create('float')->setLabel('Amount Credited')->setReadOnly();
-      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly();
+      $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly(TRUE);
+      $info['Payments'] = ListDataDefinition::create('xero_payment')->setLabel('Payments')->setReadOnly(TRUE);
+      $info['AmountDue'] = DataDefinition::create('float')->setLabel('Amount Due')->setReadOnly(TRUE);
+      $info['AmountPaid'] = DataDefinition::create('float')->setLabel('Amount Paid')->setReadOnly(TRUE);
+      $info['AmountCredited'] = DataDefinition::create('float')->setLabel('Amount Credited')->setReadOnly(TRUE);
+      $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }

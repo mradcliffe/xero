@@ -24,7 +24,7 @@ class ContactDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['ContactID'] = DataDefinition::create('uuid')->setLabel('Contact Id')->setReadOnly();
+      $info['ContactID'] = DataDefinition::create('uuid')->setLabel('Contact Id')->setReadOnly(TRUE);
 
       // Writeable properties.
       $info['Name'] = DataDefinition::create('string')->setRequired()->setLabel('Name');
@@ -45,8 +45,8 @@ class ContactDefinition extends ComplexDataDefinitionBase {
       $info['XeroNetworkKey'] = DataDefinition::create('string')->setLabel('Xero Network Key');
 
       // Read-only.
-      $info['Website'] = DataDefinition::create('url')->setLabel('Web site')->setReadOnly();
-      $info['BrandingTheme'] = DataDefinition::create('string')->setLabel('Branding theme')->setReadOnly();
+      $info['Website'] = DataDefinition::create('url')->setLabel('Web site')->setReadOnly(TRUE);
+      $info['BrandingTheme'] = DataDefinition::create('string')->setLabel('Branding theme')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;
   }
