@@ -24,13 +24,13 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
       $line_type_options = array('choices' => array('Exclusive', 'Inclusive', 'NoTax'));
 
       // UUID is read only.
-      $info['ReceiptID'] = DataDefinition::create('uuid')->setLabel('Receipt ID')->setReadOnly(TRUE);
+      $info['ReceiptID'] = DataDefinition::create('string')->setLabel('Receipt ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date')->setRequired();
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired()->setLabel('Contact');
-      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired()->setLabel('Line Items');
-      $info['User'] = DataDefinition::create('xero_user')->setRequired()->setLabel('User');
+      $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date')->setRequired(TRUE);
+      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
+      $info['User'] = DataDefinition::create('xero_user')->setRequired(TRUE)->setLabel('User');
 
       // Optional
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');

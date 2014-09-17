@@ -22,7 +22,7 @@ class LineItemDefinition extends ComplexDataDefinitionBase {
   public function getPropertyDefinitions() {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
-      $info['Description'] = DataDefinition::create('string')->setRequired()->setLabel('Description');
+      $info['Description'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Description');
       $info['Quantity'] = DataDefinition::create('float')->setLabel('Quantity');
       $info['UnitAmount'] = DataDefinition::create('float')->setLabel('Unit amount');
       $info['ItemCode'] = DataDefinition::create('string')->setLabel('Item code')->setDescription('User-defined item code');

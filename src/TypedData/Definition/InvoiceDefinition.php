@@ -28,12 +28,12 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DRAFT', 'SUBMITTED', 'DELETED', 'AUTHORISED', 'PAID', 'INVOICED'));
 
       // UUID is read only.
-      $info['InvoiceID'] = DataDefinition::create('uuid')->setLabel('Invoice ID')->setReadOnly(TRUE);
+      $info['InvoiceID'] = DataDefinition::create('string')->setLabel('Invoice ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired()->setLabel('Contact');
-      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired()->setLabel('Line Items');
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
 
       // Recommended
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date');
@@ -43,7 +43,7 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       // Optional
       $info['InvoiceNumber'] = DataDefinition::create('string')->setLabel('Invoice #');
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
-      $info['BrandingThemeID'] = DataDefinition::create('uuid')->setLabel('Branding Theme ID');
+      $info['BrandingThemeID'] = DataDefinition::create('string')->setLabel('Branding Theme ID')->addConstraint('XeroGuidConstraint');
       $info['Url'] = DataDefinition::create('url')->setLabel('URL');
       $info['CurrencyCode'] = DataDefinition::create('string')->setLabel('Currency code');
       $info['CurrencyRate'] = DataDefinition::create('float')->setLabel('Currency rate');

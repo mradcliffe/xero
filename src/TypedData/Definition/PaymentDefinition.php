@@ -23,11 +23,11 @@ class PaymentDefinition extends ComplexDataDefinitionBase {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
 
-      $info['Invoice'] = DataDefinition::create('xero_invoice')->setRequired()->setLabel('Invoice');
-      $info['Account'] = DataDefinition::create('xero_account')->setRequired()->setLabel('Account');
+      $info['Invoice'] = DataDefinition::create('xero_invoice')->setRequired(TRUE)->setLabel('Invoice');
+      $info['Account'] = DataDefinition::create('xero_account')->setRequired(TRUE)->setLabel('Account');
       // datetime_iso8601 is dumb and always does times so this is a string. DrupalWTF.
-      $info['Date'] = DataDefinition::create('string')->setRequired()->setLabel('Date');
-      $info['Amount'] = DataDefinition::create('float')->setRequired()->setLabel('Amount');
+      $info['Date'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Date');
+      $info['Amount'] = DataDefinition::create('float')->setRequired(TRUE)->setLabel('Amount');
       $info['CurrencyRate'] = DataDefinition::create('string')->setLabel('Currency rate');
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
       $info['IsReconciled'] = DataDefinition::create('boolean')->setLabel('Is reconciled?');

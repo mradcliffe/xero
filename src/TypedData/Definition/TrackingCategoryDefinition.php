@@ -22,9 +22,9 @@ class TrackingCategoryDefinition extends ComplexDataDefinitionBase {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
 
-      $info['Name'] = DataDefinition::create('string')->setLabel('Name')->setRequired();
+      $info['Name'] = DataDefinition::create('string')->setLabel('Name')->setRequired(TRUE);
       $info['Status'] = DataDefinition::create('string')->setLabel('Status');
-      $info['TrackingCategoryID'] = DataDefinition::create('uuid')->setLabel('Tracking Category ID');
+      $info['TrackingCategoryID'] = DataDefinition::create('string')->setLabel('Tracking Category ID')->addConstraint('XeroGuidConstraint');
       // $info['Options'] = ListDataDefinition::create('xero_tracking_options')->setLabel('Options');
     }
     return $this->propertyDefinitions;

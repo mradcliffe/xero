@@ -23,8 +23,8 @@ class JournalLineDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All journal items are read-only.
-      $info['JournalLineID'] = DataDefinition::create('uuid')->setLabel('Journal Line ID')->setReadOnly(TRUE);
-      $info['AccountID'] = DataDefinition::create('uuid')->setLabel('Account ID')->setReadOnly(TRUE);
+      $info['JournalLineID'] = DataDefinition::create('string')->setLabel('Journal Line ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['AccountID'] = DataDefinition::create('string')->setLabel('Account ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
       $info['AccountCode'] = DataDefinition::create('string')->setLabel('Account code')->setReadOnly(TRUE);
       $info['AccountType'] = DataDefinition::create('string')->setLabel('Account type')->setReadOnly(TRUE);
       $info['AccountName'] = DataDefinition::create('string')->setLabel('Account name')->setReadOnly(TRUE);

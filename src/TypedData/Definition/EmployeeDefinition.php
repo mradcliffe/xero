@@ -21,7 +21,7 @@ class EmployeeDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['EmployeeID'] = DataDefinition::create('uuid')->setLabel('Employee Id')->setReadOnly(TRUE);
+      $info['EmployeeID'] = DataDefinition::create('string')->setLabel('Employee Id')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['FirstName'] = DataDefinition::create('string')->setLabel('First name');

@@ -24,7 +24,7 @@ class ItemDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // Writeable
-      $info['Code'] = DataDefinition::create('string')->setRequired()->setLabel('Code')->addConstraint('Length', array('max' => 30));
+      $info['Code'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Code')->addConstraint('Length', array('max' => 30));
 
       // Recommended
       $info['Description'] = DataDefinition::create('string')->setLabel('Description');

@@ -25,12 +25,12 @@ class AccountDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('ACTIVE', 'ARCHIVED'));
 
       // UUID is read only.
-      $info['AccountID'] = DataDefinition::create('uuid')->setLabel('Account ID')->setReadOnly(TRUE);
+      $info['AccountID'] = DataDefinition::create('string')->setLabel('Account ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Code'] = DataDefinition::create('string')->setRequired()->setLabel('Code');
-      $info['Name'] = DataDefinition::create('string')->setRequired()->setLabel('Name');
-      $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Code'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Code');
+      $info['Name'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Name');
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
       $info['Description'] = DataDefinition::create('string')->setLabel('Description');
       $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->addConstraint('Choice', $tax_type_options);
       $info['EnablePaymentsToAccount'] = DataDefinition::create('boolean')->setLabel('May have payments');

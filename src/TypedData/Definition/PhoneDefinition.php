@@ -20,7 +20,7 @@ class PhoneDefinition extends ComplexDataDefinitionBase {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
       $options = array('choices' => array('DEFAULT', 'DDI', 'MOBILE', 'FAX'));
-      $info['PhoneType'] = DataDefinition::create('string')->setLabel('Type')->setRequired()->addConstraint('Choice', $options);
+      $info['PhoneType'] = DataDefinition::create('string')->setLabel('Type')->setRequired(TRUE)->addConstraint('Choice', $options);
       $info['PhoneNumber'] = DataDefinition::create('string')->setLabel('Number');
       $info['PhoneAreaCode'] = DataDefinition::create('string')->setLabel('Area code');
       $info['PhoneCountryCode'] = DataDefinition::create('string')->setLabel('Country code');

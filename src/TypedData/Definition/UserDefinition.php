@@ -21,7 +21,7 @@ class UserDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All properties are read-only.
-      $info['UserID'] = DataDefinition::create('uuid')->setLabel('User Id')->setReadOnly(TRUE);
+      $info['UserID'] = DataDefinition::create('string')->setLabel('User Id')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
       $info['EmailAddress'] = DataDefinition::create('email')->setLabel('E-mail address')->setReadOnly(TRUE);
       $info['FirstName'] = DataDefinition::create('string')->setLabel('First Name')->setReadOnly(TRUE);
       $info['LastName'] = DataDefinition::create('string')->setLabel('Last Name')->setReadOnly(TRUE);

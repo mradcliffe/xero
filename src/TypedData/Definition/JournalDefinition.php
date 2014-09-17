@@ -22,7 +22,7 @@ class JournalDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // All properties are read-only.
-      $info['JournalID'] = DataDefinition::create('uuid')->setLabel('Journal ID')->setReadOnly(TRUE);
+      $info['JournalID'] = DataDefinition::create('string')->setLabel('Journal ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
       $info['JournalDate'] = DataDefinition::create('string')->setLabel('Date')->setReadOnly(TRUE);
       $info['JournalNumber'] = DataDefiniton::create('string')->setLabel('Journal #')->setReadOnly(TRUE);
       $info['CreatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Created Date')->setReadOnly(TRUE);

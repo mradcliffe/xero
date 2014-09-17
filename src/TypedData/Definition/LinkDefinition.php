@@ -19,7 +19,7 @@ class LinkDefinition extends ComplexDataDefinitionBase {
   public function getPropertyDefinitions() {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
-      $info['Url'] = DataDefinition::create('url')->setLabel('Url')->setRequired();
+      $info['Url'] = DataDefinition::create('url')->setLabel('Url')->setRequired(TRUE);
       $info['Description'] = DataDefinition::create('string')->setLabel('Description');
     }
     return $this->propertyDefinitions;

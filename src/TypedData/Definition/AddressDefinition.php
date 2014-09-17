@@ -20,7 +20,7 @@ class AddressDefinition extends ComplexDataDefinitionBase {
     if (!isset($this->propertyDefinitions)) {
       $info = &$this->propertyDefinitions;
       $options = array('choices' => array('POBOX', 'STREET', 'DELIVERY'));
-      $info['AddressType'] = DataDefinition::create('string')->setLabel('Type')->setRequired()->addConstraint('Choice', $options);
+      $info['AddressType'] = DataDefinition::create('string')->setLabel('Type')->setRequired(TRUE)->addConstraint('Choice', $options);
       $info['AddressLine1'] = DataDefinition::create('string')->setLabel('Address Line 1');
       $info['AddressLine2'] = DataDefinition::create('string')->setLabel('Address Line 2');
       $info['AddressLine3'] = DataDefinition::create('string')->setLabel('Address Line 3');

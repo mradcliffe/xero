@@ -24,10 +24,10 @@ class ContactDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['ContactID'] = DataDefinition::create('uuid')->setLabel('Contact Id')->setReadOnly(TRUE);
+      $info['ContactID'] = DataDefinition::create('string')->setLabel('Contact Id')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Name'] = DataDefinition::create('string')->setRequired()->setLabel('Name');
+      $info['Name'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Name');
       $info['FirstName'] = DataDefinition::create('string')->setLabel('First Name');
       $info['LastName'] = DataDefinition::create('string')->setLabel('Last Name');
       $info['EmailAddress'] = DataDefinition::create('email')->setLabel('E-mail address');

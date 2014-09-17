@@ -26,13 +26,13 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DELETED', 'AUTHORISED'));
 
       // UUID is read only.
-      $info['BankTransactionID'] = DataDefinition::create('uuid')->setLabel('Bank Transaction ID')->setReadOnly(TRUE);
+      $info['BankTransactionID'] = DataDefinition::create('string')->setLabel('Bank Transaction ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Type'] = DataDefinition::create('string')->setRequired()->setLabel('Type')->addConstraint('Choice', $type_options);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired()->setLabel('Contact');
-      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired()->setLabel('Line Items');
-      $info['BankAccount'] = DataDefinition::create('xero_account')->setRequired()->setLabel('Bank Account');
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
+      $info['BankAccount'] = DataDefinition::create('xero_account')->setRequired(TRUE)->setLabel('Bank Account');
 
       $info['DueDate'] = DataDefinition::create('string')->setLabel('Due Date')->addConstraint('Date');
       $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('Choice', $line_type_options);
