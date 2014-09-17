@@ -1,18 +1,9 @@
 <?php
 /**
  * @file
- *   Xero API module
- *   Implements the PHP-Xero Library in Drupal to allow queries to
- *   xero.com
+ * Xero API module
  *
- *   Curently supported:
- *
- *   1. GET Query for any Xero entity such as Contacts, Invoices, Payments, etc...
- *   2. POST Query for Invoices.
- *   3. PUT Query for Payments.
- *   4. Caching of Xero entities.
- *   5. Form generation for Contacts, Invoices, and Accounts.
- *
+ * Implements the PHP-Xero Library in Drupal to allow queries to xero.com.
  */
 
 
@@ -37,6 +28,37 @@ function xero_permission() {
 }
 
 /**
+ * Implementation of hook_theme().
+ */
+function xero_theme($existing, $type, $theme, $path) {
+  return array(
+    'xero_reference' => array(
+      'variables' => array(
+        'item' => NULL,
+        'delta' => NULL,
+        'definition' => NULL,
+        'settings' => NULL,
+        'attributes' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_validation_constraint_alter().
+ *
+ * DrupalWTF: Why the hell are constraints plugins, which means that no one can
+ * even re-use Symfony constraints out of the box without having to do some
+ * dumb hack like this or creating your own plugin!?
+ */
+function xero_validation_constraint_alter(&$definitions) {
+  $definitions['Choice'] = array(
+    'class' => 'Symfony\Component\Validator\Constraints\Choice',
+    'provider' => 'xero',
+  );
+}
+
+/**
  * Load Xero Guzzle client.
  *
  * @return \BlackOptic\XeroBundle\XeroClient
@@ -44,6 +66,16 @@ function xero_permission() {
  */
 function xero_load() {
   return \Drupal::service('xero.client');
+}
+
+/**
+ * Load the Xero Query service.
+ *
+ * @return \Drupal\xero\XeroQuery
+ *   A XeroQuery object.
+ */
+function xero_query_load() {
+  return \Drupal::service('xero.query');
 }
 
 /**
@@ -84,7 +116,7 @@ function xero_load() {
  */
 function xero_query($method = 'get', $plugin_id, $id = FALSE, $after = FALSE, $items = array(), $format = 'xml') {
 
-  $xero = \Drupal::service('xero.query');
+  $xero = xero_query_load();
 
   $xero
     ->setMethod($method)
@@ -107,22 +139,4 @@ function xero_query($method = 'get', $plugin_id, $id = FALSE, $after = FALSE, $i
   }
 
   return $xero->execute();
-}
-
-/**
- * Evaluate error messages and send appropriate drupal status messages.
- * @param $code Optional Xero error code.
- * @param $type Optional Xero error type.
- * @param $message Xero error message.
- * @param $items The items that were posted.
- * @param $result The entire result array.
- */
-function xero_error($code = 0, $type = '', $message, $items = 'N/A', $result = 'N/A') {
-  $error_code = (!empty($type)) ? $code . ' ' . $type : $code;
-  $format_options = array('@code' => $error_code, '@message' => $message);
-  // drupal_set_message(t('Error @code: @message', $format_options), 'error');
-
-  $format_options['!items'] = '<div><h3>Items</h3><pre>' . print_r($items, TRUE) . '</pre></div>';
-  $format_options['!result'] = '<div><h3>Result</h3><pre>' . print_r($result, TRUE) . '</pre></div>';
-  // watchdog('xero', 'Error @code: @message !items !result', $format_options, WATCHDOG_CRITICAL, NULL);
 }
