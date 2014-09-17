@@ -46,7 +46,7 @@ class XeroReference extends FieldItemBase {
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
     $properties = array();
 
-    $properties['guid'] = DataDefinition::create('string')->setLabel(t('GUID'));
+    $properties['guid'] = DataDefinition::create('string')->setLabel(t('GUID'))->addConstraint('XeroGuidConstraint');
     $properties['label'] = DataDefinition::create('string')->setLabel(t('Label'));
     $properties['type'] = DataDefinition::create('string')->setLabel(t('Type'))->addConstraint('Choice', self::getTypes());
 
@@ -77,9 +77,6 @@ class XeroReference extends FieldItemBase {
 
     $constraint_manager = \Drupal::typedDataManager()->getValidationConstraintManager();
     $constraints[] = $constraint_manager->create('ComplexData', array(
-      'guid' => array(
-        'Length' => array('max' => 36, 'maxMessage' => t('Globally-Unique Identifier exceeds maximum allowed length.')),
-      ),
       'label' => array(
         'Length' => array('max' => 255, 'maxMessage' => t('The label for this exceeds the maximum allowed length.')),
       ),
