@@ -76,8 +76,12 @@ class XeroAutocompleteController implements ContainerInjectionInterface {
       foreach ($items as $item) {
         $key = $item->get($class::$guid_name)->getValue();
         $key .= $class::$label ? ' (' . $item->get($class::$label)->getValue() . ')' : '';
+        $label = $class::$label ? $item->get($class::$label)->getValue() : $key;
 
-        $matches[$key] = $class::$label ? $item->get($class::$label)->getValue() : $key;
+        $matches[] = array(
+          'value' => $key,
+          'label' => $label,
+        );
       }
     }
 
