@@ -40,6 +40,8 @@ function xero_theme($existing, $type, $theme, $path) {
         'settings' => NULL,
         'attributes' => NULL,
       ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-reference',
     ),
   );
 }

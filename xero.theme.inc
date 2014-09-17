@@ -18,5 +18,5 @@ function template_preprocess_xero_reference(&$variables) {
   $variables['guid'] = in_array('guid', $variables['settings']['display']) ? $variables['item']->guid : FALSE;
   $variables['label'] = in_array('label', $variables['settings']['display']) ? $variables['item']->label : FALSE;
   $variables['type'] = $variables['item']->type;
-  $variables['type_label'] = in_array('type', $variables['settings']['display']) ? $variables['definition']->getLabel() : FALSE;
+  $variables['type_label'] = in_array('type', $variables['settings']['display']) ? $variables['definition']['label'] : FALSE;
 }
