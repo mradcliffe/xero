@@ -341,7 +341,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    */
   public function validate() {
 
-    if ($type === NULL) {
+    if ($this->type === NULL) {
       throw new \InvalidArgumentException('The query must have a type set.');
     }
 
@@ -386,7 +386,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
 
       // @todo Change to put for requests without id.
 
-      $data_class = $this->type_definition->getClass();
+      $data_class = $this->type_definition['class'];
       $endpoint = $data_class::$plural_name;
       $context = array('plugin_id' => $this->type);
 
@@ -396,7 +396,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
 
       $request = $this->client->{$this->method}($endpoint, $this->options);
       $response = $request->send();
-      $data = $this->serializer->deserialize($response->getBody(TRUE), $this->type_definition->getClass(), $this->format, $context);
+      $data = $this->serializer->deserialize($response->getBody(TRUE), $data_class, $this->format, $context);
 
       return $data;
     }

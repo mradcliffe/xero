@@ -12,7 +12,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Serializer;
-use BlackOptic\Bundle\XeroBundle\XeroClient;
+use Drupal\xero\XeroQuery;
 use Guzzle\Http\Exception\RequestException;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -23,7 +23,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  */
 class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface {
 
-  protected $client = FALSE;
+  protected $query = FALSE;
 
   /**
    * Inject dependencies into the form except for XeroClient because we want to
@@ -31,15 +31,15 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    *
    * @param $config_factory
    *   Configuration factory interface.
-   * @param $client
+   * @param $query
    *   An instance of XeroClient or NULL if it fails, which is most likely the
    *   case on first load.
    * @param $serializer
    *   Serializer object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, $client, Serializer $serializer, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, $query, Serializer $serializer, LoggerChannelFactoryInterface $logger_factory) {
     $this->setConfigFactory($config_factory);
-    $this->client = $client;
+    $this->query = $query;
     $this->serializer = $serializer;
     $this->logger = $logger_factory->get('xero');
   }
@@ -64,7 +64,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#type' => 'fieldset',
       '#title' => t('Xero Configuration'),
       '#collapsible' => TRUE,
-      '#collapsed' => $this->client !== FALSE,
+      '#collapsed' => $this->query->client !== FALSE,
       '#tree' => TRUE,
     );
 
@@ -110,15 +110,16 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#tree' => TRUE,
     );
 
-    if ($this->client !== FALSE) {
+    if ($this->query->client !== FALSE) {
       $account_options = array();
 
       try {
-        $request = $this->client->get('Accounts');
-        $response = $request->send();
         $context = array('plugin_id' => 'xero_account');
-        $accounts = $this->serializer->deserialize($response->getBody(TRUE), 'Drupal\xero\Plugin\DataType\Account', 'xml', $context);
-
+        $accounts = $this->query
+          ->setType($context['plugin_id'])
+          ->setMethod('get')
+          ->setFormat('xml')
+          ->execute();
 
         foreach ($accounts as $account) {
           // Bank accounts do not have a code, exclude them.
@@ -182,6 +183,6 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('config.factory'), $container->get('xero.client'), $container->get('serializer'), $container->get('logger.factory'));
+    return new static($container->get('config.factory'), $container->get('xero.query'), $container->get('serializer'), $container->get('logger.factory'));
   }
 }
