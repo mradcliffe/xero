@@ -23,8 +23,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  */
 class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface {
 
-  protected $query = FALSE;
-
   /**
    * Inject dependencies into the form except for XeroClient because we want to
    * handle errors properly instead of failing and exploding spectacularly.
@@ -37,10 +35,9 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * @param $serializer
    *   Serializer object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, $query, Serializer $serializer, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory, XeroQuery $query) {
     $this->setConfigFactory($config_factory);
     $this->query = $query;
-    $this->serializer = $serializer;
     $this->logger = $logger_factory->get('xero');
   }
 
@@ -102,50 +99,6 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#required' => TRUE,
     );
 
-    $form['defaults'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Defaults'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-      '#tree' => TRUE,
-    );
-
-    if ($this->query->client !== FALSE) {
-      $account_options = array();
-
-      try {
-        $context = array('plugin_id' => 'xero_account');
-        $accounts = $this->query
-          ->setType($context['plugin_id'])
-          ->setMethod('get')
-          ->setFormat('xml')
-          ->execute();
-
-        foreach ($accounts as $account) {
-          // Bank accounts do not have a code, exclude them.
-          if ($account->get('Code')->getValue()) {
-            $account_options[$account->get('Code')->getValue()] = $account->get('Name')->getValue();
-          }
-        }
-      }
-      catch (RequestException $e) {
-        $this->logger->error('%message: %response', array('%message' => $e->getMessage(), '%response' => $e->getResponse()->getBody(TRUE)));
-        return parent::buildForm($form, $form_state);
-      }
-      catch (\Exception $e) {
-        $this->logger->error('%message', array('%message' => $e->getMessage()));
-        return parent::buildForm($form, $form_state);
-      }
-
-      $form['defaults']['account'] = array(
-        '#type' => 'select',
-        '#title' => t('Default Account'),
-        '#description' => t('Choose a default account.'),
-        '#options' => $account_options,
-        '#default_value' => $config->get('defaults.account'),
-      );
-    }
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -155,6 +108,15 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
   public function validateFileExists($element, FormStateInterface $form_state) {
     if (!file_exists($element['#value'])) {
       $form_state->setError($element, t('The specified file either does not exist, or is not accessible to the web server.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    if (!$this->query->client) {
+      $form_state->setError($form['defaults'], t('An error occurred trying to connect to Xero with the specified configuration. Please check the error logs for more inforamtion.'));
     }
   }
 
@@ -171,11 +133,6 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
        ->set('oauth.cert_path', $form_state_values['oauth']['cert_path'])
        ->set('oauth.key_path', $form_state_values['oauth']['key_path']);
 
-     // Check for default account and save setting, if available.
-     if (isset($form_state_values['defaults'])) {
-       $config->set('defaults.account', $form_state_values['defaults']['account']);
-     }
-
      $config->save();
    }
 
@@ -183,6 +140,10 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('config.factory'), $container->get('xero.query'), $container->get('serializer'), $container->get('logger.factory'));
+    return new static(
+      $container->get('config.factory'),
+      $container->get('logger.factory'),
+      $container->get('xero.query')
+    );
   }
 }

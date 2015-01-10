@@ -5,6 +5,13 @@ xero.configure:
     _title: 'Xero Configuration'
   requirements:
     _permission: 'administer site configuration'
+xero.default_settings:
+  path: '/admin/config/services/xero/defaults'
+  defaults:
+    _form: '\Drupal\xero\Form\DefaultSettingsForm'
+    _title: 'Configure Default Xero Settings'
+  requirements:
+    _permission: 'administer site configuration'
 xero.autocomplete:
   path: '/xero/autocomplete/{type}'
   defaults:

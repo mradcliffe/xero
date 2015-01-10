@@ -79,7 +79,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    * @param $logger_factory
    *   The logger factory service for error logging.
    */
-  public function __construct(XeroClient $client, Serializer $serializer, TypedDataManager $typed_data, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct($client, Serializer $serializer, TypedDataManager $typed_data, LoggerChannelFactoryInterface $logger_factory) {
     $this->client = $client;
     $this->serializer = $serializer;
     $this->typed_data = $typed_data;
