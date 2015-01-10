@@ -6,7 +6,12 @@ The module provides a factory class which instantiates XeroClient, an extension 
 
 ## XeroBundle
 
-Xero module now requires [BlackOptic\XeroBundle](https://github.com/mradcliffe/XeroBundle) instead of PHP-Xero, and this requires the [Composer Manager](http://drupal.org/project/composer_manager) module. You must run the following drush command before installing Xero: `drush composer-json-rebuild --include=xero`. This is not ideal. Drupal 8 does not have a good way of including dependencies because it does not implement Composer properly. You may also hack Drupal 8's composer.json file if you prefer to install libraries in core/vendor.
+Xero module now requires [BlackOptic\XeroBundle](https://github.com/mradcliffe/XeroBundle) instead of PHP-Xero. This requires dowmnloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
+
+With Composer Manager:
+   - `drush composer-manager-init`
+   - `cd core`
+   - `composer drupal-update`
 
 ## Using XeroQuery to fetch into TypedData
 

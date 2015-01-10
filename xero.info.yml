@@ -5,5 +5,4 @@ package: Xero
 core: 8.x
 configure: 'xero.configure'
 dependencies:
-  - symfony_dependency
   - serialization
