@@ -54,6 +54,13 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
   /**
    * {@inheritdoc}
    */
+  public function getEditableConfigNames() {
+    return ['xero.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     // Get the configuration from ConfigFormBase::config().
