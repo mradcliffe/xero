@@ -3,13 +3,3 @@ xero.admin:
   description: 'Configure the xero module for your organization'
   parent: system.admin_config_services
   route_name: xero.configure
-xero.configure:
-  title: 'Application'
-  route_name: xero.configure
-  base_route: xero.configure
-  weight: -1
-xero.default_settings:
-  title: 'Settings'
-  route_name: xero.default_settings
-  base_route: xero.configure
-  weight: 0
