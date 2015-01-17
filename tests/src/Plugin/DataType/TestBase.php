@@ -59,19 +59,6 @@ abstract class TestBase extends UnitTestCase {
     // Create data definition
     $definition_class = static::XERO_DEFINITION_CLASS;
     $this->dataDefinition = $definition_class::create(static::XERO_TYPE);
-
-/*    // Type class mock
-    $typed_data = $this->getMockBuilder(static::XERO_TYPE_CLASS)
-      ->disableOriginalConstructor()
-      ->getMock();
-    $typed_data->expects($this->any())
-      ->method('getPropertyDefinitions')
-      ->willReturn($this->dataDefinition->getPropertyDefinitions());
-
-    $this->typedDataManager->expects($this->any())
-      ->method('create')
-      ->with($this->dataDefinition)
-      ->willReturn($typed_data); */
   }
 
 }

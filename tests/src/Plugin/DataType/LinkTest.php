@@ -32,31 +32,18 @@ class LinkTest extends TestBase {
   public function setUp() {
     parent::setUp();
 
-    $values = array(
-      'Url' => 'http://example.com'
-    );
-
-    $url_definition = DataDefinition::create('uri');
-    $url = new Uri($url_definition);
-
     // Create data type.
-    $typed_data_manager = $this->typedDataManager;
     $type_class = self::XERO_TYPE_CLASS;
     $this->link = new $type_class($this->dataDefinition, self::XERO_TYPE);
-
-    $this->typedDataManager->expects($this->any())
-      ->method('getPropertyInstance')
-      ->with($this->link, 'Url')
-      ->willReturn($url);
-
   }
 
   /**
-   * Test instantiation.
+   * Test getPropertyDefinitions.
    */
-  public function testObject() {
-    $this->link->set('Url', 'http://example.com');
+  public function testPropertyDefinitions() {
+    $properties = $this->link->getProperties();
 
-    $this->assertEquals('http://example.com', $this->link->get('Url')->getValue());
+    $this->assertArrayHasKey('Url', $properties);
+    $this->assertArrayHasKey('Description', $properties);
   }
 }
