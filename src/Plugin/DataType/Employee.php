@@ -29,7 +29,7 @@ class Employee extends XeroTypeBase {
    *   TRUE if the employee is active.
    */
   public function isActive() {
-    return $this->get('Status') == 'ACTIVE';
+    return $this->get('Status')->getValue() === 'ACTIVE';
   }
 
 }

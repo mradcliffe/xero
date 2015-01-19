@@ -30,7 +30,7 @@ class Contact extends XeroTypeBase {
    *   TRUE if the contact is a customer.
    */
   public function isCustomer() {
-    $isCustomer = $this->get('isCustomer');
+    $isCustomer = $this->get('IsCustomer')->getValue();
 
     return $isCustomer == TRUE;
   }
@@ -42,7 +42,7 @@ class Contact extends XeroTypeBase {
    *   TRUE if the contact is a supplier.
    */
   public function isSupplier() {
-    $isSupplier = $this->get('isSupplier');
+    $isSupplier = $this->get('IsSupplier')->getValue();
 
     return $isSupplier == TRUE;
   }

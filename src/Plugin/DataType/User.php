@@ -31,7 +31,7 @@ class User extends XeroTypeBase {
    *   Return TRUE if the user is a subscriber.
    */
   public function isSubscriber() {
-    return $this->get('isSubscriber');
+    return $this->get('IsSubscriber')->getValue();
   }
 
 }
