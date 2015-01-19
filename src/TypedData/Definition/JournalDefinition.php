@@ -24,7 +24,7 @@ class JournalDefinition extends ComplexDataDefinitionBase {
       // All properties are read-only.
       $info['JournalID'] = DataDefinition::create('string')->setLabel('Journal ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
       $info['JournalDate'] = DataDefinition::create('string')->setLabel('Date')->setReadOnly(TRUE);
-      $info['JournalNumber'] = DataDefiniton::create('string')->setLabel('Journal #')->setReadOnly(TRUE);
+      $info['JournalNumber'] = DataDefinition::create('string')->setLabel('Journal #')->setReadOnly(TRUE);
       $info['CreatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Created Date')->setReadOnly(TRUE);
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference')->setReadOnly(TRUE);
       $info['JournalLines'] = ListDataDefinition::create('xero_journal_line')->setLabel('Journal Lines')->setReadOnly(TRUE);
