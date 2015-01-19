@@ -22,11 +22,4 @@ class Expense extends XeroTypeBase {
   static public $plural_name = 'ExpenseClaims';
   static public $label = 'ExpenseClaimID';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

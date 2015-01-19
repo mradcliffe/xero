@@ -21,11 +21,4 @@ class CreditNote extends XeroTypeBase {
   static public $plural_name = 'CreditNotes';
   static public $label = 'CreditNoteNumber';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

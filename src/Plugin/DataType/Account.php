@@ -26,13 +26,6 @@ class Account extends XeroTypeBase {
   static public $label = 'AccountCode';
 
   /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
    * See if an account can be used as a revenue account.
    *
    * @return boolean

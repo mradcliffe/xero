@@ -22,11 +22,4 @@ class Invoice extends XeroTypeBase {
   static public $plural_name = 'Invoices';
   static public $label = 'InvoiceNumber';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

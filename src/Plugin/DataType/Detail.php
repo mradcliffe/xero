@@ -17,13 +17,4 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  *   definition_class = "\Drupal\xero\TypedData\Definition\DetailDefinition"
  * )
  */
-class Detail extends Map {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-}
+class Detail extends Map {}

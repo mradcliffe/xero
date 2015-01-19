@@ -23,13 +23,6 @@ abstract class XeroTypeBase extends Map implements XeroTypeInterface {
   /**
    * {@inheritdoc}
    */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGUIDName() {
     return self::$guid_name;
   }

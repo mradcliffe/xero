@@ -22,11 +22,4 @@ class Payment extends XeroTypeBase {
   static public $plural_name = 'Payments';
   static public $label = 'PaymentID';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

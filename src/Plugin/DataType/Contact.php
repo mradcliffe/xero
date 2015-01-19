@@ -23,13 +23,6 @@ class Contact extends XeroTypeBase {
   static public $label = 'Name';
 
   /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
    * Find if the contact is a customer. The value returned and set by the API
    * is a string, but hopefully that is normalized by Serializer as a boolean.
    *

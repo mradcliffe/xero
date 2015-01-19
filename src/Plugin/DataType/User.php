@@ -25,13 +25,6 @@ class User extends XeroTypeBase {
   static public $label = 'EmailAddress';
 
   /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
    * Is the user account a subscriber?
    *
    * @return boolean

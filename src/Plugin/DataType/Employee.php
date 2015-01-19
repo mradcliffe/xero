@@ -23,13 +23,6 @@ class Employee extends XeroTypeBase {
   static public $label = 'LastName';
 
   /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
    * Is the employee active?
    *
    * @return boolean

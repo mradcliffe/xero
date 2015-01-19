@@ -22,11 +22,4 @@ class BankTransaction extends XeroTypeBase {
   static public $plural_name = 'BankTransactions';
   static public $label;
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

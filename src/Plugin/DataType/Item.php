@@ -22,11 +22,4 @@ class Item extends XeroTypeBase {
   static public $plural_name = 'Items';
   static public $label = 'Code';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

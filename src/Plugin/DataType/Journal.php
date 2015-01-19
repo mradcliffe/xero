@@ -22,11 +22,4 @@ class Journal extends XeroTypeBase {
   static public $plural_name = 'Journals';
   static public $label = 'JournalNumber';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }

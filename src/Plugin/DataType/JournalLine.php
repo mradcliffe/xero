@@ -17,13 +17,4 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  *   definition_class = "\Drupal\xero\TypedData\Definition\JournalLineDefinition"
  * )
  */
-class JournalLine extends Map {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-}
+class JournalLine extends Map {}

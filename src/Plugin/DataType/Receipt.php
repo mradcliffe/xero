@@ -22,11 +22,4 @@ class Receipt extends XeroTypeBase {
   static public $plural_name = 'Receipts';
   static public $label = 'ReceiptNumber';
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
 }
