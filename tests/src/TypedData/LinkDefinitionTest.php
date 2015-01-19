@@ -1,16 +1,16 @@
 <?php
 /**
  * @file
- * Provides \DrupalTests\xero\Plugin\DataType\LinkTest.
+ * Provides \DrupalTests\xero\TypedData\LinkDefinitionTest.
  */
 
-namespace Drupal\Tests\xero\Plugin\DataType;
+namespace Drupal\Tests\xero\TypedData;
 
-use Drupal\Core\TypedData\Plugin\DataType\Uri;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\LinkDefinition;
 use Drupal\xero\Plugin\DataType\Link;
 use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Tests\xero\Plugin\DataType\TestBase;
 
 /**
  * Assert setting and getting Link properties.

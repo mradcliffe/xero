@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Provides \DrupalTests\xero\Plugin\DataType\ItemDefinitionTest.
+ * Provides \DrupalTests\xero\TypedData\ItemDefinitionTest.
  */
 
-namespace Drupal\Tests\xero\Plugin\DataType;
+namespace Drupal\Tests\xero\TypedData;
 
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\ItemDefinition;
@@ -12,6 +12,7 @@ use Drupal\xero\TypedData\Definition\DetailDefinition;
 use Drupal\xero\Plugin\DataType\Item;
 use Drupal\xero\Plugin\DataType\Detail;
 use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Tests\xero\Plugin\DataType\TestBase;
 
 /**
  * Assert setting and getting Item properties.

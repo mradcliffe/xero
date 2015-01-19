@@ -1,15 +1,16 @@
 <?php
 /**
  * @file
- * Provides \DrupalTests\xero\Plugin\DataType\AddressDefinitionTest.
+ * Provides \DrupalTests\xero\TypedData\AddressDefinitionTest.
  */
 
-namespace Drupal\Tests\xero\Plugin\DataType;
+namespace Drupal\Tests\xero\TypedData;
 
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\AddressDefinition;
 use Drupal\xero\Plugin\DataType\Address;
 use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Tests\xero\Plugin\DataType\TestBase;
 
 /**
  * Assert setting and getting Address properties.
