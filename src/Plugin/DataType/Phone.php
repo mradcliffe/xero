@@ -20,19 +20,12 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
 class Phone extends Map {
 
   /**
-   * {@inheritdoc}
-   */
-  protected function getPropertyDefinitions() {
-    return $this->definition->getPropertyDefinitions();
-  }
-
-  /**
    * Get the canonical phone number.
    *
    * @return string
    *   The full phone number.
    */
   public function getPhone() {
-    return $this->get('PhoneCountryCode') . '-' . $this->get('PhoneAreaCode') . '-' . $this->get('PhoneNumber');
+    return $this->get('PhoneCountryCode')->getValue() . '-' . $this->get('PhoneAreaCode')->getValue() . '-' . $this->get('PhoneNumber')->getValue();
   }
 }
