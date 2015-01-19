@@ -24,8 +24,8 @@ class DetailDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
       $tax_options = array('choices' => $this->getTaxTypes());
 
-      $info['UnitPrice'] = DataDefiniton::create('float')->setLabel('Unit price');
-      $info['AccountCode'] = DataDefiniton::create('string')->setLabel('Account code');
+      $info['UnitPrice'] = DataDefinition::create('float')->setLabel('Unit price');
+      $info['AccountCode'] = DataDefinition::create('string')->setLabel('Account code');
       $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->addConstraint('Choice', $tax_options);
     }
     return $this->propertyDefinitions;
