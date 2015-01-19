@@ -38,7 +38,6 @@ class AccountDefinition extends ComplexDataDefinitionBase {
 
       // Read-only properties.
       $info['Class'] = DataDefinition::create('string')->setLabel('Class')->setReadOnly(TRUE)->addConstraint('Choice', $class_options);
-      $info['ReportingCode'] = DataDefinition::create('string')->setReadOnly(TRUE)->setLabel('Reporting code');
       $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE)->addConstraint('Choice', $status_options);
       $info['SystemAccount'] = DataDefinition::create('string')->setLabel('System account')->setReadOnly(TRUE);
       $info['BankAccountNumber'] = DataDefinition::create('string')->setLabel('Bank account')->setReadOnly(TRUE);

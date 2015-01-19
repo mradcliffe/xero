@@ -32,7 +32,7 @@ class Account extends XeroTypeBase {
    *   Return TRUE if the account is revenue-based.
    */
   public function isRevenue() {
-    $class = $this->get('AccountClass');
+    $class = $this->get('Class')->getValue();
     if ($class && $class == 'REVENUE') {
       return TRUE;
     }
@@ -50,7 +50,7 @@ class Account extends XeroTypeBase {
    *   Return TRUE if the account is a bank account.
    */
   public function isBankAccount() {
-    $type = $this->get('Type');
+    $type = $this->get('Type')->getValue();
 
     return $type == 'BANK';
   }
