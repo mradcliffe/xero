@@ -24,21 +24,21 @@ abstract class XeroTypeBase extends Map implements XeroTypeInterface {
    * {@inheritdoc}
    */
   public function getGUIDName() {
-    return self::$guid_name;
+    return static::$guid_name;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getPluralName() {
-    return self::$plural_name;
+    return static::$plural_name;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLabelName() {
-    return self::$label;
+    return static::$label;
   }
 
 }
