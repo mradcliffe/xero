@@ -18,20 +18,4 @@ use Symfony\Component\Validator\Constraint;
  */
 class XeroGuidConstraint extends Constraint {
   public $message = 'This value should be a globally-unique identifier.';
-  protected $value;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRequiredOptions() {
-    return array('value');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefaultOption() {
-    return 'value';
-  }
-
 }
