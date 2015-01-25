@@ -32,10 +32,11 @@ abstract class TestBase extends UnitTestCase {
     $this->typedDataManager = $this->getMockBuilder('\Drupal\Core\TypedData\TypedDataManager')
       ->disableOriginalConstructor()
       ->getMock();
+
     $this->typedDataManager->expects($this->any())
       ->method('getDefinition')
-      ->with(static::XERO_TYPE)
-      ->will($this->returnValue(['class' => static::XERO_DEFINITION_CLASS]));
+      ->with(static::XERO_TYPE, TRUE)
+      ->will($this->returnValue(['id' => static::XERO_TYPE, 'definition class' => static::XERO_DEFINITION_CLASS]));
     $this->typedDataManager->expects($this->any())
       ->method('getDefaultConstraints')
       ->willReturn([]);
