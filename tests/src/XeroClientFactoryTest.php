@@ -110,6 +110,11 @@ class XeroClientFactoryTest extends UnitTestCase {
         $xero_config['private_key']
       ));
 
+    if (!class_exists('\BlackOptic\Bundle\XeroBundle\XeroCLient')) {
+      $this->assertTrue(FALSE, 'XeroClient class is not found. Aborting test.');
+      return;
+    }
+
     $client = $this->factory->get($this->configFactory, $this->loggerFactory);
     $this->assertTrue(is_a($client, '\BlackOptic\Bundle\XeroBundle\XeroClient'));
   }
@@ -122,6 +127,11 @@ class XeroClientFactoryTest extends UnitTestCase {
     $this->config->expects($this->any())
       ->method('get')
       ->will($this->returnValue(NULL));
+
+    if (!class_exists('\BlackOptic\Bundle\XeroBundle\XeroCLient')) {
+      $this->assertTrue(FALSE, 'XeroClient class is not found. Aborting test.');
+      return;
+    }
 
     $client = $this->factory->get($this->configFactory, $this->loggerFactory);
     $this->assertFalse($client, print_r($client, TRUE));
