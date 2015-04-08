@@ -449,7 +449,7 @@ function xero_make($type = 'contact', $size = 'minimal', $args = array()) {
     include_once($info[$type]['file path']);
     $func = 'xero_make_' . $type;
 
-    $func_args = array('minimal');
+    $func_args = array($size);
     $func_args = array_merge($func_args, $args);
 
     return call_user_func_array($func, $func_args);

@@ -141,7 +141,7 @@ function xero_make_payment($size = 'minimal', $invid = 'id', $accid = 'id') {
 
 /**
  * Xero Make Invoice callback
- * @param $size minimal, recommended, all
+ * @param $size minimal, all
  * @param $contact_type whether to set contact id or name
  * @param $items number of line items to generate
  * @return a valid invoice data structure.
