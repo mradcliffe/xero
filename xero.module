@@ -394,9 +394,7 @@ function xero_form_helper($type = 'Contacts', $default = '') {
  * @return $cached array of cached data
  */
 function xero_get_cache($type = 'Contacts') {
-  $cached = cache_get('xero_' . strtolower($type), 'cache');
-
-  if (!is_numeric($cached)) {
+  if ($cached = cache_get('xero_' . strtolower($type), 'cache')) {
     return $cached->data;
   }
 
