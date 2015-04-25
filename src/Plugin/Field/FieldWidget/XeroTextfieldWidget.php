@@ -7,12 +7,16 @@
 namespace Drupal\xero\Plugin\Field\FieldWidget;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
-use Drupal\Core\Field\Plugin\Field\FieldWidget\StringWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Component\Utility\String;
+use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\TypedData\TypedDataManager;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Random;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a simple textfield for entering GUID.
@@ -22,10 +26,11 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
  *   label = @Translation("Xero textfield"),
  *   field_types = {
  *     "xero_reference"
- *   }
+ *   },
+ *   multiple_values = TRUE
  * )
  */
-class XeroTextfieldWidget extends StringWidget {
+class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
@@ -39,12 +44,28 @@ class XeroTextfieldWidget extends StringWidget {
   /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['third_party_settings'],
+      $container->get('typed_data_manager')
+    );
+  }
 
-    // It is not possible to implement ContainerInjectionInterface as a
-    // FieldWidget plugin because WidgetBase implements __construct. DrupalWTF.
-    $this->typedDataManager = \Drupal::typedDataManager();
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, TypedDataManager $typed_data_manager) {
+    parent::__construct(array(), $plugin_id, $plugin_definition);
+
+    $this->fieldDefinition = $field_definition;
+    $this->settings = $settings;
+    $this->thirdPartySetings = $third_party_settings;
+    $this->typedDataManager = $typed_data_manager;
+    $this->randomGenerator = new Random();
   }
 
   /**
@@ -129,22 +150,25 @@ class XeroTextfieldWidget extends StringWidget {
         '#title' => t('Xero type'),
         '#description' => t('Select the Xero data type to associate.'),
         '#options' => $options,
-        '#default_value' => isset($items[$delta]->type) ? $items[$delta]->type : '',
+        '#default_value' => isset($items[$delta]->type) ? $items[$delta]->type : NULL,
       ),
       'guid' => array(
         '#type' => 'textfield',
         '#title' => t('GUID'),
         '#description' => t('Provide the globally-unique identifier for the Xero item.'),
-        '#default_value' => isset($items[$delta]->guid) ? $items[$delta]->guid : '',
+        '#default_value' => isset($items[$delta]->guid) ? $items[$delta]->guid : NULL,
         '#maxlength' => 38,
+        '#placeholder' => $this->getGUIDPlaceholder(),
+        '#attributes' => array('class' => array('text-full')),
         '#size' => 60,
       ),
       'label' => array(
         '#type' => 'textfield',
         '#title' => t('Description'),
         '#description' => t('Describe the reference to the Xero item'),
-        '#default_value' => isset($items[$delta]->label) ? $items[$delta]->label : '',
+        '#default_value' => isset($items[$delta]->label) ? $items[$delta]->label : NULL,
         '#maxlength' => 255,
+        '#attributes' => array('class' => array('text-full')),
         '#size' => 60,
       ),
     );
@@ -176,5 +200,19 @@ class XeroTextfieldWidget extends StringWidget {
     }
 
     return $options;
+  }
+
+  /**
+   * Provide a random GUID to act as a HTML placeholder attribute.
+   *
+   * @return string
+   *   Random GUID for use as placeholder attribute.
+   */
+  protected function getGUIDPlaceholder() {
+    $hash = strtoupper(hash('ripemd128', md5($this->randomGenerator()->string(100))));
+    $guid = substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4);
+    $guid .= '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
+
+    return '{' . $guid . '}';
   }
 }

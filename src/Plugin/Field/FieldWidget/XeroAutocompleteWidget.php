@@ -11,7 +11,7 @@ use Drupal\Core\Field\Plugin\Field\FieldWidget\StringWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 
 /**

@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\Choice;
  * @FieldType(
  *   id = "xero_reference",
  *   label = @Translation("Xero reference"),
+ *   category = @Translation("Reference"),
  *   description = @Translation("A reference to a Xero data type such as a Contact, Account, BankTransaction, etc... stored as a globally-unique identifier."),
  *   no_ui = FALSE,
  *   default_widget = "xero_textfield",
@@ -56,6 +57,13 @@ class XeroReference extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
+  public static function mainPropertyName() {
+    return 'guid';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
     return array(
       'columns' => array(
@@ -89,9 +97,7 @@ class XeroReference extends FieldItemBase {
    * {@inheritdoc}
    */
   public function isEmpty() {
-    $item = $this->getValue();
-
-    return !isset($item['guid']) || $item['guid'] === NULL || empty($item['guid']);
+    return !isset($this->guid) || $this->guid === NULL || empty($this->guid);
   }
 
   /**

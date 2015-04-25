@@ -10,6 +10,8 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\TypedData\TypedDataManagerInterface;
 
 /**
  * Xero Reference field formatter.
@@ -22,7 +24,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   },
  * )
  */
-class XeroReferenceFormatter extends FormatterBase {
+class XeroReferenceFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
@@ -34,14 +36,31 @@ class XeroReferenceFormatter extends FormatterBase {
   }
 
   /**
-   * Get the typed data manager from \Drupal.
+   * {@inheritdoc}
+   */
+  public static function create(\Symfony\Component\DependencyInjection\ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['label'],
+      $configuration['view_mode'],
+      $configuration['third_party_settings'],
+      $container->get('typed_data_manager')
+    );
+  }
+
+  /**
+   * Get the typed data manager from \Drupal. This cannot use type hinting
+   * because TypedDataManager must be mocked in PHPUnit. DrupalWTF.
    *
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $definition, array $settings, $label, $view_mode, array $third_party_settings) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $definition, array $settings, $label, $view_mode, array $third_party_settings, $typed_data_manager) {
 
     parent::__construct($plugin_id, $plugin_definition, $definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->typedDataManager = \Drupal::typedDataManager();
+    $this->typedDataManager = $typed_data_manager;
   }
 
   /**
