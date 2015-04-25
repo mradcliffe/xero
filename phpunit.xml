@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="../../core/tests/bootstrap.php" colors="true">
+<phpunit
+  bootstrap="../../core/tests/bootstrap.php"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  verbose="true"
+>
   <php>
     <!-- Set error reporting to E_ALL. -->
     <ini name="error_reporting" value="32767"/>
@@ -21,7 +28,7 @@
   <!-- Filter for coverage reports. -->
   <filter>
     <whitelist>
-      <directory>.</directory>
+      <directory>src</directory>
     </whitelist>
   </filter>
 </phpunit>
