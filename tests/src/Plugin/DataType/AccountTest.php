@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\AccountDefinition;
 use Drupal\xero\Plugin\DataType\Account;
-use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
 
 /**
  * Assert setting and getting Account properties.
@@ -63,8 +63,9 @@ class AccountTest extends TestBase {
    * Test isRevenue method.
    */
   public function testAccountClass() {
+
     $string_def = DataDefinition::create('string');
-    $string = new String($string_def);
+    $string = new StringData($string_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')
@@ -87,7 +88,7 @@ class AccountTest extends TestBase {
    */
   public function testType() {
     $string_def = DataDefinition::create('string');
-    $string = new String($string_def);
+    $string = new StringData($string_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')

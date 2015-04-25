@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\TypedData;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\LineItemDefinition;
 use Drupal\xero\Plugin\DataType\LineItem;
-use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\Core\TypedData\Plugin\DataType\Float;
 use Drupal\Tests\xero\Plugin\DataType\TestBase;
 

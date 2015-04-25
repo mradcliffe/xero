@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\PhoneDefinition;
 use Drupal\xero\Plugin\DataType\Phone;
-use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
 
 /**
  * Assert setting and getting Phone properties.
@@ -53,9 +53,9 @@ class PhoneTest extends TestBase {
    */
   public function testGetPhoneNumber() {
     $string_def = DataDefinition::create('string');
-    $country = new String($string_def);
-    $area = new String($string_def);
-    $number = new String($string_def);
+    $country = new StringData($string_def);
+    $area = new StringData($string_def);
+    $number = new StringData($string_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')

@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\UserDefinition;
 use Drupal\xero\Plugin\DataType\User;
-use Drupal\Core\TypedData\Plugin\DataType\Boolean;
+use Drupal\Core\TypedData\Plugin\DataType\BooleanData;
 
 /**
  * Assert setting and getting User properties.
@@ -56,7 +56,7 @@ class UserTest extends TestBase {
    */
   public function testIsSubscriber() {
     $boolean_def = DataDefinition::create('boolean');
-    $boolean = new Boolean($boolean_def);
+    $boolean = new BooleanData($boolean_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')

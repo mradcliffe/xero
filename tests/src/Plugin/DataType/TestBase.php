@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Tests\UnitTestCase;
 
 use Drupal\Core\TypedData\DataDefinition;
-use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 
 /**

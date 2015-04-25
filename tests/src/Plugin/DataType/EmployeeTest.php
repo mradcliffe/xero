@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\EmployeeDefinition;
 use Drupal\xero\Plugin\DataType\Employee;
-use Drupal\Core\TypedData\Plugin\DataType\String;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
 
 /**
  * Assert setting and getting Employee properties.
@@ -54,7 +54,7 @@ class EmployeeTest extends TestBase {
    */
   public function testIsActive() {
     $string_def = DataDefinition::create('string');
-    $string = new String($string_def);
+    $string = new StringData($string_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')

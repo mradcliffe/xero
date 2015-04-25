@@ -9,7 +9,7 @@ namespace Drupal\Tests\xero\Plugin\DataType;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\xero\TypedData\Definition\ContactDefinition;
 use Drupal\xero\Plugin\DataType\Contact;
-use Drupal\Core\TypedData\Plugin\DataType\Boolean;
+use Drupal\Core\TypedData\Plugin\DataType\BooleanData;
 
 /**
  * Assert setting and getting Contact properties.
@@ -67,7 +67,7 @@ class ContactTest extends TestBase {
    */
   public function testIsSupplier() {
     $bool_def = DataDefinition::create('boolean');
-    $bool = new Boolean($bool_def);
+    $bool = new BooleanData($bool_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')
@@ -86,7 +86,7 @@ class ContactTest extends TestBase {
    */
   public function testIsCustomer() {
     $bool_def = DataDefinition::create('boolean');
-    $bool = new Boolean($bool_def);
+    $bool = new BooleanData($bool_def);
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')

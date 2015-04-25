@@ -5,12 +5,6 @@
     "homepage": "http://drupal.org/project/xero",
     "license": "GPL-2.0",
     "require": {
-        "blackoptic/xerobundle": "dev-no-bundle-support as master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/mradcliffe/xerobundle"
-        }
-    ]
+        "blackoptic/xerobundle": "dev-master"
+    }
 }
