@@ -100,6 +100,10 @@ class XeroGuidConstraintTest extends UnitTestCase {
     $guid = substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4);
     $guid .= '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
 
+    // A Guid string representation should be output as lower case per UUIDs
+    // and GUIDs Network Working Group INTERNET-DRAFT 3.3.
+    $guid = strtolower($guid);
+
     if ($braces) {
       return '{' . $guid . '}';
     }

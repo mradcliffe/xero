@@ -8,9 +8,9 @@ namespace Drupal\xero;
 
 use Symfony\Component\Serializer\Serializer;
 use BlackOptic\Bundle\XeroBundle\XeroClient;
-use \Drupal\xero\TypedData\XeroTypeInterface;
+use Drupal\xero\TypedData\XeroTypeInterface;
 use Drupal\Core\TypedData\TypedDataManager;
-use Drupal\Component\Uuid;
+use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Guzzle\Http\Exception\RequestException;
@@ -87,6 +87,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
   }
 
   /**
+   * Get the xero type. Useful for unit tests.
+   *
+   * @return string
+   *   The xero type set on this object.
+   */
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
    * Set the xero type by plugin id.
    *
    * @param $type
@@ -104,6 +114,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
     }
 
     return $this;
+  }
+
+  /**
+   * Get the HTTP method to use. Useful for unit tests.
+   *
+   * @return string
+   *   The HTTP Method: get or post.
+   */
+  public function getMethod() {
+    return $this->method;
   }
 
   /**
@@ -131,6 +151,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
   }
 
   /**
+   * Get the format to return. Useful for unit tests.
+   *
+   * @return string
+   *   The format to return: json, xml, or pdf.
+   */
+  public function getFormat() {
+    return $this->format;
+  }
+
+  /**
    * Set the format to use for the query. This is "method" from xero_query().
    *
    * @todo support pdf format.
@@ -149,6 +179,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
     $this->addHeader('Accept', 'application/' . $this->format);
 
     return $this;
+  }
+
+  /**
+   * Get the UUID that is set for the query. Useful for unit tests.
+   *
+   * @param string
+   *   The Universally-Unique ID that is set on the object.
+   */
+  public function getId() {
+    return $this->uuid;
   }
 
   /**
@@ -183,6 +223,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
   }
 
   /**
+   * Get the data object that was set.
+   *
+   * @return XeroTypeInterface
+   *   A xero data type or NULL.
+   */
+  public function getData() {
+    return $this->data;
+  }
+
+  /**
    * Set the data object to send in the request.
    *
    * @param XeroTypeInterface
@@ -202,6 +252,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
   }
 
   /**
+   * Get the xero query options. Useful for unit tests.
+   *
+   * @return []
+   *   An associative array of options to pass to Guzzle.
+   */
+  public function getOptions() {
+    return $this->options;
+  }
+
+  /**
    * Get the type data definition property.
    *
    * @return DataDefinitionInterface
@@ -215,7 +275,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    * Add a condition to the query.
    *
    * @param $field
-   * @param 4value
+   * @param $value
    * @param $op
    *   The operation to use, which is one of the following operators.
    *     - ==: Equal to the value
