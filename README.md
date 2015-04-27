@@ -6,7 +6,7 @@ The module provides a factory class which instantiates XeroClient, an extension 
 
 ## XeroBundle
 
-Xero module now requires [BlackOptic\XeroBundle](https://github.com/mradcliffe/XeroBundle) instead of PHP-Xero. This requires dowmnloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
+Xero module now requires [BlackOptic\XeroBundle](https://github.com/james75/XeroBundle) instead of PHP-Xero. This requires dowmnloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
 
 With Composer Manager:
    - `drush composer-manager-init`
