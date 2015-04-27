@@ -80,22 +80,6 @@ class XeroReference extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function getConstraints() {
-    $constraints = parent::getConstraints();
-
-    $constraint_manager = \Drupal::typedDataManager()->getValidationConstraintManager();
-    $constraints[] = $constraint_manager->create('ComplexData', array(
-      'label' => array(
-        'Length' => array('max' => 255, 'maxMessage' => t('The label for this exceeds the maximum allowed length.')),
-      ),
-    ));
-
-    return $constraints;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isEmpty() {
     return !isset($this->guid) || $this->guid === NULL || empty($this->guid);
   }

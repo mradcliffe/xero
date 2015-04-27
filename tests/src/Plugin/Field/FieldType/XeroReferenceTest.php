@@ -50,19 +50,20 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
       ->method('getDefaultConstraints')
       ->willReturn([]);
     // Validation constraint manager setup.
-    $validation_constraint_manager = $this->getMockBuilder('\Drupal\Core\Validation\ConstraintManager')
+    $this->validation_constraint_manager = $this->getMockBuilder('\Drupal\Core\Validation\ConstraintManager')
       ->disableOriginalConstructor()
       ->getMock();
-    $validation_constraint_manager->expects($this->any())
+    $this->validation_constraint_manager->expects($this->any())
       ->method('create')
       ->willReturn([]);
     $this->typedDataManager->expects($this->any())
       ->method('getValidationConstraintManager')
-      ->willReturn($validation_constraint_manager);
+      ->willReturn($this->validation_constraint_manager);
 
     // Set the container.
     $container = \Drupal::getContainer();
     $container->set('typed_data_manager', $this->typedDataManager);
+    $container->set('validation.constraint', $this->validation_constraint_manager);
     \Drupal::setContainer($container);
   }
 
@@ -104,20 +105,6 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
     $this->assertEquals('Type', $definitions['type']->getLabel());
     $constraint = $definitions['type']->getConstraint('Choice');
     $this->assertTrue(isset($constraint));
-  }
-
-  /**
-   * Test get constraints.
-   */
-  public function testGetConstraints() {
-    $this->typedDataManager->expects($this->any())
-      ->method('getDefinition')
-      ->with('field_item:xero_reference', TRUE)
-      ->willReturn(['class' => '\Drupal\xero\Plugin\Field\FieldType\XeroReference']);
-
-    $constraints = $this->definition->getConstraints();
-
-    $this->assertEquals('ComplexDataConstraint', is_a($constraints[0]));
   }
 
   /**

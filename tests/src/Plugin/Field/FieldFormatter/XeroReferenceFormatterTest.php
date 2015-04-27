@@ -144,6 +144,24 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     $this->assertTrue(is_a($render[0]['#item'], 'Drupal\xero\Plugin\Field\FieldType\XeroReference'));
   }
 
+  /**
+   * Test Formatter Settings Summary.
+   */
+  public function testFormatterSettingsSummary() {
+    $settingsSummary = $this->formatter->settingsSummary();
+    $this->assertEquals(3, count($settingsSummary));
+    $this->assertEquals('Guid: Visible', $settingsSummary[0]);
+    $this->assertEquals('Type: Visible', $settingsSummary[1]);
+    $this->assertEquals('Label: Visible', $settingsSummary[2]);
+
+    $this->formatter->setSetting('display', array());
+    $settingsSummary = $this->formatter->settingsSummary();
+
+    $this->assertEquals('Guid: Hidden', $settingsSummary[0]);
+    $this->assertEquals('Type: Hidden', $settingsSummary[1]);
+    $this->assertEquals('Label: Hidden', $settingsSummary[2]);
+  }
+
 
   /**
    * Create a Guid with or without curly braces.
