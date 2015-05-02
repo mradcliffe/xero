@@ -25,7 +25,7 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
  */
 class XeroQuery /*implements XeroQueryInterface */ {
 
-  static protected $operators = array('==', '!=', 'StartsWith', 'EndsWith', 'Contains', 'Guid');
+  static protected $operators = array('==', '!=', 'StartsWith', 'EndsWith', 'Contains', 'guid');
 
   /**
    * The options to pass into guzzle.
@@ -301,7 +301,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
       $this->conditions[] = $field . $op . '"' . $value . '"';
     }
     elseif ($op == 'guid') {
-      $this->conditions[] = $field . '= Guid("' . $value . '"';
+      $this->conditions[] = $field . '= Guid("' . $value . '")';
     }
     else {
       $this->conditions[] = $field . '.' . $op . '("' . $value . '")';
@@ -340,7 +340,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    */
   public function orderBy($field, $dir = 'ASC') {
     if ($dir == 'DESC') {
-      $field . ' ' . $dir;
+      $field .= ' ' . $dir;
     }
 
     $this->addQuery('order', $field);
@@ -392,6 +392,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
   }
 
   /**
+   * Get the conditions array. Useful for unit tests.
+   *
+   * @return []
+   *   An array of conditions.
+   */
+  public function getConditions() {
+    return $this->conditions;
+  }
+
+  /**
    * Validate the query before execution to make sure that query parameters
    * make sense for the method for instance.
    *
@@ -405,18 +415,8 @@ class XeroQuery /*implements XeroQueryInterface */ {
       throw new \InvalidArgumentException('The query must have a type set.');
     }
 
-    if ($this->method == 'post') {
-      if ($this->format <> 'xml') {
-        throw new \InvalidArgumentException('The format must be XML for creating or updating data.');
-      }
-
-      if ($this->options['headers']['Content-Type'] <> 'application/x-www-form-url-encoded') {
-        throw new \InvalidArgumentException('The Content-Type must be application/x-www-form-url-encoded.');
-      }
-
-      if (!empty($this->conditions)) {
-        throw new \InvalidArgumentException('Invalid use of conditions for creating or updating data.');
-      }
+    if ($this->method == 'post' && $this->format <> 'xml') {
+      throw new \InvalidArgumentException('The format must be XML for creating or updating data.');
     }
 
     if ($this->method == 'get' && $this->data !== NULL) {
