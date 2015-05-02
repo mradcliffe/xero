@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\TypedData\TypedDataManager;
 use Drupal\xero\XeroQuery;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Xero autocomplete controller.
@@ -49,14 +50,14 @@ class XeroAutocompleteController implements ContainerInjectionInterface {
    * @param $type
    *   The Xero type.
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   A JSON response of potential guid and label matches.
+   *   A JSON response of potential guid and label matches as key/value pairs.
    */
   public function autocomplete(Request $request, $type) {
     $search = $request->query->get('q');
-    $matches = array();
+    $matches = NULL;
 
-    $definition = $this->typedDataManager->getDefinition($type);
-    $class = $definition['class'];
+    $definition = $this->typedDataManager->createDataDefinition($type);
+    $class = $definition->getClass();
 
     $this->query
       ->setType($type)
@@ -73,15 +74,13 @@ class XeroAutocompleteController implements ContainerInjectionInterface {
     $items = $this->query->execute();
 
     if (!empty($items)) {
+      $matches = [];
       foreach ($items as $item) {
         $key = $item->get($class::$guid_name)->getValue();
-        $key .= $class::$label ? ' (' . $item->get($class::$label)->getValue() . ')' : '';
         $label = $class::$label ? $item->get($class::$label)->getValue() : $key;
+        $key .= $key !== $label ? ' (' . $label . ')' : '';
 
-        $matches[] = array(
-          'value' => $key,
-          'label' => $label,
-        );
+        $matches[] = array('value' => $key, 'label' => SafeMarkup::checkPlain($label));
       }
     }
 
