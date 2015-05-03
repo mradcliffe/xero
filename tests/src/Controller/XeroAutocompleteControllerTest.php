@@ -81,7 +81,7 @@ class XeroAutocompleteControllerTest extends UnitTestCase {
         }
         $items[] = $item;
 
-        // Create data type instances for 
+        // Create data type instances for
         $data[$num]['valueData'] = new StringData($stringDefinition);
         $data[$num]['valueData']->setValue($values['value']);
         $data[$num]['labelData'] = new StringData($stringDefinition);
@@ -184,7 +184,7 @@ class XeroAutocompleteControllerTest extends UnitTestCase {
     $data[] = ['xero_contact', '\Drupal\xero\TypedData\Definition\ContactDefinition', '\Drupal\xero\Plugin\DataType\Contact', []];
     $data[] = ['xero_contact', '\Drupal\xero\TypedData\Definition\ContactDefinition', '\Drupal\xero\Plugin\DataType\Contact', [0 => $expects[0]]];
     $data[] = ['xero_contact', '\Drupal\xero\TypedData\Definition\ContactDefinition', '\Drupal\xero\Plugin\DataType\Contact', $expects];
-    $data[] = ['xero_bank_transaciton', '\Drupal\xero\TypedData\Definition\BankTransactionDefinition', '\Drupal\xero\Plugin\DataType\BankTransaction', $transaction];
+    $data[] = ['xero_bank_transaction', '\Drupal\xero\TypedData\Definition\BankTransactionDefinition', '\Drupal\xero\Plugin\DataType\BankTransaction', $transaction];
 
     return $data;
   }

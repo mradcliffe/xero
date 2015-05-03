@@ -5,35 +5,34 @@ php:
   - 5.5
   - 5.6
 
-matrix:
-  - fast_finish: true
-
 before_install:
   - sudo apt-get update > /dev/null
 
 install:
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require drush/drush:dev-master
+  # - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  # - composer global require drush/drush:dev-master
+  - composer self-update
+
+  # Download Drupal and dependencies.
+  - TESTDIR=$(pwd)
+  - cd ..
+  - git clone --branch 8.0.x --depth 1 http://git.drupal.org/project/drupal.git drupal
+  - git clone --branch 8.x-1.x --depth 1 http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
+  - cd drupal
+  - chmod +x modules/composer_manager/scripts/init.sh
 
 before_script:
-  - cd ../..
-
-  # Download Drupal
-  - drush pm-download --drupal-project-name=drupal -y drupal-8.0.x
-  - cd drupal
-
-  # Download Composer Manager
-  - drush pm-download -y composer_manager-8.x-1.x
-
-  # Symlink the repository dir into modules/xero
-  - ln -sv $TRAVIS_BUILD_DIR modules/xero
+  # rsync the module directory into modules/xero
+  - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
 
   # Run the composer manager init script to add drupal-update capability.
   - ./modules/composer_manager/scripts/init.sh
 
   # Change into core directory and run composer drupal-update for dependencies.
   - cd core
-  - composer drupal-update
+  - composer -vv drupal-update
 
   # Go back to repository directory to run phpunit.
   - cd ../modules/xero
+script:
+  - ../../core/vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt

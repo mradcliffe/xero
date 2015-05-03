@@ -1,5 +1,7 @@
 # Xero Module
 
+[![Build Status](https://travis-ci.org/mradcliffe/xero.svg?branch=8.x-1.x)](https://travis-ci.org/mradcliffe/xero)
+
 This module provides classes to help interface with the Xero Account SaaS product. You will need to be familiar with the [Xero API](http://developer.xero.com).
 
 The module provides a factory class which instantiates XeroClient, an extension of Guzzle Client. This allows you to make requests to the Xero API via Guzzle. As well, all of Xero types are mapped out as a TypedData replacing the old `xero_make` system, and the raw JSON or XML can be fed into Serializer to normalize and denormalize data.
@@ -9,7 +11,7 @@ The module provides a factory class which instantiates XeroClient, an extension 
 Xero module now requires [BlackOptic\XeroBundle](https://github.com/james75/XeroBundle) instead of PHP-Xero. This requires dowmnloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
 
 With Composer Manager:
-   - `drush composer-manager-init`
+   - `drush composer-manager-init` or `./modules/composer_manager/scripts/init.sh`
    - `cd core`
    - `composer drupal-update`
 
