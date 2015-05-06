@@ -149,7 +149,7 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
    *   Guid string.
    */
   protected function createGuid($braces = TRUE) {
-    $hash = strtoupper(hash('ripemd128', md5($this->getRandomGenerator()->string(100))));
+    $hash = strtolower(hash('ripemd128', md5($this->getRandomGenerator()->string(100))));
     $guid = substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4);
     $guid .= '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
 

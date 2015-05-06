@@ -7,7 +7,7 @@
 namespace Drupal\xero\Plugin\Field\FieldWidget;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
-use Drupal\Core\Field\Plugin\Field\FieldWidget\StringWidget;
+use Drupal\Core\Field\Plugin\Field\FieldWidget\StringTextfieldWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -26,7 +26,7 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
  *   }
  * )
  */
-class XeroAutocompleteWidget extends StringWidget {
+class XeroAutocompleteWidget extends StringTextfieldWidget {
 
   /**
    * {@inheritdoc}
@@ -121,7 +121,7 @@ class XeroAutocompleteWidget extends StringWidget {
       '#autocomplete_route_parameters' => array(
         'type' => $this->getSetting('xero_type'),
       ),
-      '#default_value' => isset($items[$delta]->guid) ? $items[$delta]->guid : '',
+      '#default_value' => isset($items[$delta]->guid) ? $items[$delta]->guid . ' (' . $items[$delta]->label . ')' : '',
     );
 
     return $element;
@@ -140,9 +140,9 @@ class XeroAutocompleteWidget extends StringWidget {
         'type' => $xero_type,
       );
 
-      preg_match('/(\S+) \((.+)\)/', $value, $matches);
-      $item['guid'] = $matches[1];
-      $item['label'] = $matches[2];
+      preg_match('/([a-zA-Z0-9\-]+)(\s\((.+)\))?/', $value, $matches);
+      $item['guid'] = isset($matches[1]) ? $matches[1] : '';
+      $item['label'] = isset($matches[3]) ? $matches[3] : '';
 
       $return_values[] = $item;
     }

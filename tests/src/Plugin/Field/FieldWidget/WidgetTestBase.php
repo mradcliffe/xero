@@ -1,28 +1,39 @@
 <?php
 /**
  * @file
- * Provides \Drupal\Tests\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatterTest
+ * Provides \Drupal\Tests\xero\Plugin\Field\FieldWidget\WidgetTestBase
  */
 
-namespace Drupal\Tests\xero\Plugin\Field\FieldFormatter;
+namespace Drupal\Tests\xero\Plugin\Field\FieldWidget;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
-use Drupal\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatter;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\Field\FieldItemList;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Test the formatter plugin. This does not use BaseFieldDefinitionTestBase
- * because that class is terrible, and is full of DrupalWTF crap such as not
- * setting useful things as properties such as typed data manager.
- *
- * @coversDefaultClass \Drupal\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatter
- * @group Xero
+ * Provides a base test class for testing field widgets.
  */
-class XeroReferenceFormatterTest extends UnitTestCase {
+abstract class WidgetTestBase extends UnitTestCase {
+
+  /**
+   * The plugin id of the widget.
+   *
+   * @return string
+   *   The plugin id of the widget.
+   */
+  abstract protected function getPluginId();
+
+  /**
+   * The plugin class of the widget.
+   *
+   * @return string
+   *   The plugin class of the widget.
+   */
+  abstract protected function getPluginClass();
 
   /**
    * {@inheritdoc}
@@ -45,11 +56,8 @@ class XeroReferenceFormatterTest extends UnitTestCase {
       ->willReturn([]);
     $this->typedDataManager->expects($this->any())
       ->method('getDefinition')
-      ->with($this->anything())
-      ->will($this->onConsecutiveCalls(
-        ['class' => '\Drupal\xero\Plugin\Field\FieldType\XeroReference'],
-        ['class' => '\Drupal\xero\Plugin\DataType\Employee']
-      ));
+      // ->with($this->anything())
+      ->will($this->returnValueMap($this->getDefinitionMap()));
 
     // Mock Field Type Plugin Manager
     $this->pluginManager = $this->getMockBuilder('\Drupal\Core\Field\FieldTypePluginManager')
@@ -86,7 +94,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
 
     // Formatter configuration.
     $plugin_definition = [
-      'class' => '\Drupal\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatter'
+      'class' => $this->getPluginClass(),
     ];
     $configuration = [
       'field_definition' => $this->fieldDefinition,
@@ -96,58 +104,19 @@ class XeroReferenceFormatterTest extends UnitTestCase {
       'third_party_settings' => array(),
     ];
 
-    $this->formatter = XeroReferenceFormatter::create($container, $configuration, 'xero_reference', $plugin_definition);
+    $class = $this->getPluginClass();
+
+    if (in_array('Drupal\Core\Plugin\ContainerFactoryPluginInterface', class_implements($class))) {
+      $this->widget = $class::create($container, $configuration, $this->getPluginId(), $plugin_definition);
+    }
+    else {
+      $this->widget = new $class($this->getPluginId(), $plugin_definition, $this->fieldDefinition, $configuration['settings'], $configuration['third_party_settings']);
+    }
     $this->fieldItemList = new FieldItemList($this->fieldDefinition);
     $this->fieldItem = new XeroReference($this->fieldDefinition);
+
+    $this->fieldDefinition->setSetting('xero_type', array('xero_employee' => 'xero_employee'));
   }
-
-  /**
-   * Test Formatter class.
-   */
-  public function testFormatterClass() {
-    $values = array(
-      'guid' => $this->createGuid(),
-      'type' => 'xero_employee',
-      'label' => $this->getRandomGenerator()->word(15),
-    );
-
-    $this->fieldItem->setValue($values, FALSE);
-
-    $this->typedDataManager->expects($this->any())
-      ->method('getPropertyInstance')
-      ->with($this->fieldItemList, 0, $values)
-      ->willReturn($this->fieldItem);
-    $this->pluginManager->expects($this->any())
-      ->method('createFieldItem')
-      ->with($this->fieldItemList, 0, $values)
-      ->willReturn($this->fieldItem);
-
-    $this->fieldItemList->setValue([0 => $values]);
-
-    $render = $this->formatter->viewElements($this->fieldItemList);
-
-    $this->assertEquals(1, count($render));
-    $this->assertTrue(is_a($render[0]['#item'], 'Drupal\xero\Plugin\Field\FieldType\XeroReference'));
-  }
-
-  /**
-   * Test Formatter Settings Summary.
-   */
-  public function testFormatterSettingsSummary() {
-    $settingsSummary = $this->formatter->settingsSummary();
-    $this->assertEquals(3, count($settingsSummary));
-    $this->assertEquals('Guid: Visible', $settingsSummary[0]);
-    $this->assertEquals('Type: Visible', $settingsSummary[1]);
-    $this->assertEquals('Label: Visible', $settingsSummary[2]);
-
-    $this->formatter->setSetting('display', array());
-    $settingsSummary = $this->formatter->settingsSummary();
-
-    $this->assertEquals('Guid: Hidden', $settingsSummary[0]);
-    $this->assertEquals('Type: Hidden', $settingsSummary[1]);
-    $this->assertEquals('Label: Hidden', $settingsSummary[2]);
-  }
-
 
   /**
    * Create a Guid with or without curly braces.
@@ -167,6 +136,30 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     }
 
     return $guid;
+  }
+
+  /**
+   * Get definition map for getDefinition call moking.
+   *
+   * @return []
+   *   An array of argument and return value for getDefinition().
+   */
+  protected function getDefinitionMap() {
+    return [
+      ['field_item:xero_reference', TRUE, ['class' => '\Drupal\xero\Plugin\Field\FieldType\XeroReference']],
+      ['xero_account', TRUE, ['label' => 'Xero Account', 'class' => '\Drupal\xero\Plugin\DataType\Account']],
+      ['xero_bank_transaction', TRUE, ['label' => 'Xero Bank Transaction', 'class' => '\Drupal\xero\Plugin\DataType\BankTransaction']],
+      ['xero_contact', TRUE, ['label' => 'Xero Contact', 'class' => '\Drupal\xero\Plugin\DataType\Contact']],
+      ['xero_customer', TRUE, ['label' => 'Xero Customer', 'class' => '\Drupal\xero\Plugin\DataType\Customer']],
+      ['xero_credit_note', TRUE, ['label' => 'Xero Credit Note', 'class' => '\Drupal\xero\Plugin\DataType\CreditNote']],
+      ['xero_employee', TRUE, ['label' => 'Xero Employee', 'class' => '\Drupal\xero\Plugin\DataType\Employee']],
+      ['xero_expense', TRUE, ['label' => 'Xero Expense', 'class' => '\Drupal\xero\Plugin\DataType\Expense']],
+      ['xero_invoice', TRUE, ['label' => 'Xero Invoice', 'class' => '\Drupal\xero\Plugin\DataType\Invoice']],
+      ['xero_journal', TRUE, ['label' => 'Xero Journal', 'class' => '\Drupal\xero\Plugin\DataType\Journal']],
+      ['xero_payment', TRUE, ['label' => 'Xero Payment', 'class' => '\Drupal\xero\Plugin\DataType\Payment']],
+      ['xero_receipt', TRUE, ['label' => 'Xero Receipt', 'class' => '\Drupal\xero\Plugin\DataType\Receipt']],
+      ['xero_user', TRUE, ['label' => 'Xero User', 'class' => '\Drupal\xero\Plugin\DataType\User']],
+    ];
   }
 
 }

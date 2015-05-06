@@ -8,6 +8,7 @@ namespace Drupal\xero\Plugin\Field\FieldWidget;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
@@ -59,11 +60,11 @@ class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, TypedDataManager $typed_data_manager) {
-    parent::__construct(array(), $plugin_id, $plugin_definition);
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
     $this->fieldDefinition = $field_definition;
     $this->settings = $settings;
-    $this->thirdPartySetings = $third_party_settings;
+    $this->thirdPartySettings = $third_party_settings;
     $this->typedDataManager = $typed_data_manager;
     $this->randomGenerator = new Random();
   }
@@ -106,7 +107,7 @@ class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginIn
       $definition = $this->getXeroDefinition($type_name);
 
       if ($definition) {
-        $type_options[] = $definition['label'];
+        $type_options[$type_name] = $definition['label'];
       }
     }
 
@@ -124,7 +125,7 @@ class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginIn
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $options = $this->getTypeOptions();
 
-    $form['xero_type'] = array(
+    $element['xero_type'] = array(
       '#type' => 'select',
       '#title' => t('Xero Type'),
       '#description' => t('Select the Xero data type to use for this form.'),
@@ -133,7 +134,7 @@ class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginIn
       '#default_value' => $this->getSetting('xero_type'),
     );
 
-    return $form;
+    return $element;
   }
 
   /**
@@ -209,10 +210,10 @@ class XeroTextfieldWidget extends WidgetBase implements ContainerFactoryPluginIn
    *   Random GUID for use as placeholder attribute.
    */
   protected function getGUIDPlaceholder() {
-    $hash = strtoupper(hash('ripemd128', md5($this->randomGenerator()->string(100))));
+    $hash = strtolower(hash('ripemd128', md5($this->randomGenerator->string(100))));
     $guid = substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4);
     $guid .= '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
 
-    return '{' . $guid . '}';
+    return $guid;
   }
 }
