@@ -30,9 +30,16 @@ before_script:
 
   # Change into core directory and run composer drupal-update for dependencies.
   - cd core
-  - composer -vv drupal-update
+  # vendor directory must be removed to avoid running into GitHub API limits
+  # because Composer.
+  - rm -rf vendor
+  - composer drupal-rebuild
+  - composer update --prefer-source -n --verbose
 
   # Go back to repository directory to run phpunit.
   - cd ../modules/xero
 script:
   - ../../core/vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
+after_script:
+  # Print out coverage report.
+  - head $TRAVIS_BUILD_DIR/coverage.txt
