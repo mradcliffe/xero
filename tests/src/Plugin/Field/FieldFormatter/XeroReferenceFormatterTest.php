@@ -11,6 +11,7 @@ use Drupal\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatter;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\Field\FieldItemList;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 
@@ -131,9 +132,12 @@ class XeroReferenceFormatterTest extends UnitTestCase {
   }
 
   /**
-   * Test Formatter Settings Summary.
+   * Test Formatter Settings.
    */
-  public function testFormatterSettingsSummary() {
+  public function testFormatterSettings() {
+    $form = [];
+    $formState = new FormState();
+
     $settingsSummary = $this->formatter->settingsSummary();
     $this->assertEquals(3, count($settingsSummary));
     $this->assertEquals('Guid: Visible', $settingsSummary[0]);
@@ -146,8 +150,10 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     $this->assertEquals('Guid: Hidden', $settingsSummary[0]);
     $this->assertEquals('Type: Hidden', $settingsSummary[1]);
     $this->assertEquals('Label: Hidden', $settingsSummary[2]);
-  }
 
+    $settingsForm = $this->formatter->settingsForm($form, $formState);
+    $this->assertEquals([], $settingsForm['display']['#default_value']);
+  }
 
   /**
    * Create a Guid with or without curly braces.
