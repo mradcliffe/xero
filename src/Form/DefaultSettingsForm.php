@@ -104,11 +104,11 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
   }
 
   /**
-   * Validate that certificate or key file exist.
+   * {@inheritdoc}
    */
-  public function validateFileExists($element, FormStateInterface $form_state) {
-    if (!file_exists($element['#value'])) {
-      $form_state->setError($element, t('The specified file either does not exist, or is not accessible to the web server.'));
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    if (!$this->query->hasClient()) {
+      $form_state->setError($form['defaults'], t('An error occurred trying to connect to Xero with the specified configuration. Please check the error logs for more information.'));
     }
   }
 

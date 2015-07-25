@@ -66,41 +66,32 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
     // Open the fieldset if there was a problem loading the library.
     $form['oauth'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Xero Configuration'),
+      '#title' => $this->t('Xero Configuration'),
       '#collapsible' => TRUE,
-      '#collapsed' => $this->query->client !== FALSE,
+      '#collapsed' => $this->query->hasClient() !== FALSE,
       '#tree' => TRUE,
     );
 
     $form['oauth']['consumer_key'] = array(
       '#type' => 'textfield',
-      '#title' => t('Xero Consumer Key'),
-      '#description' => t('Provide the consumer key for your private application on xero.'),
+      '#title' => $this->t('Xero Consumer Key'),
+      '#description' => $this->t('Provide the consumer key for your private application on xero.'),
       '#default_value' => $config->get('oauth.consumer_key'),
       '#required' => TRUE,
     );
 
     $form['oauth']['consumer_secret'] = array(
       '#type' => 'textfield',
-      '#title' => t('Xero Consumer Secret'),
-      '#description' => t('Provide the consumer secret for your private application on xero.'),
+      '#title' => $this->t('Xero Consumer Secret'),
+      '#description' => $this->t('Provide the consumer secret for your private application on xero.'),
       '#default_value' => $config->get('oauth.consumer_secret'),
-      '#required' => TRUE,
-    );
-
-    $form['oauth']['cert_path'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Xero Certificate Path'),
-      '#description' => t('Provide the full path and file name to your Xero certificate.'),
-      '#default_value' => $config->get('oauth.cert_path'),
-      '#element_validate' => array(array($this, 'validateFileExists')),
       '#required' => TRUE,
     );
 
     $form['oauth']['key_path'] = array(
       '#type' => 'textfield',
-      '#title' => t('Xero Key Path'),
-      '#description' => t('Provide the full path and file name to your Xero certificate private key.'),
+      '#title' => $this->t('Xero Key Path'),
+      '#description' => $this->t('Provide the full path and file name to your Xero certificate private key.'),
       '#default_value' => $config->get('oauth.key_path'),
       '#element_validate' => array(array($this, 'validateFileExists')),
       '#required' => TRUE,
@@ -113,17 +104,8 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * Validate that certificate or key file exist.
    */
   public function validateFileExists($element, FormStateInterface $form_state) {
-    if (!file_exists($element['#value'])) {
-      $form_state->setError($element, t('The specified file either does not exist, or is not accessible to the web server.'));
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    if (!$this->query->client) {
-      $form_state->setError($form['defaults'], t('An error occurred trying to connect to Xero with the specified configuration. Please check the error logs for more inforamtion.'));
+    if (empty($element['#value']) || !file_exists($element['#value'])) {
+      $form_state->setError($element, $this->t('The specified file either does not exist, or is not accessible to the web server.'));
     }
   }
 

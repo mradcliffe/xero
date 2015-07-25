@@ -1,7 +1,6 @@
 oauth:
   consumer_key: ''
   consumer_secret: ''
-  cert_path: ''
   key_path: ''
 defaults:
   account: ''

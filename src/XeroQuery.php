@@ -68,6 +68,26 @@ class XeroQuery /*implements XeroQueryInterface */ {
   protected $data;
 
   /**
+   * The xero client.
+   */
+  protected $client;
+
+  /**
+   * The serializer object.
+   */
+  protected $serializer;
+
+  /**
+   * The typed data manager.
+   */
+  protected $typed_data;
+
+  /**
+   * Logger factory
+   */
+  protected $logger;
+
+  /**
    * Construct a Xero Query object.
    *
    * @param $client
@@ -477,5 +497,15 @@ class XeroQuery /*implements XeroQueryInterface */ {
       $this->logger->error('%message', array('%message' => $e->getMessage()));
       return FALSE;
     }
+  }
+
+  /**
+   * Confirm that the Xero Query object can make queries.
+   *
+   * @return boolean
+   *   TRUE if the Xero Client is ready to go.
+   */
+  public function hasClient() {
+    return $this->client !== FALSE;
   }
 }
