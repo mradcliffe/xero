@@ -11,7 +11,8 @@ env:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
     - TESTDIR=$(pwd)
     - DRUPAL_TI_MODULE_NAME="xero"
-    - DRUPAL_TI_PHPUNIT_CORE_SRC_DIRECTORY="./tests/src"
+    - DRUPAL_TI_SIMPLETEST_GROUP="xero"
+    - DRUPAL_TI_PHPUNIT_CORE_SRC_DIRECTORY="./tests/src/"
     - DRUPAL_TI_ENVIRONMENT="drupal-8"
 
   matrix:
@@ -28,14 +29,10 @@ install:
 
 before_script:
   - drupal-ti --include scripts/composer-manager.sh
-  - DRUPAL_TI_PHPUNIT_ARGS="-c $DRUPAL_TI_DRUPAL_DIR/modules/xero/phpunit.xml --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt"
+  - DRUPAL_TI_PHPUNIT_ARGS="-c $DRUPAL_TI_DRUPAL_DIR/modules/xero/phpunit.xml --coverage-text"
 
 script:
   - drupal-ti script
-
-after_script:
-  # Print out coverage report.
-  - head $TRAVIS_BUILD_DIR/coverage.txt
 
 notifications:
   email: false
