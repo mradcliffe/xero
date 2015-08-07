@@ -13,7 +13,9 @@ drush dl composer_manager --yes
 chmod +x modules/composer_manager/scripts/init.sh
 ./modules/composer_manager/scripts/init.sh
 
-# Update composer dependencies. Hopefully...
+# Update composer dependencies. The vendor directory has to be completely
+# removed because Composer is shit.
 cd "$DRUPAL_TI_DRUPAL_DIR/core"
+rm -rf vendor
 composer drupal-rebuild
 composer update --prefer-source -n --verbose
