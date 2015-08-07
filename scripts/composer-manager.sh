@@ -9,6 +9,6 @@ git clone --depth 1 --branch 8.x-1.x https://git.drupal.org/project/composer_man
 chmod +x modules/composer_manager/scripts/init.sh
 ./modules/composer_manager/scripts/init.sh
 cd "$DRUPAL_TI_DRUPAL_DIR/core"
-# rm -rf vendor
-# composer drupal-rebuild
-# composer update --prefer-source -n --verbose
+rm -rf vendor
+composer drupal-rebuild
+composer update --prefer-source -n --verbose
