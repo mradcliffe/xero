@@ -2,11 +2,18 @@
 
 set -e $DRUPAL_TI_DEBUG
 
+# Download Drupal because drupal-ti won't do this for us without installing
+# Drupal too.
+git clone --depth 1 --branch 8.0.x http://git.drupal.org/project/drupal.git "$DRUPAL_TI_DRUPAL_DIR"
 cd "$DRUPAL_TI_DRUPAL_DIR"
-git clone --depth 1 --branch 8.x-1.x https://git.drupal.org/project/composer_manager.git modules/composer_manager
+drush use $(pwd)#default
+
+# Download Composer Manager.
+drush dl composer_manager --yes
 chmod +x modules/composer_manager/scripts/init.sh
 ./modules/composer_manager/scripts/init.sh
+
+# Update composer dependencies. Hopefully...
 cd "$DRUPAL_TI_DRUPAL_DIR/core"
-rm -rf vendor
 composer drupal-rebuild
 composer update --prefer-source -n --verbose

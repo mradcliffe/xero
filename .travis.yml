@@ -25,11 +25,6 @@ before_install:
 
 install:
   - drupal-ti install
-  # Download and install Drupal because drupal-ti won't do it for us without
-  # installing Drupal as well. DrupalTIWTF.
-  - git clone --depth 1 --branch 8.0.x http://git.drupal.org/project/drupal.git "$DRUPAL_TI_DRUPAL_DIR"
-  - cd "$DRUPAL_TI_DRUPAL_DIR"
-  - drush use $(pwd)#default
 
 before_script:
   - drupal-ti --include scripts/composer-manager.sh
