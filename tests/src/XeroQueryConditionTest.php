@@ -12,6 +12,8 @@ class XeroQueryConditionTest extends XeroQueryTestBase {
 
   /**
    * @expectedException InvalidArgumentException
+   *
+   * @group xero
    */
   public function testBadCondition() {
     $this->query->addCondition('Name', 'a', 'garbage');
@@ -19,6 +21,8 @@ class XeroQueryConditionTest extends XeroQueryTestBase {
 
   /**
    * @expectedException InvalidArgumentException
+   *
+   * @group xero
    */
   public function testBadLogicalOperator() {
     $this->query->addOperator('NOT');
@@ -28,6 +32,8 @@ class XeroQueryConditionTest extends XeroQueryTestBase {
    * Assert logical operator.
    *
    * @todo should this protect against making poor queries to Xero API?
+   *
+   * @group xero
    */
   public function testLogicalOperator() {
     $this->query->addOperator('OR');
@@ -39,6 +45,8 @@ class XeroQueryConditionTest extends XeroQueryTestBase {
    * Assert that operators work correctly.
    *
    * @dataProvider operatorProvider
+   *
+   * @group xero
    */
   public function testOperators($operator, $value, $expected) {
     $this->query->addCondition('Name', $value, $operator);
@@ -49,6 +57,8 @@ class XeroQueryConditionTest extends XeroQueryTestBase {
 
   /**
    * Assert that Guid operator works correctly.
+   *
+   * @group xero
    */
   public function testGuidOperator() {
     $guid = $this->createGuid();

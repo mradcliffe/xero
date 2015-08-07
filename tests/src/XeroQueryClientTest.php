@@ -29,6 +29,8 @@ class XeroQueryClientTest extends XeroQueryTestBase {
    * Test XeroQuery::hasClient().
    *
    * @dataProvider clientProvider
+   *
+   * @group xero
    */
   public function testHasClient($client, $result) {
      $query = new XeroQuery($client, $this->serializer, $this->typedDataManager, $this->loggerFactory);

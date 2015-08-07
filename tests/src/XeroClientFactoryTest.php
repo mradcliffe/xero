@@ -96,6 +96,8 @@ class XeroClientFactoryTest extends UnitTestCase {
 
   /**
    * Test with valid configuration.
+   *
+   * @group xero
    */
   public function testValid() {
     $xero_config = $this->getConfiguration();
@@ -122,6 +124,8 @@ class XeroClientFactoryTest extends UnitTestCase {
 
   /**
    * Test with no configuration.
+   *
+   * @group xero
    */
   public function testNotValid() {
     $this->config->expects($this->any())
