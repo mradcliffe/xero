@@ -6,38 +6,38 @@ php:
 
 sudo: false
 
-install:
-  # - export PATH="$HOME/.composer/vendor/bin:$PATH"
+env:
+  global:
+    - PATH="$PATH:$HOME/.composer/vendor/bin"
+    - TESTDIR=$(pwd)
+    - DRUPAL_TI_MODULE_NAME="xero"
+    - DRUPAL_TI_PHPUNIT_CORE_SRC_DIRECTORY="./tests/src"
+    - DRUPAL_TI_ENVIRONMENT="drupal-8"
+
+  matrix:
+    - DRUPAL_TI_RUNNERS="phpunit-core"
+
+before_install:
   # - composer global require drush/drush:dev-master
   - composer self-update
+  - composer global require "lionsad/drupal_ti:1.*"
+  - drupal-ti before_install
 
-  # Download Drupal and dependencies.
-  - TESTDIR=$(pwd)
-  - cd ..
-  - git clone --branch 8.0.x --depth 1 http://git.drupal.org/project/drupal.git drupal
-  - git clone --branch 8.x-1.x --depth 1 http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
-  - cd drupal
-  - chmod +x modules/composer_manager/scripts/init.sh
+install:
+  - drupal-ti install
 
 before_script:
-  # rsync the module directory into modules/xero
-  - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
+  - drupal-ti --include scripts/composer-manager.sh
+  - drupal-ti before_script
+  - DRUPAL_TI_PHPUNIT_ARGS="-c $DRUPAL_TI_DRUPAL_DIR/modules/xero/phpunit.xml --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt"
 
-  # Run the composer manager init script to add drupal-update capability.
-  - ./modules/composer_manager/scripts/init.sh
-
-  # Change into core directory and run composer drupal-update for dependencies.
-  - cd core
-  # vendor directory must be removed to avoid running into GitHub API limits
-  # because Composer.
-  - rm -rf vendor
-  - composer drupal-rebuild
-  - composer update --prefer-source -n --verbose
-
-  # Go back to repository directory to run phpunit.
-  - cd ../modules/xero
 script:
-  - ../../core/vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
+  - drupal-ti script
+
 after_script:
+  - drupal-ti after_script
   # Print out coverage report.
   - head $TRAVIS_BUILD_DIR/coverage.txt
+
+notifications:
+  email: false
