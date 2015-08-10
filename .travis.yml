@@ -21,6 +21,7 @@ env:
 before_install:
   # - composer global require drush/drush:dev-master
   - composer self-update
+  - composer config repositories.foo vcs https://github.com/mradcliffe/drupal_ti
   - composer global require "lionsad/drupal_ti:1.*"
   - drupal-ti before_install
 
