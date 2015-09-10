@@ -16,31 +16,25 @@ install:
   - cd ..
   - git clone --branch 8.0.x --depth 1 http://git.drupal.org/project/drupal.git drupal
   - git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
-  # Composer Manager is broken in 8.x-1.0-beta4 so revert to 8.x-1.0-beta3.
-  - cd drupal/modules/composer_manager
-  - git checkout 8.x-1.0-beta3
-  - chmod +x scripts/init.sh
-  - cd ../..
+  - cd drupal
 
 before_script:
   # rsync the module directory into modules/xero
   - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
 
   # Run the composer manager init script to add drupal-update capability.
-  - ./modules/composer_manager/scripts/init.sh
+  - cd modules/composer_manager
+  - php ./scripts/init.php
 
   # Change into core directory and run composer drupal-update for dependencies.
-  - cd core
-  # vendor directory must be removed to avoid running into GitHub API limits
-  # because Composer.
-  - rm -rf vendor
+  - cd ../..
   - composer drupal-rebuild
   - composer update --prefer-source -n --verbose
 
   # Go back to repository directory to run phpunit.
-  - cd ../modules/xero
+  - cd modules/xero
 script:
-  - ../../core/vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
+  - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
   - head $TRAVIS_BUILD_DIR/coverage.txt
