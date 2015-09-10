@@ -15,9 +15,12 @@ install:
   - TESTDIR=$(pwd)
   - cd ..
   - git clone --branch 8.0.x --depth 1 http://git.drupal.org/project/drupal.git drupal
-  - git clone --branch 8.x-1.x --depth 1 http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
-  - cd drupal
-  - chmod +x modules/composer_manager/scripts/init.sh
+  - git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
+  # Composer Manager is broken in 8.x-1.0-beta4 so revert to 8.x-1.0-beta3.
+  - cd drupal/modules/composer_manager
+  - git checkout 8.x-1.0-beta3
+  - chmod +x scripts/init.sh
+  - cd ../..
 
 before_script:
   # rsync the module directory into modules/xero
