@@ -13,6 +13,7 @@ use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Language\Language;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -125,7 +126,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
 
     $this->fieldItemList->setValue([0 => $values]);
 
-    $render = $this->formatter->viewElements($this->fieldItemList);
+    $render = $this->formatter->viewElements($this->fieldItemList, Language::LANGCODE_NOT_SPECIFIED);
 
     $this->assertEquals(1, count($render));
     $this->assertTrue(is_a($render[0]['#item'], 'Drupal\xero\Plugin\Field\FieldType\XeroReference'));

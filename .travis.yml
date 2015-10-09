@@ -24,12 +24,11 @@ before_script:
 
   # Run the composer manager init script to add drupal-update capability.
   - cd modules/composer_manager
-  - php ./scripts/init.php
+  - php scripts/init.php
 
-  # Change into core directory and run composer drupal-update for dependencies.
+  # Change back to the root Drupal directory.
   - cd ../..
-  - composer drupal-rebuild
-  - composer update --prefer-source -n --verbose
+  - composer drupal-update --verbose --no-interaction
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
