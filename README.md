@@ -40,13 +40,12 @@ It is advised to use dependency injection to retrieve the `xero.client` and `ser
   try {
     // Do Guzzle things.
     $options = array('query' => array('where' => 'Contact.FirstName = John'));
-    $request = $this->client->get('Contacts', array(), $options);
-    $response = $request->send();
+    $response = $this->client->get('Contacts', array(), $options);
 
     // Do Serializer things. The context array must have a key plugin_id with
     // the plugin id of the data type because Drupal.
     $context = array('plugin_id' => 'xero_contact');
-    $contacts = $this->serializer->deserialize($response->getBody(TRUE), 'Drupal\xero\Plugin\DataType\Contact', 'xml', $context);
+    $contacts = $this->serializer->deserialize($response->getBody()->getContent(), 'Drupal\xero\Plugin\DataType\Contact', 'xml', $context);
 
     // Contacts is a list item and can be iterated through like an entity or
     // other typed data.
