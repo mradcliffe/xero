@@ -63,7 +63,7 @@ function xero_validation_constraint_alter(&$definitions) {
 /**
  * Load Xero Guzzle client.
  *
- * @return \BlackOptic\XeroBundle\XeroClient
+ * @return \BlackOptic\Bundle\XeroBundle\XeroClient
  *   A XeroClient object or FALSE.
  */
 function xero_load() {
@@ -118,6 +118,7 @@ function xero_query_load() {
  */
 function xero_query($method = 'get', $plugin_id, $id = FALSE, $after = FALSE, $items = array(), $format = 'xml') {
 
+  $typed_data = \Drupal::service('typed_data_manager');
   $xero = xero_query_load();
 
   $xero
@@ -134,8 +135,8 @@ function xero_query($method = 'get', $plugin_id, $id = FALSE, $after = FALSE, $i
   }
 
   if ($items) {
-    $list_definition = $xero->typed_data->createListDataDefinition($plugin_id);
-    $data = $xero->typed_data->create($xero->getDefinition(), $items, NULL, $list_definition);
+    $list_definition = $typed_data->createListDataDefinition($plugin_id);
+    $data = $typed_data->create($xero->getDefinition(), $items, NULL, $list_definition);
 
     $xero->setData($data);
   }
