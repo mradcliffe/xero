@@ -6,9 +6,6 @@
 
 namespace Drupal\xero\Plugin\DataType;
 
-use Drupal\Core\TypedData\Annotation\DataType;
-use Drupal\Core\TypedData\Annotation\Translation;
-
 /**
  * Xero Account type.
  *
@@ -30,6 +27,8 @@ class Account extends XeroTypeBase {
    *
    * @return boolean
    *   Return TRUE if the account is revenue-based.
+   *
+   * @throws \Exception
    */
   public function isRevenue() {
     $class = $this->get('Class')->getValue();

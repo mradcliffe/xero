@@ -6,11 +6,13 @@
 
 namespace Drupal\xero\TypedData;
 
+use Drupal\Core\TypedData\TypedDataInterface;
+
 /**
  * Interface to describe methods useful for Xero API integration that Xero
  * complex data types in Drupal must adhere (i.e. Contacts, but not LineItems).
  */
-interface XeroTypeInterface {
+interface XeroTypeInterface extends TypedDataInterface {
 
   /**
    * Get the GUID property name.
