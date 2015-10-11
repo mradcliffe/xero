@@ -13,8 +13,7 @@ use Drupal\Core\TypedData\TypedDataManager;
 use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Guzzle\Http\Exception\RequestException;
-use Guzzle\Http\Exception\ClientErrorResponseException;
+use GuzzleHttp\Exception\RequestException;
 // use Drupal\xero\XeroQueryInterface;
 
 /**
@@ -90,13 +89,13 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Construct a Xero Query object.
    *
-   * @param $client
+   * @param NULL|XeroClient $client
    *   The xero client object to make requests.
-   * @param $serializer
+   * @param Serializer $serializer
    *   The serialization service to handle normalization and denormalization.
-   * @param $typed_data
+   * @param TypedDataManager $typed_data
    *   The Typed Data manager for retrieving definitions of xero types.
-   * @param $logger_factory
+   * @param LoggerChannelFactoryInterface $logger_factory
    *   The logger factory service for error logging.
    */
   public function __construct($client, Serializer $serializer, TypedDataManager $typed_data, LoggerChannelFactoryInterface $logger_factory) {
@@ -119,9 +118,9 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set the xero type by plugin id.
    *
-   * @param $type
+   * @param string $type
    *   The plugin id corresponding to a xero type i.e. xero_account.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function setType($type) {
@@ -149,10 +148,10 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set which http method to use for the query. This is "type" from xero_query().
    *
-   * @param $method
+   * @param string $method
    *   The method to use, which is one of "get" or "post". The HTTP PUT method
    *   will be automatically used for updating records.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function setMethod($method) {
@@ -185,9 +184,9 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *
    * @todo support pdf format.
    *
-   * @param $format
+   * @param string $format
    *   The format ot use, which is one of "xml", "json", or "pdf".
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function setFormat($format) {
@@ -214,9 +213,9 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set the Xero UUID for the request. Useful only in get method.
    *
-   * @param $uuid
+   * @param string $uuid
    *   The universally-unique ID.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function setId($uuid) {
@@ -231,7 +230,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set the modified-after filter.
    *
-   * @param $timestamp
+   * @param integer $timestamp
    *   A UNIX timestamp to use. Should be UTC.
    * @return $this
    *   The query object for chaining.
@@ -255,9 +254,9 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set the data object to send in the request.
    *
-   * @param XeroTypeInterface
+   * @param XeroTypeInterface $data
    *   The xero data object.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function setData(XeroTypeInterface $data) {
@@ -284,7 +283,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Get the type data definition property.
    *
-   * @return DataDefinitionInterface
+   * @return \Drupal\Core\TypedData\DataDefinitionInterface
    *   The data definition class or NULL if not set.
    */
   public function getDefinition() {
@@ -335,7 +334,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *
    * @param $op
    *   Operator AND or OR.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function addOperator($op = 'AND') {
@@ -355,7 +354,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *   The full field name to use. See Xero API.
    * @param $dir
    *   The direction. either ASC or DESC.
-   * @return this
+   * @return XeroQuery
    *   The query object for chaining.
    */
   public function orderBy($field, $dir = 'ASC') {
@@ -474,23 +473,16 @@ class XeroQuery /*implements XeroQueryInterface */ {
         $this->options['body'] = $this->serializer->serialize($this->data, $this->format, $context);
       }
 
-      $request = $this->client->{$this->method}($endpoint, $this->options['headers']);
+      /** @var \Psr\Http\Message\ResponseInterface $response */
+      $response = $this->client->{$this->method}($endpoint, $this->options);
 
-      // Add query parameters via getQuery() instead :-(
-      if (!empty($this->options['query'])) {
-        $q = $request->getQuery();
-        foreach ($this->options['query'] as $key => $value) {
-          $q->set($key, $value);
-        }
-      }
-
-      $response = $request->send();
-      $data = $this->serializer->deserialize($response->getBody(TRUE), $data_class, $this->format, $context);
+      /** @var \Drupal\xero\TypedData\XeroTypeInterface $data */
+      $data = $this->serializer->deserialize($response->getBody()->getContents(), $data_class, $this->format, $context);
 
       return $data;
     }
     catch (RequestException $e) {
-      $this->logger->error('%message: %response', array('%message' => $e->getMessage(), '%response' => $e->getResponse()->getBody(TRUE)));
+      $this->logger->error('%message: %response', array('%message' => $e->getMessage(), '%response' => $e->getResponse()->getBody()->getContents()));
       return FALSE;
     }
     catch (\Exception $e) {

@@ -3,8 +3,7 @@ services:
     class: Drupal\xero\XeroClientFactory
   xero.client:
     class: BlackOptic\Bundle\XeroBundle\XeroClient
-    factory_method: get
-    factory_service: xero.client.factory
+    factory: xero.client.factory:get
     arguments: ['@config.factory', '@logger.factory']
   xero.normalizer:
     class: Drupal\xero\Normalizer\XeroNormalizer

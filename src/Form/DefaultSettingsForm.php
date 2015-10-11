@@ -13,8 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Drupal\xero\XeroQuery;
-use Guzzle\Http\Exception\RequestException;
-use Guzzle\Http\Exception\ClientErrorResponseException;
+use GuzzleHttp\Exception\RequestException;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -29,12 +28,12 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
    * Inject dependencies into the form except for XeroClient because we want to
    * handle errors properly instead of failing and exploding spectacularly.
    *
-   * @param $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Configuration factory interface.
-   * @param $query
+   * @param \Drupal\xero\XeroQuery $query
    *   An instance of XeroClient or NULL if it fails, which is most likely the
    *   case on first load.
-   * @param $serializer
+   * @param \Symfony\Component\Serializer\Serializer $serializer
    *   Serializer object.
    */
   public function __construct(ConfigFactoryInterface $config_factory, XeroQuery $query, Serializer $serializer, LoggerChannelFactoryInterface $logger_factory) {
@@ -120,7 +119,7 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
      $config = self::config('xero.settings');
      $form_state_values = $form_state->getValues();
      $config
-       ->set('defaults.account', $form_state_values['defaults']['account']);
+       ->set('defaults.account', $form_state_values['account']);
 
      $config->save();
    }

@@ -11,11 +11,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Serializer\Serializer;
-use Drupal\xero\XeroQuery;
-use Guzzle\Http\Exception\RequestException;
-use Guzzle\Http\Exception\ClientErrorResponseException;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\xero\XeroQuery;
 
 /**
  * Provide configuration form for user to provide Xero API information for a
@@ -27,18 +24,17 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
    * Inject dependencies into the form except for XeroClient because we want to
    * handle errors properly instead of failing and exploding spectacularly.
    *
-   * @param $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Configuration factory interface.
-   * @param $query
-   *   An instance of XeroClient or NULL if it fails, which is most likely the
-   *   case on first load.
-   * @param $serializer
-   *   Serializer object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger channel factory for logging.
+   * @param \Drupal\xero\XeroQuery $query
+   *   The xero query service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory, XeroQuery $query) {
     $this->setConfigFactory($config_factory);
-    $this->query = $query;
     $this->logger = $logger_factory->get('xero');
+    $this->query = $query;
   }
 
   /**
@@ -119,7 +115,6 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
      $config
        ->set('oauth.consumer_key', $form_state_values['oauth']['consumer_key'])
        ->set('oauth.consumer_secret', $form_state_values['oauth']['consumer_secret'])
-       ->set('oauth.cert_path', $form_state_values['oauth']['cert_path'])
        ->set('oauth.key_path', $form_state_values['oauth']['key_path']);
 
      $config->save();
