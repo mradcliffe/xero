@@ -102,24 +102,19 @@ Previously the Xero Make system allowed to create associative arrays. This has b
 
 ## Form Helper
 
-- Not implemented yet. Should be supported by a module that implements TypedData API (?)
+Xero API Module provides a form element helper service that will return form elements for a given Xero data type. This also works with any data type.
+
+Currently the form helper does not support populating data from Xero into a select list.
 
 ```
-  The xero_form_helper method constructs Drupal Form API elements for
-  various often-used items such as Contacts, Invoices, Accounts, and
-  other goodies. These will use the xero_get_cache method described
-  above.
-
-  <?php
-    // An autocomplete textfield for contacts.
-    $form['ContactID'] = xero_form_helper('Contacts', $default_value);
-  ?>
-
-  The autocomplete matches have changed and the xero data type's label
-  will be returned as part of the value of the field!
-
-  Note that at this time it is not possible to pass in filters for
-  xero_form_helper as it uses xero_get_cache.
+  $formBuilder = \Drupal::service('xero.form_builder');
+  
+  // Build an entire nested array for valid elements for an account type.
+  $form['Account'] = $formBuilder->getElementFor('xero_account');
+  
+  // Build an autocomplete textfield for contacts.
+  $definition = \Drupal::service('typed_data_manager')->createDataDefinition('xero_contact');
+  $form['ContactID'] = $formBuilder->getElementForDefinition($definition, 'ContactID');
 ```
 
 ## Theming Typed Data
