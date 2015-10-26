@@ -30,7 +30,7 @@ before_script:
   # Change back to the root Drupal directory.
   - cd ../..
   - composer drupal-rebuild
-  - composer update --verbose --no-interaction -n
+  - composer update --verbose --no-interaction --prefer-source
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
