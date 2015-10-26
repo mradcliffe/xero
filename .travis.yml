@@ -10,6 +10,7 @@ install:
   # - export PATH="$HOME/.composer/vendor/bin:$PATH"
   # - composer global require drush/drush:dev-master
   - composer self-update
+  - composer config github-oauth.github.com "$GITHUB_OAUTH_TOKEN"
 
   # Download Drupal and dependencies.
   - TESTDIR=$(pwd)
@@ -28,7 +29,8 @@ before_script:
 
   # Change back to the root Drupal directory.
   - cd ../..
-  - composer drupal-update --verbose --no-interaction
+  - composer drupal-rebuild
+  - composer update --verbose --no-interaction --prefer-source
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
