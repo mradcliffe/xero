@@ -34,17 +34,17 @@ class CreditDefinition extends ComplexDataDefinitionBase {
       $info['CreditNoteID'] = DataDefinition::create('string')->setLabel('Credit Note ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
       $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
 
       // Recommended
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date');
-      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('Choice', $line_type_options);
+      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('XeroChoiceConstraint', $line_type_options);
       $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
 
       // Optional
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
-      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('Choice', $status_options);
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('XeroChoiceConstraint', $status_options);
       $info['CreditNoteNumber'] = DataDefinition::create('string')->setLabel('Credit Note #');
       $info['SubTotal'] = DataDefinition::create('float')->setLabel('Sub-Total');
       $info['TotalTax'] = DataDefinition::create('float')->setLabel('Total Tax');

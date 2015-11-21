@@ -222,7 +222,7 @@ class XeroFormBuilder {
     if ($definition->getDataType() === 'boolean') {
       $type = 'checkbox';
     }
-    elseif ($definition->getConstraint('Choice')) {
+    elseif ($definition->getConstraint('XeroChoiceConstraint')) {
       $type = 'select';
     }
 
@@ -247,7 +247,7 @@ class XeroFormBuilder {
 
     if ($type === 'select') {
       // Add the Constraint options to the select element.
-      $properties['#options'] = $definition->getConstraint('Choice')['choices'];
+      $properties['#options'] = $definition->getConstraint('XeroChoiceConstraint')['choices'];
     }
     elseif (array_key_exists('XeroGuidConstraint', $definition->getConstraints())) {
       // Add an auto-complete path for data types with guids.

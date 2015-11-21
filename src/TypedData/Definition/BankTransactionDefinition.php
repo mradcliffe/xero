@@ -29,13 +29,13 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $info['BankTransactionID'] = DataDefinition::create('string')->setLabel('Bank Transaction ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
       $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
       $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
       $info['BankAccount'] = DataDefinition::create('xero_account')->setRequired(TRUE)->setLabel('Bank Account');
 
       $info['DueDate'] = DataDefinition::create('string')->setLabel('Due Date')->addConstraint('Date');
-      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('Choice', $line_type_options);
+      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('XeroChoiceConstraint', $line_type_options);
 
       // Optional
       $info['IsReconciled'] = DataDefinition::create('boolean')->setLabel('Is reconciled?');
@@ -43,7 +43,7 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
       $info['CurrencyRate'] = DataDefinition::create('float')->setLabel('Currency rate');
       $info['Url'] = DataDefinition::create('url')->setLabel('URL');
-      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('Choice', $status_options);
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('XeroChoiceConstraint', $status_options);
       $info['SubTotal'] = DataDefinition::create('float')->setLabel('Sub-Total');
       $info['TotalTax'] = DataDefinition::create('float')->setLabel('Total Tax');
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');

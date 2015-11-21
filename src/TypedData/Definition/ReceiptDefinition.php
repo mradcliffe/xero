@@ -34,7 +34,7 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
 
       // Optional
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
-      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('Choice', $line_type_options);
+      $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('XeroChoiceConstraint', $line_type_options);
       $info['SubTotal'] = DataDefinition::create('float')->setLabel('Sub-Total');
       $info['TotalTax'] = DataDefinition::create('float')->setLabel('Total Tax');
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');

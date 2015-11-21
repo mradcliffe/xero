@@ -28,17 +28,17 @@ class AccountDefinition extends ComplexDataDefinitionBase {
       $info['AccountID'] = DataDefinition::create('string')->setLabel('Account ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['Code'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Code');
+      $info['Code'] = DataDefinition::create('string')->setLabel('Code');
       $info['Name'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Name');
-      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('Choice', $type_options);
+      $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
       $info['Description'] = DataDefinition::create('string')->setLabel('Description');
-      $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->addConstraint('Choice', $tax_type_options);
+      $info['TaxType'] = DataDefinition::create('string')->setLabel('Tax type')->addConstraint('XeroChoiceConstraint', $tax_type_options);
       $info['EnablePaymentsToAccount'] = DataDefinition::create('boolean')->setLabel('May have payments');
       $info['ShowInExpenseClaims'] = DataDefinition::create('boolean')->setLabel('Shown in expense claims');
 
       // Read-only properties.
-      $info['Class'] = DataDefinition::create('string')->setLabel('Class')->setReadOnly(TRUE)->addConstraint('Choice', $class_options);
-      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE)->addConstraint('Choice', $status_options);
+      $info['Class'] = DataDefinition::create('string')->setLabel('Class')->setReadOnly(TRUE)->addConstraint('XeroChoiceConstraint', $class_options);
+      $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE)->addConstraint('XeroChoiceConstraint', $status_options);
       $info['SystemAccount'] = DataDefinition::create('string')->setLabel('System account')->setReadOnly(TRUE);
       $info['BankAccountNumber'] = DataDefinition::create('string')->setLabel('Bank account')->setReadOnly(TRUE);
       $info['CurrencyCode'] = DataDefinition::create('string')->setLabel('Currency code')->setReadOnly(TRUE);
