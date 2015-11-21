@@ -1,4 +1,10 @@
 services:
+  cache.xero_query:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: ['xero_query']
   xero.client.factory:
     class: Drupal\xero\XeroClientFactory
   xero.client:
@@ -12,7 +18,7 @@ services:
       - { name: normalizer }
   xero.query:
     class: Drupal\xero\XeroQuery
-    arguments: ['@xero.client', '@serializer', '@typed_data_manager', '@logger.factory']
+    arguments: ['@xero.client', '@serializer', '@typed_data_manager', '@logger.factory', '@cache.xero_query']
   xero.form_builder:
     class: Drupal\xero\Form\XeroFormBuilder
-    arguments: ['@typed_data_manager']
+    arguments: ['@typed_data_manager', '@cache.xero_query']

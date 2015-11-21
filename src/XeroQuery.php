@@ -1,19 +1,23 @@
 <?php
 /**
  * @file
- * Provides \Drupal\xero\XeroQuery.
+ * Contains \Drupal\xero\XeroQuery.
  */
 
 namespace Drupal\xero;
 
-use Symfony\Component\Serializer\Serializer;
 use BlackOptic\Bundle\XeroBundle\XeroClient;
-use Drupal\xero\TypedData\XeroTypeInterface;
-use Drupal\Core\TypedData\TypedDataManager;
-use Drupal\Component\Uuid\Uuid;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Uuid\Uuid;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\TypedData\ListDataDefinition;
+use Drupal\Core\TypedData\ListDataDefinitionInterface;
+use Drupal\Core\TypedData\Plugin\DataType\ItemList;
+use Drupal\Core\TypedData\TypedDataManager;
+use Drupal\xero\TypedData\XeroTypeInterface;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\Serializer\Serializer;
 // use Drupal\xero\XeroQueryInterface;
 
 /**
@@ -87,6 +91,12 @@ class XeroQuery /*implements XeroQueryInterface */ {
   protected $logger;
 
   /**
+   * @protected \Drupal\Core\Cache\CacheBackendInterface
+   *   The cache backend interface for 'xero_query' bin.
+   */
+  protected $cache;
+
+  /**
    * Construct a Xero Query object.
    *
    * @param NULL|XeroClient $client
@@ -97,12 +107,15 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *   The Typed Data manager for retrieving definitions of xero types.
    * @param LoggerChannelFactoryInterface $logger_factory
    *   The logger factory service for error logging.
+   * @param CacheBackendInterface $cache
+   *   The cache backend for Xero Query cache.
    */
-  public function __construct($client, Serializer $serializer, TypedDataManager $typed_data, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct($client, Serializer $serializer, TypedDataManager $typed_data, LoggerChannelFactoryInterface $logger_factory, CacheBackendInterface $cache) {
     $this->client = $client;
     $this->serializer = $serializer;
     $this->typed_data = $typed_data;
     $this->logger = $logger_factory->get('xero');
+    $this->cache = $cache;
   }
 
   /**
@@ -122,6 +135,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *   The plugin id corresponding to a xero type i.e. xero_account.
    * @return XeroQuery
    *   The query object for chaining.
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function setType($type) {
     try {
@@ -303,6 +317,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *     - EndsWith: Ends with the value
    *     - Conains: Contains the value
    *     - guid: Equality for guid values. See Xero API.
+   * @return XeroQuery
    */
   public function addCondition($field, $value = '', $op = '==') {
 
@@ -490,6 +505,76 @@ class XeroQuery /*implements XeroQueryInterface */ {
       return FALSE;
     }
   }
+
+  /**
+   * Fetch a given data type from cache, if it exists, or fetch it from Xero,
+   * and store in cache.
+   *
+   * @todo Support filters.
+   *
+   * @param string $type
+   *   The Xero data type plugin id.
+   *
+   * @return \Drupal\Core\TypedData\Plugin\DataType\ItemList
+   *   The cached data normalized into a list data type.
+   */
+  public function getCache($type) {
+    $data = NULL;
+    $cid = $type;
+
+    // Get the cached data.
+    if ($cached = $this->cache->get($cid)) {
+      return $cached->data;
+    }
+
+    $this
+      ->setType($type)
+      ->setFormat('xml')
+      ->setMethod('get');
+
+    $data = $this->execute();
+
+    $this->setCache($cid, $data);
+
+    return $data;
+  }
+
+  /**
+   * Store the typed data into cache based on the plugin id.
+   *
+   * @param string $cid
+   *   The cache identifier to store the data as
+   * @param \Drupal\Core\TypedData\Plugin\DataType\ItemList $data
+   *   The typed data to sets in cache.
+   */
+  protected function setCache($cid, ItemList $data) {
+    $tags = $this->getCacheTags($data);
+
+    $this->cache->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $tags);
+
+    // Invalidate the cache right away because there really is not a good time
+    // to do this for 3rd party data. This will keep it in cache until the next
+    // garbage collection period.
+    $this->cache->invalidate($cid);
+  }
+
+  /**
+   * Get the cache tag for the query.
+   *
+   * @param \Drupal\Core\TypedData\Plugin\DataType\ItemList $data
+   *   The item list to extract type information from.
+   * @return string[]
+   *   Return the cache tags to use for the cache.
+   */
+  protected function getCacheTags(ItemList $data) {
+    /** @var \Drupal\Core\TypedData\DataDefinitionInterface $definition */
+    $definition = $data->getItemDefinition();
+    /** @var \Drupal\xero\TypedData\XeroTypeInterface $type_class */
+    $type_class = $definition->getClass();
+
+    return [$type_class::$plural_name];
+  }
+
 
   /**
    * Confirm that the Xero Query object can make queries.

@@ -35,9 +35,11 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
    *   case on first load.
    * @param \Symfony\Component\Serializer\Serializer $serializer
    *   Serializer object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory, XeroQuery $query, Serializer $serializer, LoggerChannelFactoryInterface $logger_factory) {
-    $this->setConfigFactory($config_factory);
+    parent::__construct($config_factory);
     $this->query = $query;
     $this->serializer = $serializer;
     $this->logger = $logger_factory->get('xero');
@@ -68,12 +70,7 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
     $account_options = array();
 
     try {
-      $context = array('plugin_id' => 'xero_account');
-      $accounts = $this->query
-        ->setType($context['plugin_id'])
-        ->setMethod('get')
-        ->setFormat('xml')
-        ->execute();
+      $accounts = $this->query->getCache('xero_account');
 
       foreach ($accounts as $account) {
         // Bank accounts do not have a code, exclude them.
@@ -93,8 +90,8 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
 
     $form['defaults']['account'] = array(
       '#type' => 'select',
-      '#title' => t('Default Account'),
-      '#description' => t('Choose a default account.'),
+      '#title' => $this->t('Default Account'),
+      '#description' => $this->t('Choose a default account.'),
       '#options' => $account_options,
       '#default_value' => $config->get('defaults.account'),
     );
@@ -107,7 +104,7 @@ class DefaultSettingsForm extends ConfigFormBase implements ContainerInjectionIn
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     if (!$this->query->hasClient()) {
-      $form_state->setError($form['defaults'], t('An error occurred trying to connect to Xero with the specified configuration. Please check the error logs for more information.'));
+      $form_state->setError($form['defaults'], $this->t('An error occurred trying to connect to Xero with the specified configuration. Please check the error logs for more information.'));
     }
   }
 

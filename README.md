@@ -86,19 +86,17 @@ Previously the Xero Make system allowed to create associative arrays. This has b
 
 ## Caching Data
 
-- Not implemented yet.
+The Xero API for Drupal will keep a cache of objects if you use the `XeroQuery::getCache()` method. This is a simple way to grab all accounts, contacts, etc... frequently used in forms.
+
+The cache will be invalidated immediately, which means that it will be cleared at the next Drupal cache clear.
 
 ```
-    The Xero API for Drupal will keep a cache of objects if you use
-    the xero_get_cache method. This is a simple way of grabbing all
-    Contacts, Accounts, etc... that may be frequently used in forms.
-
-    <?php
-      $contacts = xero_get_cache('Contacts');
-    ?>
-
-    Note: at this time it is not possible to send in filtering.
+  $query = \Drupal::service('xero.query');
+  $contacts = $query->getCache('Contacts');
 ```
+
+Note: at this time it is not possible to filter these queries.
+
 
 ## Form Helper
 
@@ -131,7 +129,7 @@ Currently the form helper does not support populating data from Xero into a sele
   ?>
 ```
 
-## Xero Typed Data
+## Xero Data Types
 
 - Todo: more documentation like in Drupal 6 and 7.
 

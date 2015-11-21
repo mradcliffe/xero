@@ -6,6 +6,7 @@
 
 namespace Drupal\Tests\xero;
 
+use Drupal\Core\Cache\NullBackend;
 use Drupal\xero\XeroQuery;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -46,6 +47,9 @@ class XeroQueryTestBase extends UnitTestCase {
     // Setup the Serializer component class.
     $this->serializer = new Serializer();
 
+    // Setup a Null cache backend.
+    $cache = new NullBackend('xero_query');
+
     // Setup LoggerChannelFactory.
     $this->loggerFactory = new LoggerChannelFactory();
     $this->loggerFactory->addLogger(new NullLogger());
@@ -65,7 +69,7 @@ class XeroQueryTestBase extends UnitTestCase {
     $container->set('typed_data_manager', $this->typedDataManager);
     \Drupal::setContainer($container);
 
-    $this->query = new XeroQuery($this->client, $this->serializer, $this->typedDataManager, $this->loggerFactory);
+    $this->query = new XeroQuery($this->client, $this->serializer, $this->typedDataManager, $this->loggerFactory, $cache);
   }
 
   /**

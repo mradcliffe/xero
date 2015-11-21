@@ -6,6 +6,7 @@
 
 namespace Drupal\Tests\xero\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\TypedData\ListDataDefinition;
 use Drupal\Tests\UnitTestCase;
@@ -59,7 +60,10 @@ class XeroFormBuilderTest extends UnitTestCase {
         ['xero_phone', $phoneDefinition],
       ]));
 
-    $this->formBuilder = new XeroFormBuilder($typedDataManager);
+    // Mock Cache with null backend.
+    $cache = new Cache('xero_query');
+
+    $this->formBuilder = new XeroFormBuilder($typedDataManager, $cache);
 
     $container = new ContainerBuilder();
     $container->set('typed_data_manager', $typedDataManager);
