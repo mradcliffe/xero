@@ -30,6 +30,26 @@ use Symfony\Component\Serializer\Serializer;
 class XeroNormalizerTest extends UnitTestCase {
 
   /**
+   * @property array $data
+   */
+  protected $data;
+
+  /**
+   * @property \Drupal\xero\Normalizer\XeroNormalizer $normalizer
+   */
+  protected $normalizer;
+
+  /**
+   * @property \Drupal\xero\TypedData\Definition\AccountDefinition $accountDefinition
+   */
+  protected $accountDefinition;
+
+  /**
+   * @property \Drupal\Core\TypedData\ListDataDefinitionInterface $listDefinition
+   */
+  protected $listDefinition;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {

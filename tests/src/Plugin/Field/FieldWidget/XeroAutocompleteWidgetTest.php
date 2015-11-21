@@ -85,9 +85,9 @@ class XeroAutocompleteWidgetTest extends WidgetTestBase {
   }
 
   /**
-   * Provide form values and the expected output for massageFormValues
+   * Provide form values and the expected output for massageFormValues.
    *
-   * @return []
+   * @return array
    *   An array of parameters to use for the test.
    */
   public function formValueProvider() {
