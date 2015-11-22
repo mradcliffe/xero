@@ -106,10 +106,10 @@ Currently the form helper does not support populating data from Xero into a sele
 
 ```
   $formBuilder = \Drupal::service('xero.form_builder');
-  
+
   // Build an entire nested array for valid elements for an account type.
   $form['Account'] = $formBuilder->getElementFor('xero_account');
-  
+
   // Build an autocomplete textfield for contacts.
   $definition = \Drupal::service('typed_data_manager')->createDataDefinition('xero_contact');
   $form['ContactID'] = $formBuilder->getElementForDefinition($definition, 'ContactID');
@@ -117,48 +117,34 @@ Currently the form helper does not support populating data from Xero into a sele
 
 ## Theming Typed Data
 
-- Not implemented yet.
+The main Xero data types have a view method that will return a render array. See the `templates` directory for details.
 
 ```
-  Although you're probably using Xero you may want to display data
-  such as contacts, invoices, and credit notes. These php templates
-  also use theme functions for line items and addresses respectively.
+  $query = \Drupal::get('xero.query');
 
-  <?php
-    $output = theme('xero_contact', $contact);
-  ?>
+  $contacts = $query
+    ->setType('xero_contact')
+    ->execute();
+
+  foreach ($contacts as $contact) {
+    $render[] = $contact->view();
+  }
 ```
 
 ## Xero Data Types
 
-- Todo: more documentation like in Drupal 6 and 7.
+A xero type is a data type as defined by the [Xero Developer API](http://developer.xero.com/documentation/api/api-overview/). Data types current supported:
 
-```
-  A xero type is a data type as defined by the Xero Developer API. Xero API now
-  supports xero types in the following manner:
-
-  %xero_type menu wildcard will load an associative array of information about
-  a given type. Please consult xero_get_data_types() for more information as
-  this does not contain all data types.
-
-  The autocomplete path has been reduced to one path using the above wildcard
-  argument. The autocomplete key is the Xero data type name and not the plural
-  key. See below.
-
-  Type information refers to either the key returned by Xero's Restful API, or
-  the Drupal Xero API title/key for Form API.
-
-    - name: The key to use for Form API.
-    - title: The title to use for Form API.
-    - guid: The GUID key for a Xero type.
-    - label: The human-readable key for a Xero type. If empty, guid will be used.
-    - plural: The plural key for a Xero type.
-
-    Example (Contacts):
-
-      'name' => 'Contact',
-      'title' => 'Contact',
-      'guid' => 'ContactID',
-      'label' => 'Name',
-      'plural' => 'Contacts',
-```
+* Accounts
+* Bank Transactions
+* Contacts
+* Credit Notes
+* Employees
+* Expense Claims
+* Invoices
+* Items
+* Journals
+* Payments
+* Receipts
+* Tracking Categories
+* Users
