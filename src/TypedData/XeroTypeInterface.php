@@ -37,4 +37,12 @@ interface XeroTypeInterface extends TypedDataInterface {
    *   The Label property for this type, if any.
    */
   public function getLabelName();
+
+  /**
+   * Render the typed data into a render element.
+   *
+   * @return array
+   *   A render array.
+   */
+  public function view();
 }

@@ -6,7 +6,14 @@
 
 namespace Drupal\Tests\xero\Plugin\DataType;
 
+use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\TypedData\Plugin\DataType\FloatData;
+use Drupal\Core\TypedData\Plugin\DataType\StringData;
+use Drupal\xero\Plugin\DataType\Account;
+use Drupal\xero\Plugin\DataType\Invoice;
 use Drupal\xero\Plugin\DataType\Payment;
+use Drupal\xero\TypedData\Definition\AccountDefinition;
+use Drupal\xero\TypedData\Definition\InvoiceDefinition;
 use Drupal\xero\TypedData\Definition\PaymentDefinition;
 
 /**
@@ -32,5 +39,47 @@ class XeroTypeBaseTest extends TestBase {
     $this->assertEquals('PaymentID', $payment->getGUIDName(), print_r($payment, TRUE));
     $this->assertEquals('Payments', $payment->getPluralName());
     $this->assertEquals('PaymentID', $payment->getLabelName());
+
+    $invoiceDefinition = new InvoiceDefinition(['id' => 'xero_invoice', 'definition class' => '\Drupal\xero\TypedData\Definition\InvoiceDefinition']);
+    $invoice = new Invoice($invoiceDefinition, 'xero_invoice');
+    $accountDefinition = new AccountDefinition(['id' => 'xero_account', 'definition class' => '\Drupal\xero\TypedData\Definition\AccountDefinition']);
+    $account = new Account($accountDefinition, 'xero_account');
+    $stringDefinition = new DataDefinition(['id' => 'string']);
+    $date = new StringData($stringDefinition, 'string');
+    $floatDefinition = new DataDefinition(['id' => 'float']);
+    $amount = new FloatData($floatDefinition, 'float');
+
+
+    $this->typedDataManager->expects($this->any())
+      ->method('getPropertyInstance')
+      ->will($this->returnValue([
+        [[$payment, 'Invoice', NULL], $invoice],
+        [[$payment, 'Account', NULL], $account],
+        [[$payment, 'Date', '2015-10-05'], $date],
+        [[$payment, 'Amount', 10.0], $amount],
+      ]));
+
+    $payment->setValue([
+      'Invoice' => NULL,
+      'Account' => NULL,
+      'Date' => '2015-10-05',
+      'Amount' => 10.0
+    ]);
+
+    $expected = [
+      '#theme' => 'xero_payment',
+      '#item' => [
+        'Invoice' => NULL,
+        'Account' => NULL,
+        'Date' => '2015-10-05',
+        'Amount' => 10.0,
+      ],
+      '#attributes' => [
+        'class' => ['xero-item', 'xero-item--payment']
+      ],
+    ];
+
+    $this->assertEquals($expected, $payment->view());
   }
+
 }
