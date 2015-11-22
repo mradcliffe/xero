@@ -22,6 +22,10 @@ abstract class TestBase extends UnitTestCase {
   const XERO_DEFINITION_CLASS = FALSE;
 
   protected $typedDataManager;
+
+  /**
+   * @property \Drupal\Core\TypedData\ComplexDataDefinitionBase
+   */
   protected $dataDefinition;
 
   /**
@@ -60,6 +64,7 @@ abstract class TestBase extends UnitTestCase {
     // Create data definition
     $definition_class = static::XERO_DEFINITION_CLASS;
     $this->dataDefinition = $definition_class::create(static::XERO_TYPE);
+    $this->dataDefinition->getPropertyDefinitions();
   }
 
 }

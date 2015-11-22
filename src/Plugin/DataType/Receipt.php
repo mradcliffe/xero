@@ -22,4 +22,51 @@ class Receipt extends XeroTypeBase {
   static public $plural_name = 'Receipts';
   static public $label = 'ReceiptNumber';
 
+  /**
+   * {@inheritdoc}
+   */
+  public function view() {
+    $header = [
+      $this->t('Description'),
+      $this->t('Account code'),
+      $this->t('Quantity'),
+      $this->t('Unit amount'),
+      $this->t('Tax type'),
+      $this->t('Line amount')
+    ];
+    $rows = [];
+
+    $className = substr($this->getName(), 5);
+
+    $build = [
+      '#theme' => $this->getName(),
+      '#receipt' => $this->getValue(),
+      '#user' => $this->get('User')->view(),
+      '#contact' => $this->get('Contact')->view(),
+      '#items' => [
+        '#theme' => 'table',
+        '#header' => $header,
+      ],
+      '#attributes' => [
+        'class' => ['xero-item', 'xero-item--' . $className],
+      ],
+    ];
+
+    foreach ($this->get('LineItems') as $lineitem) {
+      /** @var \Drupal\xero\Plugin\DataType\LineItem $lineitem */
+      $rows[] = [
+        $lineitem->get('Description')->getString(),
+        $lineitem->get('AccountCode')->getString(),
+        $lineitem->get('Quantity')->getString(),
+        $lineitem->get('UnitAmount')->getString(),
+        $lineitem->get('TaxType')->getString(),
+        $lineitem->get('LineAmount')->getString(),
+      ];
+    }
+
+    $build['#items']['#rows'] = $rows;
+
+    return $build;
+  }
+
 }

@@ -41,4 +41,22 @@ abstract class XeroTypeBase extends Map implements XeroTypeInterface {
     return static::$label;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function view() {
+
+    $className = substr($this->getName(), 5);
+
+    $item = [
+      '#theme' => $this->getName(),
+      '#item' => $this->getValue(),
+      '#attributes' => [
+        'class' => ['xero-item', 'xero-item--' . $className],
+      ],
+    ];
+
+    return $item;
+  }
+
 }

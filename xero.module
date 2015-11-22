@@ -43,6 +43,98 @@ function xero_theme($existing, $type, $theme, $path) {
       'file' => 'xero.theme.inc',
       'template' => 'xero-reference',
     ),
+    'xero_account' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-account'
+    ),
+    'xero_bank_transaction' => array(
+      'variables' => array(
+        'transaction' => NULL,
+        'items' => NULL,
+        'contact' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-bank-transaction'
+    ),
+    'xero_contact' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-contact'
+    ),
+    'xero_credit_note' => array(
+      'variables' => array(
+        'credit' => NULL,
+        'contact' => NULL,
+        'items' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-credit-note'
+    ),
+    'xero_employee' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-employee'
+    ),
+    'xero_expense' => array(
+      'variables' => array(
+        'expense' => NULL,
+        'user' => NULL,
+        'payments' => NULL,
+        'receipts' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-expense'
+    ),
+    'xero_invoice' => array(
+      'variables' => array(
+        'invoice' => NULL,
+        'items' => NULL,
+        'payments' => NULL,
+        'contact' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-invoice'
+    ),
+    'xero_item' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-item'
+    ),
+    'xero_journal' => array(
+      'variables' => array(
+        'journal' => NULL,
+        'items' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-journal'
+    ),
+    'xero_payment' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-payment'
+    ),
+    'xero_receipt' => array(
+      'variables' => array(
+        'receipt' => NULL,
+        'user' => NULL,
+        'contact' => NULL,
+        'items' => NULL,
+        'attributes' => NULL
+      ),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-receipt'
+    ),
+    'xero_user' => array(
+      'variables' => array('item' => NULL, 'attributes' => NULL),
+      'file' => 'xero.theme.inc',
+      'template' => 'xero-user'
+    )
   );
 }
 
