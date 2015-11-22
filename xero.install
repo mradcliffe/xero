@@ -9,8 +9,8 @@
  */
 function xero_requirements($phase) {
   $requirements = array();
- 
-  try { 
+
+  try {
     $client = \Drupal::service('xero.client');
   }
   catch (Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException $e) {
