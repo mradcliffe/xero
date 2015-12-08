@@ -45,7 +45,7 @@ class ContactDefinition extends ComplexDataDefinitionBase {
       $info['XeroNetworkKey'] = DataDefinition::create('string')->setLabel('Xero Network Key');
 
       // Read-only.
-      $info['Website'] = DataDefinition::create('url')->setLabel('Web site')->setReadOnly(TRUE);
+      $info['Website'] = DataDefinition::create('uri')->setLabel('Web site')->setReadOnly(TRUE);
       $info['BrandingTheme'] = DataDefinition::create('string')->setLabel('Branding theme')->setReadOnly(TRUE);
     }
     return $this->propertyDefinitions;

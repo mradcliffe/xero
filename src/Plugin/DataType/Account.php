@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_account",
  *   label = @Translation("Xero Account"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\AccountDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\AccountDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Account extends XeroTypeBase {

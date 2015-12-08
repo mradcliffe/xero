@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_contact",
  *   label = @Translation("Xero Contact"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\ContactDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ContactDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Contact extends XeroTypeBase {

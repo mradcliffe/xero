@@ -6,6 +6,8 @@
 
 namespace Drupal\Tests\xero;
 
+use Drupal\Core\TypedData\ListDataDefinition;
+use Drupal\xero\Plugin\DataType\XeroItemList;
 use Drupal\xero\TypedData\Definition\AccountDefinition;
 use Drupal\xero\Plugin\DataType\User;
 use Drupal\xero\TypedData\Definition\UserDefinition;
@@ -50,7 +52,7 @@ class XeroQuerySettersTest extends XeroQueryTestBase {
     $this->query->setMethod('post');
     $this->assertEquals('post', $this->query->getMethod());
     $this->assertEquals('xml', $this->query->getFormat('xml'));
-    $this->assertEquals('application/x-www-form-urlencoded', $this->query->getOptions()['headers']['Content-Type']);
+    $this->assertEquals('text/xml;charset=UTF-8', $this->query->getOptions()['headers']['Content-Type']);
   }
 
   /**
@@ -100,16 +102,17 @@ class XeroQuerySettersTest extends XeroQueryTestBase {
       )
       ->will($this->onConsecutiveCalls($accountDefinition, $userDefinition));
 
+    $listDefinition = ListDataDefinition::createFromDataType('xero_user');
+    $users = XeroItemList::createInstance($listDefinition);
+
     $this->query->setType('xero_account');
-    $user = new User($userDefinition);
-    $this->query->setData($user);
+    $this->query->setData($users);
   }
 
   /**
    * Assert that setData is working properly when type is not set.
    */
   public function testSetData() {
-    $accountDefinition = AccountDefinition::create('xero_account');
     $userDefinition = UserDefinition::create('xero_user');
 
     $this->typedDataManager->expects($this->any())
@@ -117,8 +120,10 @@ class XeroQuerySettersTest extends XeroQueryTestBase {
       ->with('xero_user')
       ->willReturn($userDefinition);
 
-    $user = new User($userDefinition);
-    $this->query->setData($user);
-    $this->assertSame($user, $this->query->getData());
+    $listDefinition = ListDataDefinition::createFromDataType('xero_user');
+    $users = XeroItemList::createInstance($listDefinition);
+
+    $this->query->setData($users);
+    $this->assertSame($users, $this->query->getData());
   }
 }

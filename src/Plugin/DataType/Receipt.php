@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_receipt",
  *   label = @Translation("Xero Receipt"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\ReceiptDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ReceiptDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Receipt extends XeroTypeBase {

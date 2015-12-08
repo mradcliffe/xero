@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_journal",
  *   label = @Translation("Xero Journal"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\JournalDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\JournalDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Journal extends XeroTypeBase {

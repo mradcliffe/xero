@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_invoice",
  *   label = @Translation("Xero Invoice"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\InvoiceDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\InvoiceDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Invoice extends XeroTypeBase {

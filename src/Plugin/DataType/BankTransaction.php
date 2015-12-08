@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_bank_transaction",
  *   label = @Translation("Xero Bank Transaction"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\BankTransactionDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\BankTransactionDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class BankTransaction extends XeroTypeBase {

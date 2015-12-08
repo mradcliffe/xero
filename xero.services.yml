@@ -15,7 +15,11 @@ services:
     class: Drupal\xero\Normalizer\XeroNormalizer
     arguments: ['@typed_data_manager']
     tags:
-      - { name: normalizer }
+      - { name: normalizer}
+  xero.list_normalizer:
+    class: Drupal\xero\Normalizer\XeroListNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }
   xero.query:
     class: Drupal\xero\XeroQuery
     arguments: ['@xero.client', '@serializer', '@typed_data_manager', '@logger.factory', '@cache.xero_query']

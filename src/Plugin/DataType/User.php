@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_user",
  *   label = @Translation("Xero User"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\UserDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\UserDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  *
  * @todo user roles?

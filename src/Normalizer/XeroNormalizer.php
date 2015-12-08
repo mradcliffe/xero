@@ -28,28 +28,10 @@ class XeroNormalizer extends ComplexDataNormalizer implements DenormalizerInterf
    */
   public function normalize($object, $format = NULL, array $context = array()) {
     // Get the array map.
-    $data = array();
     $items = array();
     $ret = array();
 
-    foreach ($object as $n => $item) {
-      if (!isset($plural_name)) {
-        $plural_name = $item::$plural_name;
-        $name = $item::$xero_name;
-      }
-
-      $data = parent::normalize($item, $format, $context);
-      $data = $this->reduceEmpty($data);
-      $items[] = $data;
-    }
-    $ret[$plural_name] = [$name => NULL];
-
-    if (count($items) === 1) {
-      $ret[$plural_name][$name] = $items[0];
-    }
-    else {
-      $ret[$plural_name][$name] = $items;
-    }
+    $ret[$object->getName()] = parent::normalize($object, $format, $context);
 
     return $ret;
   }
@@ -77,32 +59,4 @@ class XeroNormalizer extends ComplexDataNormalizer implements DenormalizerInterf
 
     return $items;
   }
-
-  /**
-   * Remove null values from normalized items.
-   *
-   * @param $value
-   *   The value to reduce.
-   * @return mixed
-   *   Either FALSE or the value.
-   */
-  protected function reduceEmpty($value) {
-    if (is_array($value)) {
-      foreach ($value as $n => $item) {
-        $item = $this->reduceEmpty($item);
-        if ($item) {
-          $value[$n] = $item;
-        }
-        else {
-          unset($value[$n]);
-        }
-      }
-    }
-    else if (empty($value)) {
-      return FALSE;
-    }
-
-    return $value;
-  }
-
 }

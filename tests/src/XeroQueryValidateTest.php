@@ -6,11 +6,14 @@
 
 namespace Drupal\Tests\xero;
 
+use Drupal\Core\TypedData\ListDataDefinition;
+use Drupal\xero\Plugin\DataType\XeroItemList;
 use Drupal\xero\TypedData\Definition\AccountDefinition;
 use Drupal\xero\TypedData\Definition\CreditDefinition;
 use Drupal\xero\Plugin\DataType\Account;
 use Drupal\xero\Plugin\DataType\CreditNote;
 use Drupal\Tests\xero\XeroQueryTestBase;
+use Symfony\Component\Validator\Constraints\Null;
 
 class XeroQueryValidateTest extends XeroQueryTestBase {
 
@@ -22,13 +25,31 @@ class XeroQueryValidateTest extends XeroQueryTestBase {
   }
 
   /**
+   *
+   * @param string $type
+   *   The xero data type
+   * @param string $method
+   *   The method to use, get or post.
+   * @param string $format
+   *   The format to return into - xml or json
+   * @param array $headers
+   *   An array of headers.
+   * @param boolean $has_condition
+   *   The test contains conditions
+   * @param boolean $has_data
+   *   The test contains xero data to post.
+   *
    * @dataProvider queryOptionsProvider
    * @expectedException InvalidArgumentException
    */
   public function testBadQuery($type, $method, $format = NULL, $headers = NULL, $has_condition = FALSE, $has_data = FALSE) {
 
     // Setup the xero type to use for this test.
-    $definition = $this->setUpDefinition($type);
+    $listDefinition = ListDataDefinition::createFromDataType($type);
+    $listDefinition->setClass('\Drupal\xero\Plugin\DataType\XeroItemList');
+    $list = XeroItemList::createInstance($listDefinition);
+
+    $definition = $this->setUpDefinition($type, $list);
 
     $this->query->setType($type);
     $this->query->setMethod($method);
@@ -42,7 +63,10 @@ class XeroQueryValidateTest extends XeroQueryTestBase {
     }
 
     if ($has_data) {
-      $this->query->setData($this->typedDataManager->createInstance($type, array('name' => NULL, 'parent' => NULL)));
+      $data_class = $definition->getClass();
+      $data = $data_class::createInstance($definition, $data_class::$xero_name, $list);
+      $list->appendItem($data);
+      $this->query->setData($list);
     }
 
     $this->query->validate();
@@ -51,7 +75,7 @@ class XeroQueryValidateTest extends XeroQueryTestBase {
   /**
    * Provide various options to test validate method.
    *
-   * @return []
+   * @return \array[]
    *   An array of indexed arrays of arguments to setup the query class with:
    *   type, method, format, header, hasCondition, hasData
    */
@@ -69,10 +93,12 @@ class XeroQueryValidateTest extends XeroQueryTestBase {
    *
    * @param $plugin_id
    *   The plugin id for the definition.
-   * @return DataDefinitionInterface
+   * @param $parent
+   *   (Optional) A parent data type.
+   * @return \Drupal\Core\TypedData\DataDefinitionInterface
    *   The data definition.
    */
-  protected function setUpDefinition($plugin_id) {
+  protected function setUpDefinition($plugin_id, $parent = NULL) {
     if ($plugin_id === 'xero_credit_note') {
       $definition = CreditDefinition::create($plugin_id);
       $definition->setClass('\Drupal\xero\Plugin\DataType\CreditNote');
@@ -88,10 +114,6 @@ class XeroQueryValidateTest extends XeroQueryTestBase {
       ->method('getDefinition')
       ->with($plugin_id)
       ->willReturn($definition);
-    $this->typedDataManager->expects($this->any())
-      ->method('createInstance')
-      ->with($plugin_id, array('name' => NULL, 'parent' => NULL))
-      ->willReturn($data);
 
     return $definition;
   }

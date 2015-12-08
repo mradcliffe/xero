@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_item",
  *   label = @Translation("Xero Item"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\ItemDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ItemDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Item extends XeroTypeBase {

@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_expense",
  *   label = @Translation("Xero Expense Claim"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\ExpenseDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\ExpenseDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Expense extends XeroTypeBase {

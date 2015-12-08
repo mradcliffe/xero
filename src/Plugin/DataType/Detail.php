@@ -14,7 +14,8 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * @DataType(
  *   id = "xero_detail",
  *   label = @Translation("Xero Detail"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\DetailDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\DetailDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Detail extends Map {}

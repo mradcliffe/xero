@@ -11,11 +11,9 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\TypedData\ListDataDefinition;
-use Drupal\Core\TypedData\ListDataDefinitionInterface;
-use Drupal\Core\TypedData\Plugin\DataType\ItemList;
+use Drupal\Core\TypedData\ListInterface;
 use Drupal\Core\TypedData\TypedDataManager;
-use Drupal\xero\TypedData\XeroTypeInterface;
+use Drupal\xero\Plugin\DataType\XeroItemList;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Serializer\Serializer;
 // use Drupal\xero\XeroQueryInterface;
@@ -169,14 +167,15 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *   The query object for chaining.
    */
   public function setMethod($method) {
-    if (!in_array($method, array('get', 'post'))) {
+    if (!in_array($method, array('get', 'post', 'put'))) {
       throw new \InvalidArgumentException('Invalid method given.');
     }
     $this->method = $method;
 
-    // Set the content type to x-www-form-urlencoded per Xero API.
-    if ($this->method == 'post') {
-      $this->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // The content type must be text/xml despite the Xero API specifically
+    // stating it should be x-www-form-urlencoded because.
+    if ($this->method === 'post' || $this->method === 'put') {
+      $this->addHeader('Content-Type', 'text/xml;charset=UTF-8');
       $this->setFormat('xml');
     }
 
@@ -258,7 +257,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Get the data object that was set.
    *
-   * @return XeroTypeInterface
+   * @return \Drupal\Core\TypedData\ListInterface
    *   A xero data type or NULL.
    */
   public function getData() {
@@ -268,20 +267,22 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Set the data object to send in the request.
    *
-   * @param XeroTypeInterface $data
-   *   The xero data object.
+   * @param \Drupal\Core\TypedData\ListInterface $data
+   *   The xero data object wrapped in a list interface.
    * @return XeroQuery
    *   The query object for chaining.
    */
-  public function setData(XeroTypeInterface $data) {
-    if (isset($this->type) && $this->type <> $data->getPluginId()) {
+  public function setData(ListInterface $data) {
+    if (isset($this->type) && $this->type <> $data->getItemDefinition()->getDataType()) {
       throw new \InvalidArgumentException('The xero data type set for this query does not match the data.');
     }
     elseif (!isset($this->type)) {
-      $this->type = $data->getPluginId();
+      $this->type = $data->getItemDefinition()->getDataType();
     }
 
     $this->data = $data;
+
+    return $this;
   }
 
   /**
@@ -449,7 +450,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
       throw new \InvalidArgumentException('The query must have a type set.');
     }
 
-    if ($this->method == 'post' && $this->format <> 'xml') {
+    if (!in_array($this->method, ['post', 'put']) && $this->format <> 'xml') {
       throw new \InvalidArgumentException('The format must be XML for creating or updating data.');
     }
 
@@ -467,7 +468,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Execute the Xero query.
    *
-   * @return mixed
+   * @return boolean|\Drupal\Core\TypedData\Plugin\DataType\ItemList
    *   The TypedData object in the response.
    */
   public function execute() {
@@ -478,11 +479,17 @@ class XeroQuery /*implements XeroQueryInterface */ {
 
       $this->explodeConditions();
 
-      // @todo Change to put for requests without id.
+      // Change to PUT if UUID is not set for a post.
+      if ($this->method === 'post' && !$this->uuid) {
+        $this->setMethod('put');
+      }
 
       $data_class = $this->type_definition['class'];
       $endpoint = $data_class::$plural_name;
-      $context = array('plugin_id' => $this->type);
+      $context = [
+        'xml_root_node_name' => $endpoint,
+        'plugin_id' => $this->type,
+      ];
 
       if ($this->data !== NULL) {
         $this->options['body'] = $this->serializer->serialize($this->data, $this->format, $context);
@@ -497,7 +504,10 @@ class XeroQuery /*implements XeroQueryInterface */ {
       return $data;
     }
     catch (RequestException $e) {
-      $this->logger->error('%message: %response', array('%message' => $e->getMessage(), '%response' => $e->getResponse()->getBody()->getContents()));
+      $this->logger->error('%message: %uri %response', [
+        '%message' => $e->getMessage(),
+        '%uri' => $e->getRequest()->getUri(),
+        '%response' => $e->getResponse()->getBody()->getContents()]);
       return FALSE;
     }
     catch (\Exception $e) {
@@ -515,7 +525,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
    * @param string $type
    *   The Xero data type plugin id.
    *
-   * @return \Drupal\Core\TypedData\Plugin\DataType\ItemList
+   * @return \Drupal\xero\Plugin\DataType\XeroItemList
    *   The cached data normalized into a list data type.
    */
   public function getCache($type) {
@@ -544,10 +554,10 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *
    * @param string $cid
    *   The cache identifier to store the data as
-   * @param \Drupal\Core\TypedData\Plugin\DataType\ItemList $data
+   * @param \Drupal\xero\Plugin\DataType\XeroItemList $data
    *   The typed data to sets in cache.
    */
-  protected function setCache($cid, ItemList $data) {
+  protected function setCache($cid, XeroItemList $data) {
     $tags = $this->getCacheTags($data);
 
     $this->cache->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $tags);
@@ -561,12 +571,12 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Get the cache tag for the query.
    *
-   * @param \Drupal\Core\TypedData\Plugin\DataType\ItemList $data
+   * @param \Drupal\xero\Plugin\DataType\XeroItemList $data
    *   The item list to extract type information from.
    * @return string[]
    *   Return the cache tags to use for the cache.
    */
-  protected function getCacheTags(ItemList $data) {
+  protected function getCacheTags(XeroItemList $data) {
     /** @var \Drupal\Core\TypedData\DataDefinitionInterface $definition */
     $definition = $data->getItemDefinition();
     /** @var \Drupal\xero\TypedData\XeroTypeInterface $type_class */

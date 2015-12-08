@@ -1,7 +1,0 @@
-name = Ubercart Xero Example
-description = Post invoices of orders to Xero. This is an example module.
-core = 7.x
-package = Examples
-
-dependencies[] = uc_order
-dependencies[] = xero

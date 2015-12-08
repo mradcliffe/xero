@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_employee",
  *   label = @Translation("Xero Employee"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\EmployeeDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\EmployeeDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Employee extends XeroTypeBase {

@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_payment",
  *   label = @Translation("Xero Payment"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\PaymentDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\PaymentDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Payment extends XeroTypeBase {

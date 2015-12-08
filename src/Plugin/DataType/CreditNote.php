@@ -12,7 +12,8 @@ namespace Drupal\xero\Plugin\DataType;
  * @DataType(
  *   id = "xero_credit_note",
  *   label = @Translation("Xero Credit Note"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\CreditDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\CreditDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class CreditNote extends XeroTypeBase {
@@ -20,6 +21,7 @@ class CreditNote extends XeroTypeBase {
   static public $guid_name = 'CreditNoteID';
   static public $plural_name = 'CreditNotes';
   static public $label = 'CreditNoteNumber';
+  static public $xero_name = 'CreditNote';
 
   /**
    * {@inheritdoc}
