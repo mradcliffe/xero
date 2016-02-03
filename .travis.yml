@@ -40,7 +40,7 @@ before_script:
     else
       composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git ;
       composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master" ;
-      composer install --dev --prefer-source ;
+      composer update --dev ;
     fi
 
   # Go back to repository directory to run phpunit.
