@@ -24,7 +24,7 @@ install:
   - cd ..
   - git clone --branch ${DRUPAL} http://git.drupal.org/project/drupal.git drupal
   - if [ ${DRUPAL} == "8.0.x" ]; then
-      git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager
+      git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager ;
     fi
   - cd drupal
 
@@ -34,12 +34,12 @@ before_script:
 
   # Change back to the root Drupal directory.
   - if [ ${DRUPAL} == "8.0.x" ]; then
-      php modules/composer_manager/scripts/init.php
-      composer drupal-rebuild
-      composer update --verbose --no-interaction --prefer-source --lock
+      php modules/composer_manager/scripts/init.php ;
+      composer drupal-rebuild ;
+      composer update --verbose --no-interaction --prefer-source --lock ;
     else
-      composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git
-      composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master"
+      composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git ;
+      composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master" ;
     fi
 
   # Go back to repository directory to run phpunit.
