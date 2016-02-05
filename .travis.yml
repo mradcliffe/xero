@@ -39,7 +39,7 @@ before_script:
       composer update --verbose --no-interaction --prefer-source --lock ;
     else
       composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git ;
-      composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master" ;
+      composer require --no-update blackoptic/xerobundle:"dev-fix-guzzle-6 as master" ;
       composer update --dev ;
     fi
 
