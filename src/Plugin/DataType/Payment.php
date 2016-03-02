@@ -18,9 +18,9 @@ namespace Drupal\xero\Plugin\DataType;
  */
 class Payment extends XeroTypeBase {
 
-  static public $guid_name = 'PaymentID';
+  static public $guid_name;
   static public $xero_name = 'Payment';
   static public $plural_name = 'Payments';
-  static public $label = 'PaymentID';
+  static public $label = 'Reference';
 
 }

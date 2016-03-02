@@ -59,6 +59,7 @@ abstract class TestBase extends UnitTestCase {
     // Mock the container.
     $container = new ContainerBuilder();
     $container->set('typed_data_manager', $this->typedDataManager);
+    $container->set('string_translation', $this->getStringTranslationStub());
     \Drupal::setContainer($container);
 
     // Create data definition

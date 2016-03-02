@@ -18,7 +18,7 @@ namespace Drupal\xero\Plugin\DataType;
  */
 class Item extends XeroTypeBase {
 
-  static public $guid_name = 'ItemID';
+  static public $guid_name = 'Code';
   static public $xero_name = 'Item';
   static public $plural_name = 'Items';
   static public $label = 'Code';

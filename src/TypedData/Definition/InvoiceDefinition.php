@@ -54,6 +54,7 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $info['SubTotal'] = DataDefinition::create('float')->setLabel('Sub-Total');
       $info['TotalTax'] = DataDefinition::create('float')->setLabel('Total Tax');
       $info['Total'] = DataDefinition::create('float')->setLabel('Total');
+      $info['TotalDiscount'] = DataDefinition::create('float')->setLabel('Total Discount');
 
       // Read-only
       $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly(TRUE);

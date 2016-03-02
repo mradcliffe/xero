@@ -45,6 +45,7 @@ class Invoice extends XeroTypeBase {
     $className = substr($this->getName(), 5);
     $rows = [];
     $payment_rows = [];
+    $contact = $this->get('Contact');
 
     $build = [
       '#theme' => $this->getName(),
@@ -52,7 +53,7 @@ class Invoice extends XeroTypeBase {
        '#attributes' => [
         'class' => ['xero-item', 'xero-item--' . $className],
       ],
-      '#contact' => $this->get('Contact')->view(),
+      '#contact' => is_object($contact) ? $contact->view() : '',
       '#items' => [
         '#theme' => 'table',
         '#header' => $header,

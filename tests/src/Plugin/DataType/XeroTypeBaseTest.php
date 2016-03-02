@@ -36,9 +36,8 @@ class XeroTypeBaseTest extends TestBase {
     $type_class = self::XERO_TYPE_CLASS;
     $payment = new $type_class($this->dataDefinition, self::XERO_TYPE);
 
-    $this->assertEquals('PaymentID', $payment->getGUIDName(), print_r($payment, TRUE));
     $this->assertEquals('Payments', $payment->getPluralName());
-    $this->assertEquals('PaymentID', $payment->getLabelName());
+    $this->assertEquals('Reference', $payment->getLabelName());
 
     $invoiceDefinition = new InvoiceDefinition(['id' => 'xero_invoice', 'definition class' => '\Drupal\xero\TypedData\Definition\InvoiceDefinition']);
     $invoice = new Invoice($invoiceDefinition, 'xero_invoice');
@@ -49,6 +48,7 @@ class XeroTypeBaseTest extends TestBase {
     $floatDefinition = new DataDefinition(['id' => 'float']);
     $amount = new FloatData($floatDefinition, 'float');
 
+    $this->assertEquals('InvoiceID', $invoice->getGUIDName());
 
     $this->typedDataManager->expects($this->any())
       ->method('getPropertyInstance')
