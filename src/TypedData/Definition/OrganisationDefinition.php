@@ -20,7 +20,7 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
   /**
    * @const array
    */
-  const VERSIONTYPES = [
+  static public $VERSIONTYPES = [
     'AU', 'NZ', 'GLOBAL', 'UK', 'US', 'AUONRAMP', 'NZONRAMP', 'GLOBALONRAMP',
     'UKONRAMP', 'USONRAMP'
   ];
@@ -47,7 +47,7 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
       $info['Version'] = DataDefinition::create('string')
         ->setLabel('Version')
         ->setReadOnly(TRUE)
-        ->addConstraint('Choice', ['choices' => self::VERSIONTYPES]);
+        ->addConstraint('Choice', ['choices' => self::$VERSIONTYPES]);
       $info['BaseCurrency'] = DataDefinition::create('string')
         ->setLabel('Base Currency')
         ->setReadOnly(TRUE);

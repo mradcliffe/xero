@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Tests\Authentication\Provider\DaoAuthenticat
  */
 class TaxRateDefinition extends ComplexDataDefinitionBase {
 
-  const TAXTYPES = [
+  static public $TAXTYPES = [
     'OUTPUT', 'INPUT', 'NONE', 'GSTONIMPORTS', 'INPUT2', 'ZERORATED', 'OUTPUT2',
     'CAPEXINPUT', 'CAPEXINPUT2', 'CAPEXOUTPUT', 'CAPEXOUTPUT2', 'CAPEXSRINPUT',
     'CAPEXSROUTPUT', 'ECZRINPUT', 'ECZROUPUT', 'ECZROUTPUTSERVICES',
@@ -26,7 +26,7 @@ class TaxRateDefinition extends ComplexDataDefinitionBase {
     'EXEMPTCAPITAL', 'INPUTTAXED', 'BASEXCLUDED', 'GSTONCAPIMPORTS'
   ];
 
-  const REPORTTYPES = [
+  static public $REPORTTYPES = [
     'OUTPUT', 'INPUT', 'EXEMPTOUTPUT', 'INPUTTAXED', 'BASEXCLUDED',
     'EXEMPTEXPENSES', 'EXEMPTCAPITAL', 'EXEMPTEXPORT', 'CAPITALEXINPUT',
     'GSTONCAPIMPORTS', 'GSTONIMPORTS', 'EXEMPTINPUT', 'NONE', 'ECOUTPUT',
@@ -46,7 +46,7 @@ class TaxRateDefinition extends ComplexDataDefinitionBase {
         ->setRequired(TRUE);
       $info['TaxType'] = DataDefinition::create('string')
         ->setLabel('Type')
-        ->addConstraint('Choice', ['choices' => self::TAXTYPES]);
+        ->addConstraint('Choice', ['choices' => self::$TAXTYPES]);
       $info['TaxComponents'] = ListDataDefinition::create('xero_tax_component')
         ->setLabel('Components')
         ->setRequired(TRUE);
@@ -56,7 +56,7 @@ class TaxRateDefinition extends ComplexDataDefinitionBase {
       $info['ReportTaxType'] = DataDefinition::create('string')
         ->setLabel('Report Tax Type')
         ->setDescription('Required in Australia, New Zealand and United Kingdom.')
-        ->addConstraint('Choice', ['choices' => self::REPORTTYPES]);
+        ->addConstraint('Choice', ['choices' => self::$REPORTTYPES]);
       $info['CanApplyToAssets'] = DataDefinition::create('boolean')
         ->setLabel('Can Apply to Assets')
         ->setReadOnly(TRUE);
