@@ -18,7 +18,8 @@ use Drupal\xero\TypedData\Definition\PhoneDefinition;
 /**
  * Class XeroFormBuilderTest
  *
- * @group xero
+ * @group Xero
+ * @coversDefaultClass \Drupal\xero\Form\XeroFormBuilder
  */
 class XeroFormBuilderTest extends UnitTestCase {
 

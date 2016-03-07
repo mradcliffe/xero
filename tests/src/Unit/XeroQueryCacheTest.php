@@ -20,7 +20,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * Assert that the getCache and setCache methods work appropriately.
  *
- * @group xero
+ * @group Xero
  * @covers \Drupal\xero\XeroQuery
  */
 class XeroQueryCacheTest extends XeroQueryTestBase {

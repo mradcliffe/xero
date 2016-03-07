@@ -19,6 +19,7 @@ use Drupal\Tests\UnitTestCase;
  * Provides a base test class for testing field widgets.
  *
  * @coversDefaultClass \Drupal\xero\Plugin\Field\FieldWidget\XeroTextfieldWidget
+ * @group Xero
  */
 class XeroTextfieldTest extends WidgetTestBase {
 

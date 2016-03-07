@@ -15,6 +15,9 @@ use Drupal\xero\Plugin\DataType\CreditNote;
 use Drupal\Tests\xero\UnitXeroQueryTestBase;
 use Symfony\Component\Validator\Constraints\Null;
 
+/**
+ * @group Xero
+ */
 class XeroQueryValidateTest extends XeroQueryTestBase {
 
   /**

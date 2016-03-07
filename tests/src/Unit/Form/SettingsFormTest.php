@@ -15,6 +15,7 @@ use Drupal\xero\Form\SettingsForm;
  * Test the Xero configuration form.
  *
  * @coversDefaultClass \Drupal\xero\Form\SettingsForm
+ * @group Xero
  */
 class SettingsFormTest extends FormTestBase {
 

@@ -10,6 +10,9 @@ use Drupal\Core\Cache\NullBackend;
 use Drupal\xero\XeroQuery;
 use Drupal\Tests\xero\UnitXeroQueryTestBase;
 
+/**
+ * @group Xero
+ */
 class XeroQueryClientTest extends XeroQueryTestBase {
 
   /**

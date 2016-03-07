@@ -13,6 +13,9 @@ use Drupal\xero\Plugin\DataType\User;
 use Drupal\xero\TypedData\Definition\UserDefinition;
 use Drupal\Tests\xero\UnitXeroQueryTestBase;
 
+/**
+ * @group Xero
+ */
 class XeroQuerySettersTest extends XeroQueryTestBase {
 
   /**

@@ -8,6 +8,9 @@ namespace Drupal\Tests\xero\Unit;
 
 use Drupal\Tests\xero\UnitXeroQueryTestBase;
 
+/**
+ * @group Xero
+ */
 class XeroQueryOrderTest extends XeroQueryTestBase {
 
   /**

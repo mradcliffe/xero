@@ -13,7 +13,8 @@ use Drupal\Tests\UnitTestCase;
 
 /**
  * Assert that Xero TypedData definition classes are functional.
- * @group xero
+ *
+ * @group Xero
  */
 class XeroDefinitionTest extends UnitTestCase {
 
