@@ -102,8 +102,6 @@ Note: at this time it is not possible to filter these queries.
 
 Xero API Module provides a form element helper service that will return form elements for a given Xero data type. This also works with any data type.
 
-Currently the form helper does not support populating data from Xero into a select list.
-
 ```
   $formBuilder = \Drupal::service('xero.form_builder');
 
@@ -114,6 +112,17 @@ Currently the form helper does not support populating data from Xero into a sele
   $definition = \Drupal::service('typed_data_manager')->createDataDefinition('xero_contact');
   $form['ContactID'] = $formBuilder->getElementForDefinition($definition, 'ContactID');
 ```
+
+## Field API
+
+Xero API provides the Xero Reference field type and associated widgets and formatters. This allows to store the Xero ID and Label associated with a given Xero data type, and is useful for tracking transactions or invoices associated with e-commerce payments or internal accounting data structures.
+
+### Field Widgets
+
+1. The textfield widget allows a user to specify the ID, Label, and Type with text fields.
+2. The autocomplete widget allows a user to search Xero for records by the record label.
+   * Note that there are daily API limits, and excessive searches may bump into this limit.
+
 
 ## Theming Typed Data
 
@@ -137,14 +146,30 @@ A xero type is a data type as defined by the [Xero Developer API](http://develop
 
 * Accounts
 * Bank Transactions
+* Bank Transfern
+* Branding Themes
 * Contacts
+   * Addresses
+   * Phones
+   * Links
+* Contact Groups
 * Credit Notes
+* Currencies
 * Employees
 * Expense Claims
 * Invoices
+   * Line items
+* Invoice Reminders
 * Items
 * Journals
+   * Journal Line Items
+* Linked Transactions
+* Organisation
 * Payments
 * Receipts
+* Repeating Invoices
+   * Schedules
+* Tax Components
+   * Tax Rates
 * Tracking Categories
 * Users
