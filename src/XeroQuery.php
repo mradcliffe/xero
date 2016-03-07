@@ -13,7 +13,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\TypedData\ListInterface;
 use Drupal\Core\TypedData\TypedDataManager;
-use Drupal\xero\Plugin\DataType\XeroItemList;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Serializer\Serializer;
 // use Drupal\xero\XeroQueryInterface;
@@ -554,10 +553,10 @@ class XeroQuery /*implements XeroQueryInterface */ {
    *
    * @param string $cid
    *   The cache identifier to store the data as
-   * @param \Drupal\xero\Plugin\DataType\XeroItemList $data
+   * @param \Drupal\Core\TypedData\ListInterface $data
    *   The typed data to sets in cache.
    */
-  protected function setCache($cid, XeroItemList $data) {
+  protected function setCache($cid, ListInterface $data) {
     $tags = $this->getCacheTags($data);
 
     $this->cache->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $tags);
@@ -571,12 +570,12 @@ class XeroQuery /*implements XeroQueryInterface */ {
   /**
    * Get the cache tag for the query.
    *
-   * @param \Drupal\xero\Plugin\DataType\XeroItemList $data
+   * @param \Drupal\Core\TypedData\ListInterface $data
    *   The item list to extract type information from.
    * @return string[]
    *   Return the cache tags to use for the cache.
    */
-  protected function getCacheTags(XeroItemList $data) {
+  protected function getCacheTags(ListInterface $data) {
     /** @var \Drupal\Core\TypedData\DataDefinitionInterface $definition */
     $definition = $data->getItemDefinition();
     /** @var \Drupal\xero\TypedData\XeroTypeInterface $type_class */

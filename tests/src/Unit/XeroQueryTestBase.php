@@ -6,11 +6,14 @@
 
 namespace Drupal\Tests\xero\Unit;
 
-use Drupal\Core\Cache\NullBackend;
-use Drupal\xero\XeroQuery;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\serialization\Encoder\XmlEncoder;
+use Drupal\serialization\Normalizer\ComplexDataNormalizer;
+use Drupal\serialization\Normalizer\TypedDataNormalizer;
 use Drupal\Tests\UnitTestCase;
+use Drupal\xero\XeroQuery;
+use Drupal\xero\Normalizer\XeroNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
@@ -37,6 +40,11 @@ class XeroQueryTestBase extends UnitTestCase {
   protected $client;
 
   /**
+   * @var \Drupal\Core\Cache\NullBackend
+   */
+  protected $cache;
+
+  /**
    * @var \Drupal\xero\XeroQuery
    */
   protected $query;
@@ -44,11 +52,10 @@ class XeroQueryTestBase extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
-    // Setup the Serializer component class.
-    $this->serializer = new Serializer();
-
     // Setup a Null cache backend.
-    $cache = new NullBackend('xero_query');
+    $this->cache = $this->getMockBuilder('Drupal\Core\Cache\NullBackend')
+      ->disableOriginalConstructor()
+      ->getMock();
 
     // Setup LoggerChannelFactory.
     $this->loggerFactory = new LoggerChannelFactory();
@@ -67,9 +74,19 @@ class XeroQueryTestBase extends UnitTestCase {
     // Setup the container.
     $container = new ContainerBuilder();
     $container->set('typed_data_manager', $this->typedDataManager);
+    $container->set('serializer', $this->serializer);
     \Drupal::setContainer($container);
 
-    $this->query = new XeroQuery($this->client, $this->serializer, $this->typedDataManager, $this->loggerFactory, $cache);
+    // Setup the Serializer component class.
+    $this->serializer = new Serializer([
+      new ComplexDataNormalizer(),
+      new XeroNormalizer($this->typedDataManager),
+      new TypedDataNormalizer()
+    ], [
+      new XmlEncoder()
+    ]);
+
+    $this->query = new XeroQuery($this->client, $this->serializer, $this->typedDataManager, $this->loggerFactory, $this->cache);
   }
 
   /**
