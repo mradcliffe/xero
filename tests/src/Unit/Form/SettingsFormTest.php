@@ -19,6 +19,8 @@ use Drupal\xero\Form\SettingsForm;
  */
 class SettingsFormTest extends FormTestBase {
 
+  use \Drupal\simpletest\AssertHelperTrait;
+
   protected $privateKey;
   protected $pemFile;
 
@@ -54,7 +56,7 @@ class SettingsFormTest extends FormTestBase {
     $form_state->setValueForElement($form['oauth']['key_path'], '');
 
     $this->settingsForm->validateFileExists($form['oauth']['key_path'], $form_state);
-    $this->assertEquals('The specified file either does not exist, or is not accessible to the web server.', $form_state->getError($form['oauth']['key_path']));
+    $this->assertEquals('The specified file either does not exist, or is not accessible to the web server.', $this->castSafeStrings($form_state->getError($form['oauth']['key_path'])));
   }
 
   /**
@@ -98,6 +100,9 @@ class SettingsFormTest extends FormTestBase {
     $stringTranslation = $this->getMockBuilder('Drupal\Core\StringTranslation\TranslationManager')
       ->disableOriginalConstructor()
       ->getMock();
+    $stringTranslation->expects($this->any())
+      ->method('translateString')
+      ->willReturn('The specified file either does not exist, or is not accessible to the web server.');
     $stringTranslation->expects($this->any())
       ->method('translate')
       ->willReturn('The specified file either does not exist, or is not accessible to the web server.');
