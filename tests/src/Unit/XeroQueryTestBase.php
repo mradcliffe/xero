@@ -17,7 +17,10 @@ use Drupal\xero\Normalizer\XeroNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
-class XeroQueryTestBase extends UnitTestCase {
+/**
+ * Class XeroQueryTestBase provides helper methods for unit tests.
+ */
+abstract class XeroQueryTestBase extends UnitTestCase {
 
   /**
    * @var \Drupal\Core\TypedData\TypedDataManager
