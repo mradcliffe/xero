@@ -4,8 +4,8 @@ php:
   - 5.6
 
 env:
-  - DRUPAL=8.0.x
   - DRUPAL=8.1.x
+  - DRUPAL=8.2.x
 
 git:
   depth: 1
@@ -22,25 +22,19 @@ install:
   - TESTDIR=$(pwd)
   - cd ..
   - git clone --depth 1 --branch ${DRUPAL} http://git.drupal.org/project/drupal.git drupal
-  - if [ ${DRUPAL} == "8.0.x" ]; then
-    git clone --depth 1 --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git drupal/modules/composer_manager ;
-    fi
   - cd drupal
+
+  # Add composer test dependencies to Drupal.
+  - composer config repositories.drupal composer https://packages.drupal.org/8
+  - composer require mile23/drupal-merge-plugin
 
 before_script:
   # rsync the module directory into modules/xero
   - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
 
-  # Change back to the root Drupal directory.
-  - if [ ${DRUPAL} == "8.0.x" ]; then
-      php modules/composer_manager/scripts/init.php ;
-      composer drupal-rebuild ;
-      composer update --verbose --no-interaction --prefer-source --lock --dev ;
-    else
-      composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git ;
-      composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master" ;
-      composer update --verbose --dev ;
-    fi
+  # Require xero module dependencies manually.
+  - composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git
+  - composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master"
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
