@@ -25,7 +25,6 @@ class LinkedTransactionDefinition extends ComplexDataDefinitionBase {
 
       $info['LinkedTransactionID'] = DataDefinition::create('string')
         ->setLabel('Linked Transaction ID')
-        ->setReadOnly(TRUE)
         ->addConstraint('XeroGuidConstraint');
 
       $info['SourceTransactionID'] = DataDefinition::create('string')

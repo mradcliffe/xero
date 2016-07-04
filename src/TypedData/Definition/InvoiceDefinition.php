@@ -6,7 +6,7 @@
 
 namespace Drupal\xero\TypedData\Definition;
 
-use Drupal\Core\TypeDdata\ListDataDefinition;
+use Drupal\Core\TypedData\ListDataDefinition;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\ComplexDataDefinitionBase;
 
@@ -28,11 +28,11 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DRAFT', 'SUBMITTED', 'DELETED', 'AUTHORISED', 'PAID', 'INVOICED'));
 
       // UUID is read only.
-      $info['InvoiceID'] = DataDefinition::create('string')->setLabel('Invoice ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['InvoiceID'] = DataDefinition::create('string')->setLabel('Invoice ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['Contact'] = ContactDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
       $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
 
       // Recommended
@@ -44,7 +44,7 @@ class InvoiceDefinition extends ComplexDataDefinitionBase {
       $info['InvoiceNumber'] = DataDefinition::create('string')->setLabel('Invoice #');
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
       $info['BrandingThemeID'] = DataDefinition::create('string')->setLabel('Branding Theme ID')->addConstraint('XeroGuidConstraint');
-      $info['Url'] = DataDefinition::create('url')->setLabel('URL');
+      $info['Url'] = DataDefinition::create('uri')->setLabel('URL');
       $info['CurrencyCode'] = DataDefinition::create('string')->setLabel('Currency code');
       $info['CurrencyRate'] = DataDefinition::create('float')->setLabel('Currency rate');
       $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('XeroChoiceConstraint', $status_options);

@@ -42,7 +42,7 @@ class RepeatingInvoiceDefinition extends InvoiceDefinition {
       unset($info['UpdatedDateUTC']);
 
       // Add repeating invoice specific properties.
-      $info['Schedule'] = DataDefinition::create('xero_schedule')
+      $info['Schedule'] = ScheduleDefinition::create('xero_schedule')
         ->setLabel('Schedule');
 
       // Set all properties as read-only.

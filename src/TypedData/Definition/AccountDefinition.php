@@ -25,7 +25,7 @@ class AccountDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('ACTIVE', 'ARCHIVED'));
 
       // UUID is read only.
-      $info['AccountID'] = DataDefinition::create('string')->setLabel('Account ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['AccountID'] = DataDefinition::create('string')->setLabel('Account ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Code'] = DataDefinition::create('string')->setLabel('Code');

@@ -24,7 +24,7 @@ class ContactDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['ContactID'] = DataDefinition::create('string')->setLabel('Contact Id')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['ContactID'] = DataDefinition::create('string')->setLabel('Contact Id')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Name'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Name');

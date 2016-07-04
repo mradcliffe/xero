@@ -24,13 +24,13 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
       $line_type_options = array('choices' => array('Exclusive', 'Inclusive', 'NoTax'));
 
       // UUID is read only.
-      $info['ReceiptID'] = DataDefinition::create('string')->setLabel('Receipt ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['ReceiptID'] = DataDefinition::create('string')->setLabel('Receipt ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date')->setRequired(TRUE);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['Contact'] = ContactDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
       $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
-      $info['User'] = DataDefinition::create('xero_user')->setRequired(TRUE)->setLabel('User');
+      $info['User'] = UserDefinition::create('xero_user')->setRequired(TRUE)->setLabel('User');
 
       // Optional
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
@@ -41,7 +41,7 @@ class ReceiptDefinition extends ComplexDataDefinitionBase {
 
       // Read-only
       $info['ReceiptNumber'] = DataDefinition::create('string')->setLabel('Receipt #')->setReadOnly(TRUE);
-      $info['Url'] = DataDefinition::create('url')->setLabel('URL')->setReadOnly(TRUE);
+      $info['Url'] = DataDefinition::create('uri')->setLabel('URL')->setReadOnly(TRUE);
       $info['Status'] = DataDefinition::create('string')->setLabel('Status')->setReadOnly(TRUE);
       $info['UpdatedDateUTC'] = DataDefinition::create('datetime_iso8601')->setLabel('Updated Date')->setReadOnly(TRUE);
       $info['HasAttachments'] = DataDefinition::create('boolean')->setLabel('Has Attachments?')->setReadOnly(TRUE);

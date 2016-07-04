@@ -31,11 +31,11 @@ class CreditDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DRAFT', 'SUBMITTED', 'DELETED', 'AUTHORISED', 'PAID', 'INVOICED'));
 
       // UUID is read only.
-      $info['CreditNoteID'] = DataDefinition::create('string')->setLabel('Credit Note ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['CreditNoteID'] = DataDefinition::create('string')->setLabel('Credit Note ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['Contact'] = ContactDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
 
       // Recommended
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date');

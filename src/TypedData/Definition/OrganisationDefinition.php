@@ -22,7 +22,7 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
    */
   static public $VERSIONTYPES = [
     'AU', 'NZ', 'GLOBAL', 'UK', 'US', 'AUONRAMP', 'NZONRAMP', 'GLOBALONRAMP',
-    'UKONRAMP', 'USONRAMP'
+    'UKONRAMP', 'USONRAMP',
   ];
 
   /**
@@ -77,7 +77,7 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
         ->setLabel('Sales Tax Basis')
         ->setReadOnly(TRUE)
         ->addConstraint('Choice', ['choices' => [
-          'PAYMENTS', 'INVOICE', 'CASH', 'ACCRUAL', 'FLATRATECASH', 'FLATRATEACCRUAL', 'ACCRUALS', 'NONE'
+          'PAYMENTS', 'INVOICE', 'CASH', 'ACCRUAL', 'FLATRATECASH', 'FLATRATEACCRUAL', 'ACCRUALS', 'NONE',
         ]]);
       $info['SalesTaxPeriod'] = DataDefinition::create('string')
         ->setLabel('Sales Tax Period')
@@ -85,7 +85,7 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
         ->addConstraint('Choice', ['choices' => [
           'MONTHLY', 'QUARTERLY1', 'QUARTERLY2', 'QUARTERLY3', 'ANNUALLY', 'ONEMONTHS',
           'TWOMONTHS', 'SIXMONTHS', '1MONTHLY', '2MONTHLY', '3MONTHLY', '6MONTHLY',
-          'QUARTERLY'
+          'QUARTERLY',
         ]]);
       $info['PeriodLockDate'] = DataDefinition::create('datetime_iso8601')
         ->setLabel('Period Lock Date')
@@ -121,8 +121,6 @@ class OrganisationDefinition extends ComplexDataDefinitionBase {
       $info['ExternalLinks'] = ListDataDefinition::create('xero_link')
         ->setLabel('External Links')
         ->setReadOnly(TRUE);
-      // $info['PaymentTerms']
-
     }
     return $this->propertyDefinitions;
   }

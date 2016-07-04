@@ -26,13 +26,13 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $status_options = array('choices' => array('DELETED', 'AUTHORISED'));
 
       // UUID is read only.
-      $info['BankTransactionID'] = DataDefinition::create('string')->setLabel('Bank Transaction ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['BankTransactionID'] = DataDefinition::create('string')->setLabel('Bank Transaction ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
       $info['Type'] = DataDefinition::create('string')->setRequired(TRUE)->setLabel('Type')->addConstraint('XeroChoiceConstraint', $type_options);
-      $info['Contact'] = DataDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
+      $info['Contact'] = ContactDefinition::create('xero_contact')->setRequired(TRUE)->setLabel('Contact');
       $info['LineItems'] = ListDataDefinition::create('xero_line_item')->setRequired(TRUE)->setLabel('Line Items');
-      $info['BankAccount'] = DataDefinition::create('xero_account')->setRequired(TRUE)->setLabel('Bank Account');
+      $info['BankAccount'] = AccountDefinition::create('xero_account')->setRequired(TRUE)->setLabel('Bank Account');
 
       $info['DueDate'] = DataDefinition::create('string')->setLabel('Due Date')->addConstraint('Date');
       $info['LineAmountTypes'] = DataDefinition::create('string')->setLabel('Line Amount Type')->addConstraint('XeroChoiceConstraint', $line_type_options);
@@ -42,7 +42,7 @@ class BankTransactionDefinition extends ComplexDataDefinitionBase {
       $info['Date'] = DataDefinition::create('string')->setLabel('Date')->addConstraint('Date');
       $info['Reference'] = DataDefinition::create('string')->setLabel('Reference');
       $info['CurrencyRate'] = DataDefinition::create('float')->setLabel('Currency rate');
-      $info['Url'] = DataDefinition::create('url')->setLabel('URL');
+      $info['Url'] = DataDefinition::create('uri')->setLabel('URL');
       $info['Status'] = DataDefinition::create('string')->setLabel('Status')->addConstraint('XeroChoiceConstraint', $status_options);
       $info['SubTotal'] = DataDefinition::create('float')->setLabel('Sub-Total');
       $info['TotalTax'] = DataDefinition::create('float')->setLabel('Total Tax');

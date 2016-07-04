@@ -22,10 +22,10 @@ class ExpenseDefinition extends ComplexDataDefinitionBase {
       $info = &$this->propertyDefinitions;
 
       // UUID is read only.
-      $info['ExpenseClaimID'] = DataDefinition::create('string')->setLabel('Expense Claim ID')->setReadOnly(TRUE)->addConstraint('XeroGuidConstraint');
+      $info['ExpenseClaimID'] = DataDefinition::create('string')->setLabel('Expense Claim ID')->addConstraint('XeroGuidConstraint');
 
       // Writeable properties.
-      $info['User'] = DataDefinition::create('xero_user')->setRequired(TRUE)->setLabel('User');
+      $info['User'] = UserDefinition::create('xero_user')->setRequired(TRUE)->setLabel('User');
       $info['Receipts'] = ListDataDefinition::create('xero_receipt')->setRequired(TRUE)->setLabel('Receipts');
 
       // Read-only

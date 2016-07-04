@@ -25,17 +25,13 @@ class BrandingThemeDefinition extends ComplexDataDefinitionBase {
 
       $info['BrandingThemeID'] = DataDefinition::create('string')
         ->setLabel('Branding Theme ID')
-        ->addConstraint('XeroGuidConstraint')
-        ->setReadOnly(TRUE);
+        ->addConstraint('XeroGuidConstraint');
       $info['Name'] = DataDefinition::create('string')
-        ->setLabel('Label')
-        ->setReadOnly(TRUE);
+        ->setLabel('Label');
       $info['SortOrder'] = DataDefinition::create('integer')
-        ->setLabel('Sort Order')
-        ->setReadOnly(TRUE);
+        ->setLabel('Sort Order');
       $info['CreatedDateUTC'] = DataDefinition::create('datetime_iso8601')
-        ->setLabel('Created Date')
-        ->setReadOnly(TRUE);
+        ->setLabel('Created Date');
     }
     return $this->propertyDefinitions;
   }

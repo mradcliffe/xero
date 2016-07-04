@@ -25,14 +25,13 @@ class BankTransferDefinition extends ComplexDataDefinitionBase {
 
       $info['BankTransferID'] = DataDefinition::create('string')
         ->setLabel('Bank Transfer ID')
-        ->setReadOnly(TRUE)
         ->addConstraint('XeroGuidConstraint');
 
       // Required properties.
-      $info['FromBankAccount'] = DataDefinition::create('xero_account')
+      $info['FromBankAccount'] = AccountDefinition::create('xero_account')
         ->setLabel('From Account')
         ->setRequired(TRUE);
-      $info['ToBankAccount'] = DataDefinition::create('xero_account')
+      $info['ToBankAccount'] = AccountDefinition::create('xero_account')
         ->setLabel('To Account')
         ->setRequired(TRUE);
       $info['Amount'] = DataDefinition::create('float')

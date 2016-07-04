@@ -25,11 +25,9 @@ class CurrencyDefinition extends ComplexDataDefinitionBase {
 
       $info['Code'] = DataDefinition::create('string')
         ->setLabel('Code')
-        ->addConstraint('Length', ['min' => 3, 'max' => 3])
-        ->setReadOnly(TRUE);
+        ->addConstraint('Length', ['min' => 3, 'max' => 3]);
       $info['Description'] = DataDefinition::create('string')
-        ->setLabel('Description')
-        ->setReadOnly(TRUE);
+        ->setLabel('Description');
     }
     return $this->propertyDefinitions;
   }
