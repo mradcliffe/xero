@@ -507,6 +507,7 @@ class XeroQuery /*implements XeroQueryInterface */ {
         '%message' => $e->getMessage(),
         '%uri' => $e->getRequest()->getUri(),
         '%response' => $e->getResponse()->getBody()->getContents()]);
+      $blah = (string) $e->getRequest()->getBody();
       return FALSE;
     }
     catch (\Exception $e) {

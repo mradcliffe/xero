@@ -14,10 +14,14 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * @DataType(
  *   id = "xero_phone",
  *   label = @Translation("Xero Phone"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\PhoneDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\PhoneDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
 class Phone extends Map {
+
+  static public $xero_name = 'Phone';
+  static public $plural_name = 'Phones';
 
   /**
    * Get the canonical phone number.

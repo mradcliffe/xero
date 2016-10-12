@@ -247,7 +247,10 @@ class XeroFormBuilder {
 
     if ($type === 'select') {
       // Add the Constraint options to the select element.
-      $properties['#options'] = $definition->getConstraint('XeroChoiceConstraint')['choices'];
+      $properties['#options'] = array_combine(
+        $definition->getConstraint('XeroChoiceConstraint')['choices'],
+        $definition->getConstraint('XeroChoiceConstraint')['choices']
+      );
     }
     elseif (array_key_exists('XeroGuidConstraint', $definition->getConstraints())) {
       // Add an auto-complete path for data types with guids.

@@ -14,7 +14,13 @@ use Drupal\Core\TypedData\Plugin\DataType\Map;
  * @DataType(
  *   id = "xero_address",
  *   label = @Translation("Xero Address"),
- *   definition_class = "\Drupal\xero\TypedData\Definition\AddressDefinition"
+ *   definition_class = "\Drupal\xero\TypedData\Definition\AddressDefinition",
+ *   list_class = "\Drupal\xero\Plugin\DataType\XeroItemList"
  * )
  */
-class Address extends Map {}
+class Address extends Map {
+
+  static public $xero_name = 'Address';
+  static public $plural_name = 'Addresses';
+
+}
