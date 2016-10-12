@@ -497,17 +497,17 @@ class XeroQuery /*implements XeroQueryInterface */ {
       /** @var \Psr\Http\Message\ResponseInterface $response */
       $response = $this->client->{$this->method}($endpoint, $this->options);
 
-      /** @var \Drupal\xero\TypedData\XeroTypeInterface $data */
+      /** @var \Drupal\xero\Plugin\DataType\XeroItemList $data */
       $data = $this->serializer->deserialize($response->getBody()->getContents(), $data_class, $this->format, $context);
 
       return $data;
     }
     catch (RequestException $e) {
-      $this->logger->error('%message: %uri %response', [
+      $this->logger->error('%message: %uri %request %response', [
         '%message' => $e->getMessage(),
         '%uri' => $e->getRequest()->getUri(),
+        '%request' => $e->getRequest()->getBody()->getContents(),
         '%response' => $e->getResponse()->getBody()->getContents()]);
-      $blah = (string) $e->getRequest()->getBody();
       return FALSE;
     }
     catch (\Exception $e) {
