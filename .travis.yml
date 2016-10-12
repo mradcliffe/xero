@@ -6,6 +6,11 @@ php:
 env:
   - DRUPAL=8.1.x
   - DRUPAL=8.2.x
+  - DRUPAL=8.3.x
+
+matrix:
+  allow_failures:
+    - env: DRUPAL=8.3.x
 
 git:
   depth: 1
