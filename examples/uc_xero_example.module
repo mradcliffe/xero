@@ -26,11 +26,6 @@ function uc_xero_example_uc_order($op, $order, $arg2) {
       $typedDataManager = \Drupal::typedDataManager();
       $list_definition = $typedDataManager->createListDataDefinition('xero_invoice');
       $invoices = $typedDataManager->create($list_definition, 'xero_invoice');
-      $invoice = $typedDataManager->createInstance('xero_invoice', [
-        'data_definition' => $typedDataManager->createDataDefinition('xero_invoice'),
-        'name' => 'Invoice',
-        'parent' => $invoices,
-      ]);
 
       $values = [
         'Contact' => [
@@ -54,7 +49,7 @@ function uc_xero_example_uc_order($op, $order, $arg2) {
         ];
       }
 
-      $invoice->setValue($values);
+      $invoices->appendItem($values);
 
       /** @var \Drupal\xero\XeroQuery $query */
       $query = \Drupal::service('xero.query');

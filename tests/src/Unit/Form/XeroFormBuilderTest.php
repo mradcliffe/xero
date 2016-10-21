@@ -85,7 +85,7 @@ class XeroFormBuilderTest extends UnitTestCase {
     $this->assertEquals('Is supplier?', $element['IsSupplier']['#title']);
     $this->assertEquals('container', $element['Addresses']['#type']);
     $this->assertEquals('select', $element['Addresses'][0]['AddressType']['#type']);
-    $this->assertEquals(['POBOX', 'STREET', 'DELIVERY'], $element['Addresses'][0]['AddressType']['#options']);
+    $this->assertEquals(['POBOX' => 'POBOX', 'STREET' => 'STREET', 'DELIVERY' => 'DELIVERY'], $element['Addresses'][0]['AddressType']['#options']);
 
     // Assert that read-only property is not added to the element.
     $this->assertArrayNotHasKey('Website', $element);
