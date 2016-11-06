@@ -12,9 +12,6 @@ matrix:
   allow_failures:
     - env: DRUPAL=8.3.x
 
-git:
-  depth: 1
-
 sudo: false
 
 install:
