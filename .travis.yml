@@ -32,7 +32,7 @@ install:
 before_script:
   # Figure out the branch or pull request branch to use.
   - COMPOSER_BRANCH=$TRAVIS_BRANCH
-  - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ] ; then COMPOSER_BRANC=$TRAVIS_PULL_REQUEST_BRANCH ; fi
+  - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ] ; then COMPOSER_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH ; fi
 
   # Require xero module.
   - composer require --prefer-source drupal/xero:"dev-${COMPOSER_BRANCH} as master"
