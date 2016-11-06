@@ -15,10 +15,10 @@ matrix:
 sudo: false
 
 install:
-  # - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  # - composer global require drush/drush:dev-master
-  - composer self-update
   - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
+
+  # Try to make the git checkout not shallow because travis.
+  - rm .git/shallow
 
   # Download Drupal and dependencies.
   - TESTDIR=$(pwd)
