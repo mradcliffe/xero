@@ -32,10 +32,13 @@ install:
   # Add composer test dependencies to Drupal.
   - composer config repositories.drupal composer https://packages.drupal.org/8
   - composer config repositories.xero vcs $TESTDIR
-
 before_script:
-  # Require xero module
-  - composer require --prefer-source drupal/xero
+  # Figure out the branch or pull request branch to use.
+  - COMPOSER_BRANCH=$TRAVIS_BRANCH
+  - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ] ; then COMPOSER_BRANC=$TRAVIS_PULL_REQUEST_BRANCH ; fi
+
+  # Require xero module.
+  - composer require --prefer-source drupal/xero:"dev-${COMPOSER_BRANCH} as master"
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
