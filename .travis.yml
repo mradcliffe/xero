@@ -18,6 +18,7 @@ install:
   - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
 
   # Try to make the git checkout not shallow because travis.
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git checkout -b "$TRAVIS_PULL_REQUEST" ; fi
   - rm .git/shallow
 
   # Download Drupal and dependencies.
@@ -32,7 +33,7 @@ install:
 before_script:
   # Figure out the branch or pull request branch to use.
   - COMPOSER_BRANCH=$TRAVIS_BRANCH
-  - if [ "$TRAVIS_PULL_REQUEST_BRANCH" != "" ] ; then COMPOSER_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH ; fi
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then COMPOSER_BRANCH=$TRAVIS_PULL_REQUEST ; fi
 
   # Require xero module.
   - composer require --prefer-source drupal/xero:"dev-${COMPOSER_BRANCH} as master"
