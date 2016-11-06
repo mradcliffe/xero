@@ -1,12 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\xero\XeroQuery.
- */
 
 namespace Drupal\xero;
 
-use BlackOptic\Bundle\XeroBundle\XeroClient;
+use Radcliffe\Xero\XeroClient;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Cache\CacheBackendInterface;

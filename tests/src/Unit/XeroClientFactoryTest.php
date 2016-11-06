@@ -1,14 +1,11 @@
 <?php
-/**
- * @file
- * Provides \Drupal\Tests\xero\XeroClientFactoryTest
- */
 
 namespace Drupal\Tests\xero\Unit;
 
 use Drupal\xero\XeroClientFactory;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Argument;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 /**
@@ -22,30 +19,14 @@ class XeroClientFactoryTest extends UnitTestCase {
   protected $pemFile;
 
   /**
+   * @var \Drupal\xero\XeroClientFactory
+   */
+  protected $factory;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
-
-    $null_logger = new NullLogger();
-    $this->loggerFactory = new LoggerChannelFactory();
-    $this->loggerFactory->addLogger($null_logger);
-
-    // Mock config object.
-    $this->config = $this->getMockBuilder('\Drupal\Core\Config\ImmutableConfig')
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    // Mock config factory because it looks like a pain to invoke on null
-    // storage just for a test.
-    $this->configFactory = $this->getMockBuilder('\Drupal\Core\Config\ConfigFactory')
-      ->disableOriginalConstructor()
-      ->getMock();
-
-    $this->configFactory->expects($this->any())
-      ->method('get')
-      ->with('xero.settings')
-      ->will($this->returnValue($this->config));
-
     $this->factory = new XeroClientFactory();
   }
 
@@ -67,7 +48,7 @@ class XeroClientFactoryTest extends UnitTestCase {
    *   A memory stream wrapper for the private key data that can be used with
    *   file_get_contents().
    *
-   * @see \BlackOptic\Bundle\XeroBundle\XeroClient::__construct().
+   * @see \Radcliffe\Xero\XeroClient::__construct().
    */
   private function createPrivateKey() {
     $output = '';
@@ -90,8 +71,21 @@ class XeroClientFactoryTest extends UnitTestCase {
     return [
       'consumer_key' => $this->getRandomGenerator()->string(32),
       'consumer_secret' => $this->getRandomGenerator()->string(32),
-      'private_key' => $this->createPrivateKey(),
+      'application' => 'private',
+      'key_path' => $this->createPrivateKey(),
     ];
+  }
+
+  /**
+   * Get the logger factory.
+   *
+   * @return \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected function getLoggerFactory() {
+    $nullLogger = new NullLogger();
+    $loggerFactory = new LoggerChannelFactory();
+    $loggerFactory->addLogger($nullLogger);
+    return $loggerFactory;
   }
 
   /**
@@ -99,24 +93,22 @@ class XeroClientFactoryTest extends UnitTestCase {
    */
   public function testValid() {
     $xero_config = $this->getConfiguration();
+    $loggerFactory = $this->getLoggerFactory();
+    $configProphet = $this->prophesize('\Drupal\Core\Config\ImmutableConfig');
+    $configProphet->get(Argument::type('string'))->will(function ($args) use ($xero_config) {
+      $key = str_replace('oauth.', '', $args[0]);
+      return $xero_config[$key];
+    });
+    $configFactoryProphet = $this->prophesize('\Drupal\Core\Config\ConfigFactoryInterface');
+    $configFactoryProphet->get('xero.settings')->willReturn($configProphet->reveal());
 
-    $this->config->expects($this->any())
-      ->method('get')
-      ->will($this->onConsecutiveCalls(
-        $xero_config['consumer_key'],
-        $xero_config['consumer_secret'],
-        $xero_config['consumer_key'],
-        $xero_config['consumer_secret'],
-        $xero_config['private_key']
-      ));
-
-    if (!class_exists('\BlackOptic\Bundle\XeroBundle\XeroClient')) {
+    if (!class_exists('\Radcliffe\Xero\XeroClient')) {
       $this->assertTrue(FALSE, 'XeroClient class is not found. Aborting test.');
       return;
     }
 
-    $client = $this->factory->get($this->configFactory, $this->loggerFactory);
-    $this->assertTrue(is_a($client, '\BlackOptic\Bundle\XeroBundle\XeroClient'));
+    $client = $this->factory->get($configFactoryProphet->reveal(), $loggerFactory);
+    $this->assertTrue(is_a($client, '\Radcliffe\Xero\XeroClient'));
   }
 
 
@@ -124,16 +116,18 @@ class XeroClientFactoryTest extends UnitTestCase {
    * Test with no configuration.
    */
   public function testNotValid() {
-    $this->config->expects($this->any())
-      ->method('get')
-      ->will($this->returnValue(NULL));
+    $loggerFactory = $this->getLoggerFactory();
+    $configProphet = $this->prophesize('\Drupal\Core\Config\ImmutableConfig');
+    $configProphet->get(Argument::type('string'))->willReturn(NULL);
+    $configFactoryProphet = $this->prophesize('\Drupal\Core\Config\ConfigFactoryInterface');
+    $configFactoryProphet->get('xero.settings')->willReturn($configProphet->reveal());
 
-    if (!class_exists('\BlackOptic\Bundle\XeroBundle\XeroClient')) {
+    if (!class_exists('\Radcliffe\Xero\XeroClient')) {
       $this->assertTrue(FALSE, 'XeroClient class is not found. Aborting test.');
       return;
     }
 
-    $client = $this->factory->get($this->configFactory, $this->loggerFactory);
+    $client = $this->factory->get($configFactoryProphet->reveal(), $loggerFactory);
     $this->assertFalse($client, print_r($client, TRUE));
   }
 }

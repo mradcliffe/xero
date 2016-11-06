@@ -31,15 +31,11 @@ install:
 
   # Add composer test dependencies to Drupal.
   - composer config repositories.drupal composer https://packages.drupal.org/8
-  - composer require mile23/drupal-merge-plugin
+  - composer config repositories.xero vcs $TESTDIR
 
 before_script:
-  # rsync the module directory into modules/xero
-  - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
-
-  # Require xero module dependencies manually.
-  - composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git
-  - composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master"
+  # Require xero module
+  - composer require --prefer-source drupal/xero:dev-master
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero

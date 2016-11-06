@@ -8,12 +8,11 @@ The module provides a factory class which instantiates XeroClient, an extension 
 
 ## XeroBundle
 
-Xero module now requires [BlackOptic\XeroBundle](https://github.com/james75/XeroBundle) instead of PHP-Xero. This requires dowmnloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
+Xero module now requires [xeroclient](https://github.com/mradcliffe/xeroclient) instead of PHP-Xero or XeroBundle. This requires downloading the dependency with Composer either with [Composer Manager](http://drupal.org/project/composer_manager) module or by [managing Drupal with Composer](https://www.drupal.org/node/2404989) itself. Do not attempt to enable the module without installing the dependencies first or the Symfony container will crash.
 
-With Composer Manager:
-   - `drush composer-manager-init` or `./modules/composer_manager/scripts/init.sh`
-   - `cd core`
-   - `composer drupal-update`
+With Drupal package repository:
+
+* `composer require drupal/xero`
 
 ## Using XeroQuery to fetch into TypedData
 

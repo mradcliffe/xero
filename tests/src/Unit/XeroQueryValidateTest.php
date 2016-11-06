@@ -12,8 +12,6 @@ use Drupal\xero\TypedData\Definition\AccountDefinition;
 use Drupal\xero\TypedData\Definition\CreditDefinition;
 use Drupal\xero\Plugin\DataType\Account;
 use Drupal\xero\Plugin\DataType\CreditNote;
-use Drupal\Tests\xero\UnitXeroQueryTestBase;
-use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * @group Xero

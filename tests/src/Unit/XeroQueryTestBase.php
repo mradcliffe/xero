@@ -38,7 +38,7 @@ abstract class XeroQueryTestBase extends UnitTestCase {
   protected $loggerFactory;
 
   /**
-   * @var \BlackOptic\Bundle\XeroBundle\XeroClient
+   * @var \Radcliffe\Xero\XeroClient
    */
   protected $client;
 
@@ -70,7 +70,7 @@ abstract class XeroQueryTestBase extends UnitTestCase {
       ->getMock();
 
     // Mock XeroClient.
-    $this->client = $this->getMockBuilder('BlackOptic\Bundle\XeroBundle\XeroClient')
+    $this->client = $this->getMockBuilder('Radcliffe\Xero\XeroClient')
       ->disableOriginalConstructor()
       ->getMock();
 

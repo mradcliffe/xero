@@ -12,7 +12,6 @@ use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\ListDataDefinition;
 use Drupal\Core\TypedData\ListDataDefinitionInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
-use Symfony\Component\Validator\Constraints\True;
 
 /**
  * The Xero form builder service provides methods to create form elements from

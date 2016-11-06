@@ -1,12 +1,8 @@
 <?php
-/**
- * @file
- * Provides \Drupal\xero\XeroClientFactory.
- */
 
 namespace Drupal\xero;
 
-use BlackOptic\Bundle\XeroBundle\XeroClient;
+use Radcliffe\Xero\XeroClient;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -17,15 +13,23 @@ class XeroClientFactory {
 
   /**
    * Return a configured XeroClient object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
+   *
+   * @return \Radcliffe\Xero\XeroClient|FALSE
    */
   public function get(ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
     $config = $config_factory->get('xero.settings');
     $xero_config = [
-      'base_url' => 'https://api.xero.com/api.xro/2.0/',
+      'base_uri' => 'https://api.xero.com/api.xro/2.0/',
       'token' => $config->get('oauth.consumer_key'),
       'token_secret' => $config->get('oauth.consumer_secret'),
       'consumer_key' => $config->get('oauth.consumer_key'),
       'consumer_secret' => $config->get('oauth.consumer_secret'),
+      'application' => 'private',
       'private_key' => $config->get('oauth.key_path')
     ];
 
