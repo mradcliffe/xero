@@ -23,6 +23,9 @@ install:
   - git clone --depth 1 --branch ${DRUPAL} http://git.drupal.org/project/drupal.git drupal
   - cd drupal
 
+  # Capture the absolute path to the drupal directory.
+  - DRUPALDIR=$(pwd)
+
   # Download Drupal core dependencies via lock file.
   - composer install
 
@@ -34,7 +37,7 @@ before_script:
   - composer require --prefer-source "drupal/xero @dev"
 script:
   # Go to xero modules directory to run phpunit.
-  - cd ../drupal/modules/xero
+  - cd $DRUPALDIR/modules/xero
   - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
