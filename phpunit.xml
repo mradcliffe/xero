@@ -15,13 +15,13 @@
   </php>
   <testsuites>
     <testsuite name="Xero API Module Unit Test Suite">
-      <directory>./modules/xero/tests</directory>
+      <directory>tests/src</directory>
     </testsuite>
   </testsuites>
   <!-- Filter for coverage reports. -->
   <filter>
     <whitelist>
-      <directory>./modules/xero/src</directory>
+      <directory>src</directory>
     </whitelist>
   </filter>
 </phpunit>
