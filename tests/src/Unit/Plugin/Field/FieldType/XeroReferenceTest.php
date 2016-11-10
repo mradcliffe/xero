@@ -28,7 +28,7 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
    * {@inheritdoc}
    */
   protected function getModuleAndPath() {
-    return array('xero', realpath($this->root . '/modules/xero'));
+    return array('xero', dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))));
   }
 
   /**
