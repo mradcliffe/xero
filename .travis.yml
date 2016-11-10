@@ -40,12 +40,8 @@ script:
   - ls $DRUPALDIR
   - ls $DRUPALDIR/vendor
   - ls $DRUPALDIR/vendor/bin
-  - cd $DRUPALDIR/modules/xero
-  - ls .
-  - ls ..
-  - ls ../..
-  - ls ../../vendor
-  - ls ../../vendor/bin
+  - cd $DRUPALDIR/modules
+  - ls -alh
   - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
