@@ -9,7 +9,6 @@ namespace Drupal\Tests\xero\Unit\Plugin\Field\FieldFormatter;
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
 use Drupal\xero\Plugin\Field\FieldFormatter\XeroReferenceFormatter;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -32,9 +31,8 @@ class XeroReferenceFormatterTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
-    // DrupalWTF: t()
-    $path = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-    require_once $path . '/../../core/includes/bootstrap.inc';
+    // DrupalWTF. t().
+    require_once realpath($this->root . '/core/includes/bootstrap.inc');
 
     $container = new ContainerBuilder();
 

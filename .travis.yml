@@ -12,15 +12,12 @@ matrix:
   allow_failures:
     - env: DRUPAL=8.3.x
 
-git:
-  depth: 1
-
 sudo: false
 
+git:
+  depth: 3
+
 install:
-  # - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  # - composer global require drush/drush:dev-master
-  - composer self-update
   - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
 
   # Download Drupal and dependencies.
@@ -29,22 +26,17 @@ install:
   - git clone --depth 1 --branch ${DRUPAL} http://git.drupal.org/project/drupal.git drupal
   - cd drupal
 
+  # Download Drupal core dependencies via lock file.
+  - composer install
+
   # Add composer test dependencies to Drupal.
   - composer config repositories.drupal composer https://packages.drupal.org/8
-  - composer require mile23/drupal-merge-plugin
-
+  - composer config repositories.xero path $TESTDIR
 before_script:
-  # rsync the module directory into modules/xero
-  - rsync -rtlDPvc --exclude .git/ $TESTDIR modules/
-
-  # Require xero module dependencies manually.
-  - composer config repositories.xerobundle vcs https://github.com/mradcliffe/XeroBundle.git
-  - composer require blackoptic/xerobundle:"dev-fix-guzzle-6 as master"
-
-  # Go back to repository directory to run phpunit.
-  - cd modules/xero
+  # Require xero module.
+  - composer require --prefer-source "drupal/xero @dev"
 script:
-  - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
+  - vendor/bin/phpunit --configuration modules/xero/phpunit.xml --bootstrap core/tests/bootstrap.php --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
   - head $TRAVIS_BUILD_DIR/coverage.txt

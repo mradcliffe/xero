@@ -8,9 +8,7 @@ namespace Drupal\Tests\xero\Unit\Plugin\Field\FieldWidget;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldTypePluginManager;
 use Drupal\Core\Field\FieldItemList;
-use Drupal\Core\Form\FormState;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 
@@ -42,8 +40,7 @@ abstract class WidgetTestBase extends UnitTestCase {
     parent::setUp();
 
     // DrupalWTF: t()
-    $path = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-    require_once $path . '/../../core/includes/bootstrap.inc';
+    require_once realpath($this->root . '/core/includes/bootstrap.inc');
 
     $container = new ContainerBuilder();
 

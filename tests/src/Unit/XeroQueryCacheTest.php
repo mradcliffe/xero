@@ -1,17 +1,11 @@
 <?php
 
-/**
- * @file
- * Contains XeroQueryCacheTest.php
- */
-
 namespace Drupal\Tests\xero\Unit;
 
 use Drupal\Core\TypedData\ListDataDefinition;
 use Drupal\Core\TypedData\Plugin\DataType\BooleanData;
 use Drupal\Core\TypedData\Plugin\DataType\DateTimeIso8601;
 use Drupal\Core\TypedData\Plugin\DataType\Email;
-use Drupal\Core\TypedData\Plugin\DataType\ItemList;
 use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\xero\Plugin\DataType\User;
 use Drupal\xero\TypedData\Definition\UserDefinition;
@@ -190,6 +184,9 @@ class XeroQueryCacheTest extends XeroQueryTestBase {
     $this->client->expects($this->any())
       ->method('__call')
       ->willReturn($this->getMockResponse());
+    $this->client->expects($this->any())
+      ->method('get')
+      ->willreturn($this->getMockResponse());
 
     /** @var \Drupal\Core\TypedData\Plugin\DataType\ItemList $data */
     $data = $this->query->getCache('xero_user');
