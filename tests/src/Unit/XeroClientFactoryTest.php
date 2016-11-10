@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Log\NullLogger;
 /**
  * Tests getting the XeroClient class.
  *
- * @coversDefaultClass \Drupal\xero\XeroClientFactory;
+ * @coversDefaultClass \Drupal\xero\XeroClientFactory
  * @group Xero
  */
 class XeroClientFactoryTest extends UnitTestCase {
@@ -31,37 +31,6 @@ class XeroClientFactoryTest extends UnitTestCase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  protected function tearDown() {
-    if (file_exists($this->pemFile)) {
-      unlink($this->pemFile);
-    }
-
-    parent::tearDown();
-  }
-
-  /**
-   * Create a private key in memory for tests.
-   *
-   * @return string
-   *   A memory stream wrapper for the private key data that can be used with
-   *   file_get_contents().
-   *
-   * @see \Radcliffe\Xero\XeroClient::__construct().
-   */
-  private function createPrivateKey() {
-    $output = '';
-    $this->pemFile = $this->getRandomGenerator()->word(15) . '.pem';
-    $resource = openssl_pkey_new(['digest_alg' => 'sha1', 'private_key_bits' => 1024, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
-    openssl_pkey_export($resource, $output);
-
-    file_put_contents($this->pemFile, $output);
-
-    return $this->pemFile;
-  }
-
-  /**
    * Get xero configuration dummy data.
    *
    * @return []
@@ -72,7 +41,7 @@ class XeroClientFactoryTest extends UnitTestCase {
       'consumer_key' => $this->getRandomGenerator()->string(32),
       'consumer_secret' => $this->getRandomGenerator()->string(32),
       'application' => 'private',
-      'key_path' => $this->createPrivateKey(),
+      'key_path' => __DIR__ . DIRECTORY_SEPARATOR . '../../fixtures/dummy.pem',
     ];
   }
 
