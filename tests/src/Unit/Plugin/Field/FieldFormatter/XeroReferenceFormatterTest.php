@@ -32,9 +32,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     parent::setUp();
 
     // DrupalWTF. t().
-    $this->root = $this->findAppRoot();
-    var_dump($this->root);
-    require_once $this->root . '/core/includes/bootstrap.inc';
+    require_once realpath($this->root . '/core/includes/bootstrap.inc');
 
     $container = new ContainerBuilder();
 
@@ -101,27 +99,6 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     $this->formatter = XeroReferenceFormatter::create($container, $configuration, 'xero_reference', $plugin_definition);
     $this->fieldItemList = new FieldItemList($this->fieldDefinition);
     $this->fieldItem = new XeroReference($this->fieldDefinition);
-  }
-
-  protected function findAppRoot() {
-    if (is_dir($this->root . '/core')) {
-      var_dump($this->root);
-      return $this->root;
-    }
-
-    // Try arbitrary TravisCI because travis.
-    $travis_root = preg_replace('/\/..$/', '', $this->root);
-    $d = dir($travis_root);
-    while (FALSE !== ($entry = $d->read())) {
-      if ($entry !== 'xero' && (strpos($entry, '.') === FALSE || strpos($entry, '.') !== 0)) {
-        if (is_dir($travis_root . DIRECTORY_SEPARATOR . $entry . '/core')) {
-          var_dump($travis_root . DIRECTORY_SEPARATOR . $entry);
-          return $travis_root . DIRECTORY_SEPARATOR . $entry;
-        }
-      }
-    }
-
-    throw new \RuntimeException('Cannot find DRUPAL ROOT because DrupalWTF.');
   }
 
   /**

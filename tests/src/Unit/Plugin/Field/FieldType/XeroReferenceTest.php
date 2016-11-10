@@ -8,8 +8,6 @@ namespace Drupal\Tests\xero\Unit\Plugin\Field\FieldType;
 
 use Drupal\xero\Plugin\Field\FieldType\XeroReference;
 use Drupal\Tests\Core\Field\BaseFieldDefinitionTestBase;
-use Drupal\Core\TypedData\DataDefinition;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
 
 /**
  * Test the constraint system for Xero Guid strings.
@@ -30,7 +28,7 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
    * {@inheritdoc}
    */
   protected function getModuleAndPath() {
-    return array('xero', dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))));
+    return array('xero', realpath($this->root . '/modules/xero'));
   }
 
   /**
@@ -39,8 +37,7 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
   protected function setUp() {
     parent::setUp();
 
-    list($module, $path) = $this->getModuleAndPath();
-    require_once $path . '/../../core/includes/bootstrap.inc';
+    require_once realpath($this->root . '/core/includes/bootstrap.inc');
 
     // Set the typed data manager service after mocking (again).
     $this->typedDataManager = $this->getMockBuilder('\Drupal\Core\TypedData\TypedDataManager')
