@@ -41,6 +41,9 @@ script:
   - ls $DRUPALDIR/vendor
   - ls $DRUPALDIR/vendor/bin
   - cd $DRUPALDIR/modules/xero
+  - ls .
+  - ls ..
+  - ls ../..
   - ls ../../vendor
   - ls ../../vendor/bin
   - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
