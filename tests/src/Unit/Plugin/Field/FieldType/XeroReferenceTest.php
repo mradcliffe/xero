@@ -37,7 +37,9 @@ class XeroReferenceTest extends BaseFieldDefinitionTestBase {
   protected function setUp() {
     parent::setUp();
 
-    require_once realpath($this->root . '/core/includes/bootstrap.inc');
+    var_dump(realpath($this->root));
+    var_dump($this->root);
+    require_once realpath($this->root) . '/core/includes/bootstrap.inc';
 
     // Set the typed data manager service after mocking (again).
     $this->typedDataManager = $this->getMockBuilder('\Drupal\Core\TypedData\TypedDataManager')
