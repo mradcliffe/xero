@@ -17,8 +17,9 @@ sudo: false
 install:
   - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
 
+  - REPOHASH=$(git rev-parse HEAD)
+
   # Try to make the git checkout not shallow because travis.
-  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git checkout -b "$TRAVIS_PULL_REQUEST" ; fi
   - rm .git/shallow
 
   # Download Drupal and dependencies.
@@ -31,12 +32,8 @@ install:
   - composer config repositories.drupal composer https://packages.drupal.org/8
   - composer config repositories.xero vcs $TESTDIR
 before_script:
-  # Figure out the branch or pull request branch to use.
-  - COMPOSER_BRANCH=$TRAVIS_BRANCH
-  - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then COMPOSER_BRANCH=$TRAVIS_PULL_REQUEST ; fi
-
   # Require xero module.
-  - composer require --prefer-source "drupal/xero:dev-${COMPOSER_BRANCH} as 1.x-dev"
+  - composer require --prefer-source "drupal/xero:dev-master#${REPOHASH}"
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
