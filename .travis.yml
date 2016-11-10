@@ -36,6 +36,9 @@ before_script:
   # Go to xero modules directory to run phpunit.
   - cd modules/xero
 script:
+  - ls ../../
+  - ls ../../vendor
+  - ls ../../vendor/bin
   - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
