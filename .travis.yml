@@ -37,7 +37,14 @@ before_script:
   - composer require --prefer-source "drupal/xero @dev"
 script:
   # Go to xero modules directory to run phpunit.
-  - cd $DRUPALDIR/modules/xero
+  - echo $DRUPALDIR
+  - cd $DRUPALDIR
+  - ls
+  - ls core/
+  - ls vendor/
+  - ls modules/
+  - ls modules/xero
+  - cd modules/xero
   - ../../vendor/bin/phpunit --coverage-text=$TRAVIS_BUILD_DIR/coverage.txt
 after_script:
   # Print out coverage report.
