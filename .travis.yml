@@ -36,7 +36,7 @@ before_script:
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then COMPOSER_BRANCH=$TRAVIS_PULL_REQUEST ; fi
 
   # Require xero module.
-  - composer require --prefer-source drupal/xero:"dev-${COMPOSER_BRANCH} as 1.x-dev"
+  - composer require --prefer-source drupal/xero:"dev-8.x-1.x as dev-${COMPOSER_BRANCH}"
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
