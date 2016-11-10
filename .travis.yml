@@ -33,7 +33,7 @@ install:
   - composer config repositories.xero vcs $TESTDIR
 before_script:
   # Require xero module.
-  - composer require --prefer-source "drupal/xero:dev-master#${REPOHASH}"
+  - composer require --prefer-source "drupal/xero:dev-master#${REPOHASH} as dev-1.x"
 
   # Go back to repository directory to run phpunit.
   - cd modules/xero
