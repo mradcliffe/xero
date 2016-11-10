@@ -32,7 +32,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     parent::setUp();
 
     // DrupalWTF. t().
-    require_once $this->root . '/core/includes/bootstrap.inc';
+    require_once realpath($this->root) . '/core/includes/bootstrap.inc';
 
     $container = new ContainerBuilder();
 
