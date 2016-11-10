@@ -33,6 +33,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
 
     // DrupalWTF. t().
     $this->root = $this->findAppRoot();
+    var_dump($this->root);
     require_once $this->root . '/core/includes/bootstrap.inc';
 
     $container = new ContainerBuilder();
@@ -104,6 +105,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
 
   protected function findAppRoot() {
     if (is_dir($this->root . '/core')) {
+      var_dump($this->root);
       return $this->root;
     }
 
@@ -113,6 +115,7 @@ class XeroReferenceFormatterTest extends UnitTestCase {
     while (FALSE !== ($entry = $d->read())) {
       if ($entry !== 'xero' && (strpos($entry, '.') === FALSE || strpos($entry, '.') !== 0)) {
         if (is_dir($travis_root . DIRECTORY_SEPARATOR . $entry . '/core')) {
+          var_dump($travis_root . DIRECTORY_SEPARATOR . $entry);
           return $travis_root . DIRECTORY_SEPARATOR . $entry;
         }
       }
